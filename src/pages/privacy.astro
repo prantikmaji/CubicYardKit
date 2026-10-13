@@ -1,0 +1,152 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/seo/Breadcrumbs.astro';
+
+const seo = {
+  title: 'Privacy Policy | CubicYardKit — AdSense & Cookie Compliance',
+  description:
+    'Our Privacy Policy explains how CubicYardKit handles user privacy, browser LocalStorage project data, cookies, and Google AdSense third-party advertising.',
+  canonicalUrl: 'https://cubicyardkit.com/privacy/',
+};
+
+const breadcrumbs = [{ name: 'Privacy Policy', href: '/privacy/' }];
+---
+
+<BaseLayout
+  title={seo.title}
+  description={seo.description}
+  canonicalUrl={seo.canonicalUrl}
+  breadcrumbs={breadcrumbs}
+>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+    <Breadcrumbs items={breadcrumbs} />
+
+    <!-- Hero Header -->
+    <div class="relative overflow-hidden rounded-2xl bg-slate-900 border border-slate-800 p-6 sm:p-10 mb-10 text-white shadow-md">
+      <div class="absolute -top-12 -right-12 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="relative max-w-2xl">
+        <div class="inline-flex items-center gap-2 bg-emerald-950/80 border border-emerald-500/40 rounded-full px-3 py-1 text-xs font-bold text-emerald-300 mb-3.5 shadow-xs">
+          <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_8px_#34d399]"></span>
+          Google AdSense Compliant · Zero Server Tracking · GDPR & CCPA
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-black text-white tracking-tight leading-tight mb-3">
+          Privacy Policy
+        </h1>
+        <p class="text-sm sm:text-base text-slate-200 leading-relaxed">
+          At CubicYardKit, your privacy is paramount. This policy discloses how we handle user data, cookies, browser LocalStorage project files, and third-party advertising partners.
+        </p>
+      </div>
+    </div>
+
+    <!-- Core Content Sections -->
+    <div class="space-y-8 text-slate-800 text-sm leading-relaxed">
+
+      <!-- Section 1: Overview & Zero-Server Philosophy -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-3.5">
+        <div class="border-b border-slate-100 pb-3">
+          <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Privacy First</span>
+          <h2 class="text-xl font-black text-slate-900 mt-2">1. Our Commitment to Data Minimization</h2>
+        </div>
+        <p>
+          CubicYardKit operates on a privacy-by-design framework. We do not require account registration, passwords, email sign-ups, or credit card submissions to use our calculation engines or project material planners. 
+        </p>
+        <p>
+          We do not sell, rent, or trade your personal information to third parties.
+        </p>
+      </section>
+
+      <!-- Section 2: Browser LocalStorage Disclosure -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-3.5">
+        <div class="border-b border-slate-100 pb-3">
+          <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Local Data</span>
+          <h2 class="text-xl font-black text-slate-900 mt-2">2. Client-Side LocalStorage Project Data</h2>
+        </div>
+        <p>
+          When you click "Save to My Projects" in our calculators or the Patio Material Planner, your project dimensions, materials, and bills of materials are saved directly in your own browser using HTML5 <strong>LocalStorage</strong> under the key <code class="text-xs bg-slate-100 px-1.5 py-0.5 rounded font-mono text-slate-800">cubicyardkit_saved_projects_v1</code>.
+        </p>
+        <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 text-xs space-y-1">
+          <strong class="text-slate-900 block">Complete Client Isolation:</strong>
+          <p class="text-slate-600">
+            This data lives exclusively on your local device. It is never transmitted to, collected by, or stored on our servers. You can clear this data at any time by using the "Delete" button inside the Saved Projects dialog or by clearing your browser's site cookies and local storage.
+          </p>
+        </div>
+      </section>
+
+      <!-- Section 3: Google AdSense & Third-Party Cookies (MANDATORY) -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-4">
+        <div class="border-b border-slate-100 pb-3">
+          <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Advertising & Cookies</span>
+          <h2 class="text-xl font-black text-slate-900 mt-2">3. Google AdSense & Cookie Disclosures</h2>
+        </div>
+        <p>
+          We use third-party advertising companies, specifically <strong>Google AdSense</strong>, to serve advertisements when you visit our website. These companies may use cookies and web beacons to collect non-personally identifiable information about your visits to this and other websites in order to provide advertisements about goods and services of interest to you.
+        </p>
+        
+        <div class="space-y-3 pt-1">
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-2">
+            <strong class="text-slate-900 block">Google DART & Advertising Cookies:</strong>
+            <ul class="list-disc list-inside space-y-1 text-slate-600">
+              <li>Third-party vendors, including Google, use cookies to serve ads based on your prior visits to our website or other websites across the Internet.</li>
+              <li>Google's use of advertising cookies enables it and its partners to serve ads to you based on your visit to our sites and/or other sites on the Internet.</li>
+              <li>Users may opt out of personalized advertising by visiting <a href="https://adssettings.google.com/" target="_blank" rel="noopener noreferrer" class="text-emerald-700 underline font-semibold">Google Ad Settings</a>.</li>
+              <li>Alternatively, you can opt out of a third-party vendor's use of cookies for personalized advertising by visiting <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer" class="text-emerald-700 underline font-semibold">www.aboutads.info/choices</a>.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Web Analytics & Server Logs -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-3.5">
+        <div class="border-b border-slate-100 pb-3">
+          <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Analytics</span>
+          <h2 class="text-xl font-black text-slate-900 mt-2">4. Server Logs & Anonymous Telemetry</h2>
+        </div>
+        <p>
+          Like most web platforms, our hosting infrastructure (Cloudflare Pages) automatically logs standard, non-personally identifiable server connection records:
+        </p>
+        <ul class="list-disc list-inside space-y-1 text-xs text-slate-700 ml-1">
+          <li>Browser type, operating system, and device screen size.</li>
+          <li>Referring/exit pages and general geographic region (country/state level for edge CDN routing).</li>
+          <li>Date and time stamps of requests to optimize cache performance and defend against DDoS attacks.</li>
+        </ul>
+        <p class="text-xs text-slate-600">
+          These server logs are never linked to any personally identifiable information.
+        </p>
+      </section>
+
+      <!-- Section 5: GDPR & CCPA / CPRA Rights -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-3.5">
+        <div class="border-b border-slate-100 pb-3">
+          <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md uppercase tracking-wider">User Rights</span>
+          <h2 class="text-xl font-black text-slate-900 mt-2">5. Your Privacy Rights (GDPR & CCPA/CPRA)</h2>
+        </div>
+        <p>
+          Depending on your location (such as the European Economic Area, the United Kingdom, or California), you possess specific rights regarding your personal information:
+        </p>
+        <ul class="list-disc list-inside space-y-1.5 text-xs text-slate-700 ml-1">
+          <li><strong>Right to Know & Access:</strong> The right to request information regarding categories of personal data collected.</li>
+          <li><strong>Right to Deletion:</strong> The right to request deletion of personal information. (Because our project planner data is stored entirely in your local browser, you can delete it immediately at any time).</li>
+          <li><strong>Right to Opt-Out of Sale or Sharing:</strong> We do not sell your personal data. You can opt out of personalized ad tracking via the Google and DAA links above.</li>
+        </ul>
+      </section>
+
+      <!-- Section 6: Contact Information -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-3.5">
+        <div class="border-b border-slate-100 pb-3">
+          <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Questions</span>
+          <h2 class="text-xl font-black text-slate-900 mt-2">6. Privacy Inquiries</h2>
+        </div>
+        <p>
+          If you have any questions, concerns, or requests regarding this Privacy Policy or our cookie disclosures, please contact our data team:
+        </p>
+        <p class="text-xs text-slate-700 font-medium">
+          Email: <a href="mailto:privacy@cubicyardkit.com" class="text-emerald-700 underline font-mono">privacy@cubicyardkit.com</a> or via our <a href="/contact/" class="text-emerald-700 underline font-semibold">Contact Page</a>.
+        </p>
+        <p class="text-xs text-slate-500 pt-2 border-t border-slate-100">
+          Last updated: October 2026.
+        </p>
+      </section>
+
+    </div>
+  </div>
+</BaseLayout>

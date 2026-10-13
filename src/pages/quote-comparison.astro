@@ -1,0 +1,231 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import QuoteComparisonIsland from '../components/quotes/QuoteComparisonIsland';
+import Breadcrumbs from '../components/seo/Breadcrumbs.astro';
+import RelatedCalculators from '../components/layout/RelatedCalculators.astro';
+
+const seo = {
+  title: 'Supplier Quote Comparison Tool | CubicYardKit',
+  description:
+    'Compare landscaping and building supplier quotes across bulk cubic yards, scale tons, and bags. Normalizes delivery fees, fuel surcharges, and minimum drop limits.',
+  canonicalUrl: 'https://cubicyardkit.com/quote-comparison/',
+};
+
+const faqs = [
+  {
+    question: 'Why do supplier quotes look completely different for the identical material?',
+    answer:
+      'Different vendors sell aggregate and soils in disparate pricing metrics: commercial rock quarries invoice by certified scale weight (US short tons = 2,000 lbs), landscape supply depots sell by loader bucket volume (cubic yards), and retail home improvement stores sell by packaged bag units (typically 50-lb or 0.5-cu-ft bags). Furthermore, delivery drop fees and fuel surcharges shift the true "landed cost" significantly depending on order volume.',
+  },
+  {
+    question: 'How does this quote comparison tool normalize supplier prices?',
+    answer:
+      'Our comparison engine converts every entered quote into an equivalent common denominator of volume and mass using verified ASTM material densities. It accounts for vendor minimum order quantities, rounds bag counts to whole purchasable units, adds transportation delivery fees, and computes the true all-in Effective Cost per Cubic Yard ($/yd³).',
+  },
+  {
+    question: 'What is a split-load delivery fee and how can I avoid it?',
+    answer:
+      'If you need two materials on the same day (such as 4 yards of crushed stone base and 2 yards of topsoil), suppliers must either send two separate dump trucks or use a truck equipped with an internal divider baffle. Suppliers charge a "split-load fee" of $40 to $80 to offset the hazard of cross-contamination. If jobsite space permits, schedule deliveries on different days or consolidate materials to eliminate the surcharge.',
+  },
+  {
+    question: 'What is a minimum delivery drop fee?',
+    answer:
+      'Because operating a commercial tandem-axle dump truck costs $120 to $180 per hour in fuel, insurance, and certified commercial driver (CDL) wages, landscape suppliers charge a minimum delivery fee (typically $75 to $120) regardless of how few yards you purchase. If ordering only 1 or 2 cubic yards, this flat fee dramatically inflates your effective cost per yard.',
+  },
+  {
+    question: 'Why does buying bulk gravel by the ton vary on rainy days?',
+    answer:
+      'Quarry stockpiles are open to the weather. Saturated crushed stone can absorb 4% to 10% water by weight after prolonged rain storms. Because quarry scales measure gross vehicle weight, purchasing by the ton on wet days means you pay mineral aggregate prices for trapped water weight. Always inquire if the scale house adjusts for moisture or order in cubic yards if possible.',
+  },
+  {
+    question: 'What is demurrage or truck waiting time?',
+    answer:
+      'Commercial bulk haulers allocate 10 to 15 minutes of free on-site unloading time upon arrival. If the driver is delayed due to blocked driveways, vehicle obstructions, or manual wheelbarrow unloading directly from the dump bed, suppliers bill demurrage charges ranging from $2.00 to $4.50 per minute for every minute beyond the free threshold.',
+  },
+];
+---
+
+<BaseLayout
+  title={seo.title}
+  description={seo.description}
+  canonicalUrl={seo.canonicalUrl}
+  faqs={faqs}
+  breadcrumbs={[{ name: 'Supplier Quote Comparison', item: seo.canonicalUrl }]}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-5 sm:pt-7 pb-14 sm:pb-20">
+    <Breadcrumbs items={[{ name: 'Supplier Quote Comparison' }]} />
+
+    <!-- Hero Banner — High contrast dark slate with emerald aura -->
+    <div class="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-slate-900 border border-slate-800 px-6 sm:px-8 lg:px-10 py-7 sm:py-9 lg:py-10 mb-8 sm:mb-10 text-white shadow-md">
+      <div class="absolute -top-12 -right-12 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="relative flex flex-wrap items-end justify-between gap-6 lg:gap-8">
+        <div class="max-w-2xl">
+          <div class="inline-flex items-center gap-2 bg-emerald-950/80 border border-emerald-500/40 rounded-full px-3.5 py-1 text-xs font-bold text-emerald-300 mb-3.5 sm:mb-4 shadow-xs">
+            <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_8px_#34d399]"></span>
+            Supplier Decision Matrix · Landed Cost Normalization · Bulk vs Bags
+          </div>
+
+          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-[1.08] mb-2.5 sm:mb-3">
+            Supplier Quote Comparison Tool
+          </h1>
+          <p class="text-sm sm:text-base text-slate-200 max-w-xl leading-relaxed">
+            Enter quotes from local quarries, landscape supply yards, and home centers. Normalizes prices across bulk cubic yards, scale tons, and pre-packaged bags to reveal your lowest true landed cost.
+          </p>
+        </div>
+
+        <!-- Trust indicators -->
+        <div class="flex flex-wrap sm:flex-nowrap gap-2.5 sm:gap-3 shrink-0 w-full sm:w-auto">
+          {[
+            { val: 'Landed', unit: 'all-in', label: 'Material + Delivery' },
+            { val: 'Yd / Ton / Bag', unit: 'normalized', label: 'Unit Parity' },
+            { val: 'Best Deal', unit: 'decision', label: 'Instant Ranking' },
+          ].map(stat => (
+            <div class="flex-1 sm:flex-initial bg-slate-800/90 border border-slate-700/80 rounded-xl px-3.5 sm:px-4 py-2.5 sm:py-3 text-center min-w-[75px] sm:min-w-[90px] shadow-xs">
+              <div class="text-base sm:text-lg font-black text-white font-mono">{stat.val}</div>
+              <div class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">{stat.unit}</div>
+              <div class="text-[10px] text-slate-300 font-medium mt-0.5">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive Island -->
+    <div class="mb-12 sm:mb-16">
+      <QuoteComparisonIsland client:load />
+    </div>
+
+    <!-- Educational & Commercial Procurement Guide -->
+    <div class="space-y-12 mb-16">
+
+      <!-- SECTION 1: The Landed Cost Formula -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-5">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Commercial Procurement Strategy</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-2">The True Landed Cost Equation: How to Evaluate Material Bids</h2>
+        </div>
+
+        <p class="text-sm text-slate-700 leading-relaxed">
+          Evaluating landscape and aggregate quotes based solely on advertised unit price ($/ton or $/yard) is the most frequent financial miscalculation in project estimating. A quarry advertising crushed gravel at <strong>$32 per ton</strong> may appear cheaper than a local landscape depot charging <strong>$48 per cubic yard</strong>. However, when delivery drop fees, minimum orders, and tonnage conversions are factored in, the rankings frequently invert:
+        </p>
+
+        <div class="bg-slate-900 text-white p-5 rounded-xl space-y-3 font-mono text-xs">
+          <div class="text-emerald-400 font-bold uppercase tracking-wider">The Landed Cost Formula</div>
+          <div class="text-sm sm:text-base font-bold bg-slate-800/80 p-3 rounded-lg border border-slate-700">
+            Total Landed Cost = ( Material Quantity × Unit Price ) + Delivery Fee + Surcharges
+          </div>
+          <div class="text-xs text-slate-300 leading-relaxed font-sans">
+            To compare competing quotes objectively, calculate the <strong>Effective Cost per Cubic Yard</strong>:
+          </div>
+          <div class="text-sm font-bold bg-slate-800/80 p-3 rounded-lg border border-slate-700 text-emerald-300">
+            Effective $/yd³ = Total Landed Cost ÷ Net Required Volume (yd³)
+          </div>
+        </div>
+
+        <h3 class="text-lg font-bold text-slate-900 pt-2">Worked Contractor Proof: Ordering 8 Cubic Yards of #57 Crushed Stone</h3>
+        <p class="text-sm text-slate-700 leading-relaxed">
+          Examine a real procurement comparison for an 8-cubic-yard driveway topping project with stone density of 2,700 lbs/yd³ (1.35 tons/yd³):
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-700">
+          <div class="p-4 bg-emerald-50/60 rounded-xl border border-emerald-300 space-y-2">
+            <span class="font-bold text-emerald-950 block text-sm">Vendor A: Local Landscape Depot</span>
+            <span class="text-[10px] font-mono text-emerald-800 font-bold block">Priced by Cubic Yard</span>
+            <div class="space-y-1 font-mono text-slate-800">
+              <div>Material: 8 yds × $52/yd = $416.00</div>
+              <div>Delivery: Flat local drop = $75.00</div>
+              <div class="text-sm font-bold text-emerald-700 pt-1">Total: $491.00 ($61.38/yd³)</div>
+            </div>
+            <p class="text-[11px] text-slate-600">✓ <strong>WINNER: Lowest overall cost</strong> despite highest apparent unit price.</p>
+          </div>
+
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <span class="font-bold text-slate-900 block text-sm">Vendor B: Regional Rock Quarry</span>
+            <span class="text-[10px] font-mono text-slate-700 font-bold block">Priced by Certified Scale Ton</span>
+            <div class="space-y-1 font-mono text-slate-800">
+              <div>Material: 10.8 tons × $34/ton = $367.20</div>
+              <div>Delivery: Heavy highway haul = $150.00</div>
+              <div class="text-sm font-bold text-slate-900 pt-1">Total: $517.20 ($64.65/yd³)</div>
+            </div>
+            <p class="text-[11px] text-slate-600">High transportation drop fee offsets lower rock material rate.</p>
+          </div>
+
+          <div class="p-4 bg-rose-50/60 rounded-xl border border-rose-200 space-y-2">
+            <span class="font-bold text-rose-950 block text-sm">Vendor C: Big-Box Home Center</span>
+            <span class="text-[10px] font-mono text-rose-800 font-bold block">Priced in 50-lb Bags (0.5 cu ft)</span>
+            <div class="space-y-1 font-mono text-slate-800">
+              <div>Material: 432 bags × $4.50 = $1,944.00</div>
+              <div>Delivery: Pallet drop flat fee = $79.00</div>
+              <div class="text-sm font-bold text-rose-700 pt-1">Total: $2,023.00 ($252.88/yd³)</div>
+            </div>
+            <p class="text-[11px] text-slate-600">Over 400% more expensive due to packaging and retail markup.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 2: Hidden Supplier Fees & Surcharges -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-5">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Jobsite Logistics</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-2">Hidden Bulk Material Surcharges to Ask Your Supplier Before Ordering</h2>
+        </div>
+
+        <p class="text-sm text-slate-700 leading-relaxed">
+          When requesting quotes over the telephone or via email, always demand line-item confirmation of the following industry charges:
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-700">
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-1.5">
+            <span class="font-bold text-slate-900 block text-sm">1. Under-Minimum / Short-Load Surcharge</span>
+            <p class="text-slate-600 leading-relaxed">
+              Most commercial dump haulers set minimum load requirements (typically 4 or 5 cubic yards). If you order 2 yards, they will assess a short-load penalty ranging from $40 to $90 to cover operational vehicle costs.
+            </p>
+          </div>
+
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-1.5">
+            <span class="font-bold text-slate-900 block text-sm">2. Split-Load Baffle Fee</span>
+            <p class="text-slate-600 leading-relaxed">
+              Placing two materials (such as topsoil and gravel) in a single dump truck equipped with an internal divider gate incurs a $40 to $75 fee. If you have space on site, receiving deliveries on separate days can eliminate this surcharge.
+            </p>
+          </div>
+
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-1.5">
+            <span class="font-bold text-slate-900 block text-sm">3. Demurrage & Unloading Wait Time</span>
+            <p class="text-slate-600 leading-relaxed">
+              Drivers are contracted for quick dump-and-go unloading (usually 10 to 15 minutes max). If the driver is delayed due to driveway obstructions or slow manual spreading, dispatch will charge $2.00 to $4.00 per minute of wait time.
+            </p>
+          </div>
+
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-1.5">
+            <span class="font-bold text-slate-900 block text-sm">4. Off-Pavement Drop Waivers</span>
+            <p class="text-slate-600 leading-relaxed">
+              Drivers will require a signed property damage waiver before crossing curb lines or driving over lawns. Loaded 60,000-lb trucks can crack unreinforced residential driveways and crush shallow septic tanks. Always stage drops near the street curb.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 3: FAQs -->
+      <section class="space-y-6">
+        <div>
+          <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Procurement FAQ</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-1">Quote Comparison FAQs</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {faqs.map((faq) => (
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-2xs">
+              <h3 class="font-bold text-slate-900 text-sm mb-2">{faq.question}</h3>
+              <p class="text-xs text-slate-600 leading-relaxed">{faq.answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Cross-Calculator Link Matrix -->
+      <RelatedCalculators currentPath={seo.canonicalUrl} />
+
+    </div>
+  </div>
+</BaseLayout>

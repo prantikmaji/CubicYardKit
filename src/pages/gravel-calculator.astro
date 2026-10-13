@@ -1,0 +1,378 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import GravelCalculator from '../components/calc/GravelCalculator';
+import Breadcrumbs from '../components/seo/Breadcrumbs.astro';
+import SavedProjectsIsland from '../components/storage/SavedProjectsIsland';
+import RelatedCalculators from '../components/layout/RelatedCalculators.astro';
+
+const seo = {
+  title: 'Gravel Calculator | Yards, Tons & Pea Gravel | CubicYardKit',
+  description:
+    'Calculate gravel in cubic yards, certified tons, and 50-lb bags for driveways, patios, and drainage. ASTM aggregate gradations, multi-layer profiles, and quarry scale conversions.',
+  canonicalUrl: 'https://cubicyardkit.com/gravel-calculator/',
+};
+
+const faqs = [
+  {
+    question: 'How do I calculate how much gravel I need for a driveway or walkway?',
+    answer:
+      'Measure the length and width in feet, and your desired depth in inches. Multiply length by width to obtain surface area in square feet. Multiply by depth in inches and divide by 324 to find cubic yards: (Length ft × Width ft × Depth in) ÷ 324 = Cubic Yards. To convert cubic yards to tons, multiply by the aggregate density factor: 1.35 for standard 3/4" crushed stone (#57 clean), 1.40 for pea gravel, or 1.50 for dense crusher run. Add a 10% to 15% allowance for compaction and subgrade penetration.',
+  },
+  {
+    question: 'How many tons of gravel are in a cubic yard?',
+    answer:
+      'One cubic yard of typical #57 crushed limestone or granite aggregate weighs approximately 2,700 pounds, which equals 1.35 US tons (2,700 ÷ 2,000). Smooth pea gravel weighs approximately 2,800 pounds (1.40 tons) per cubic yard due to tighter pebble packing. Dense crusher run (dense grade aggregate with fines) weighs approximately 3,000 pounds (1.50 tons) per cubic yard when compacted. Always check scale ticket moisture content, as rain can add 5% to 8% water weight.',
+  },
+  {
+    question: 'Can you use pea gravel for a vehicular driveway?',
+    answer:
+      'Civil contractors strongly advise against using pea gravel on vehicle driveways or steep inclines. Pea gravel consists of naturally rounded, smooth river stones that act like ball bearings under vehicular tire pressure. Tires will spin, create deep ruts, and throw loose stones. Vehicle driveways require angular crushed stone (#57 or crusher run), whose jagged, fractured edges interlock under weight to form a rigid, load-bearing driving surface.',
+  },
+  {
+    question: 'How deep should a gravel driveway be installed?',
+    answer:
+      'A properly engineered new gravel driveway requires a total depth of 8 to 10 inches built in three structural lifts: a 4 to 6 inch sub-base of coarse #3 or #4 ballast rock, followed by a 3 to 4 inch base layer of compacted crusher run (DGA / CR6), topped with a 2 to 3 inch wearing surface of 3/4-inch angular crushed stone (#57 stone). For resurfacing an existing solid driveway base, a 2 to 3 inch topdressing layer is standard.',
+  },
+  {
+    question: 'How many 50-lb bags of gravel make 1 cubic yard or 1 ton?',
+    answer:
+      'Standard pre-bagged gravel sold at hardware retail centers contains 0.5 cubic feet (approx. 50 lbs). Because one cubic yard contains 27 cubic feet, you need exactly 54 bags (27 ÷ 0.5) to equal one cubic yard. To equal one US ton (2,000 lbs), you need exactly 40 bags of 50 lbs each. Buying in bulk from a local quarry or landscape supplier is dramatically cheaper for projects exceeding 0.75 cubic yards.',
+  },
+  {
+    question: 'Why is landscape geotextile fabric critical under gravel?',
+    answer:
+      'Without a heavy-duty woven geotextile fabric between the virgin soil subgrade and your gravel base, the heavy crushed stone will migrate downward into the soft subsoil under vehicle traffic while mud works its way upward. Geotextile fabric acts as a permanent tensile separation barrier, preserving the entire thickness of your stone foundation, stopping ruts, and preventing weed growth from below.',
+  },
+  {
+    question: 'How do you crown a gravel driveway for proper water drainage?',
+    answer:
+      'A gravel driveway must be shaped with a center crown that slopes downward toward the shoulders at a 2% to 4% pitch (approximately 1/2 inch of drop per foot of width from the centerline). For a 10-foot-wide driveway, the center should be 2.5 inches higher than the outer edges. This prevents standing water, which is the root cause of potholes and washboarding.',
+  },
+  {
+    question: 'How much does a commercial tandem dump truck of gravel hold?',
+    answer:
+      'A standard commercial tandem-axle dump truck (10-wheeler) typically carries 10 to 12 cubic yards of gravel, legally capped by Department of Transportation (DOT) gross vehicle weight ratings at 13 to 15 tons of payload. Tri-axle dump trucks can haul 14 to 16 cubic yards (18 to 22 tons).',
+  },
+];
+---
+
+<BaseLayout
+  title={seo.title}
+  description={seo.description}
+  canonicalUrl={seo.canonicalUrl}
+  faqs={faqs}
+  breadcrumbs={[{ name: 'Gravel Calculator', item: seo.canonicalUrl }]}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-5 sm:pt-7 pb-14 sm:pb-20">
+    <Breadcrumbs items={[{ name: 'Gravel Calculator' }]} />
+
+    <!-- Hero Banner — High contrast dark slate with emerald aura -->
+    <div class="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-slate-900 border border-slate-800 px-6 sm:px-8 lg:px-10 py-7 sm:py-9 lg:py-10 mb-8 sm:mb-10 text-white shadow-md">
+      <div class="absolute -top-12 -right-12 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="relative flex flex-wrap items-end justify-between gap-6 lg:gap-8">
+        <div class="max-w-2xl">
+          <div class="inline-flex items-center gap-2 bg-emerald-950/80 border border-emerald-500/40 rounded-full px-3.5 py-1 text-xs font-bold text-emerald-300 mb-3.5 sm:mb-4 shadow-xs">
+            <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_8px_#34d399]"></span>
+            Quarry Scale Weights · ASTM C33 Aggregate Classifications · Certified Tonnage
+          </div>
+
+          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-[1.08] mb-2.5 sm:mb-3">
+            Gravel Calculator
+          </h1>
+          <p class="text-sm sm:text-base text-slate-200 max-w-xl leading-relaxed">
+            Estimate aggregate in cubic yards, certified tons, and 50-lb bags for driveways, walkways, patios, and French drains. Includes ASTM aggregate gradations, multi-layer base engineering, and compaction factors.
+          </p>
+        </div>
+
+        <!-- Trust indicators -->
+        <div class="flex flex-wrap sm:flex-nowrap gap-2.5 sm:gap-3 shrink-0 w-full sm:w-auto">
+          {[
+            { val: '2,700', unit: 'lb/yd³', label: '#57 Crushed Stone' },
+            { val: '2,800', unit: 'lb/yd³', label: 'Pea Gravel' },
+            { val: '3,000', unit: 'lb/yd³', label: 'Crusher Run' },
+            { val: '54', unit: 'bags/yd³', label: '50-lb Bags (0.5 cu ft)' },
+          ].map(stat => (
+            <div class="flex-1 sm:flex-initial bg-slate-800/90 border border-slate-700/80 rounded-xl px-3.5 sm:px-4 py-2.5 sm:py-3 text-center min-w-[75px] sm:min-w-[90px] shadow-xs">
+              <div class="text-base sm:text-lg font-black text-white font-mono">{stat.val}</div>
+              <div class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">{stat.unit}</div>
+              <div class="text-[10px] text-slate-300 font-medium mt-0.5">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive Island -->
+    <div class="mb-12 sm:mb-16">
+      <GravelCalculator client:load />
+    </div>
+
+    <!-- Trade Editorial & Engineering Deep Dive -->
+    <div class="space-y-12 mb-16">
+
+      <!-- SECTION 1: How to Calculate Gravel (Formulas & Dimensional Analysis) -->
+      <section id="formula" class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-5 scroll-mt-20">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Volumetric & Scale Math</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-2">How to Calculate Gravel: Formulas for Yards, Tons & Bags</h2>
+        </div>
+
+        <p class="text-sm text-slate-700 leading-relaxed">
+          Aggregates in North America are surveyed in <strong>cubic yards</strong> but commercially invoiced at quarry scale houses in <strong>certified tons</strong> (recorded across inbound/outbound axle scales). Ordering materials requires a two-step mathematical process: determining the net geometric volume, and converting that volume to mass using the mineral density of the stone:
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4 font-mono text-xs">
+          <div class="bg-slate-900 text-white p-4 rounded-xl space-y-2">
+            <span class="text-emerald-400 font-bold block uppercase tracking-wider">Step 1: Volumetric Formula (Yards)</span>
+            <div class="text-sm font-bold bg-slate-800/80 p-2.5 rounded border border-slate-700">
+              Cubic Yards = ( Length ft × Width ft × Depth in ) ÷ 324
+            </div>
+            <p class="text-slate-300 font-sans text-xs pt-1">
+              Derived from dividing length × width × (depth ÷ 12) by 27. (12 × 27 = 324).
+            </p>
+          </div>
+
+          <div class="bg-slate-900 text-white p-4 rounded-xl space-y-2">
+            <span class="text-emerald-400 font-bold block uppercase tracking-wider">Step 2: Scale Weight Formula (Tons)</span>
+            <div class="text-sm font-bold bg-slate-800/80 p-2.5 rounded border border-slate-700">
+              Tons = Cubic Yards × ( Bulk Density lbs/yd³ ÷ 2,000 )
+            </div>
+            <p class="text-slate-300 font-sans text-xs pt-1">
+              For standard #57 stone: multiply yards by <strong>1.35</strong>. For crusher run: multiply by <strong>1.50</strong>.
+            </p>
+          </div>
+        </div>
+
+        <h3 class="text-lg font-bold text-slate-900 pt-2">Worked Contractor Example: 40' × 12' Driveway at 3" Depth</h3>
+        <p class="text-sm text-slate-700 leading-relaxed">
+          Suppose you are surfacing a residential driveway section measuring <strong>40 feet long</strong>, <strong>12 feet wide</strong>, and <strong>3 inches deep</strong> with 3/4" angular crushed limestone:
+        </p>
+        <ol class="list-decimal list-inside text-sm text-slate-700 space-y-1.5 pl-2 font-medium">
+          <li>Calculate surface area: <span class="font-mono text-slate-900">40 ft × 12 ft = 480 sq ft</span></li>
+          <li>Calculate net cubic volume: <span class="font-mono text-slate-900">(480 sq ft × 3 in) ÷ 324 = 4.44 cu yds</span></li>
+          <li>Add 12% compaction and subgrade penetration allowance: <span class="font-mono text-slate-900">4.44 × 1.12 = 4.97 cu yds</span></li>
+          <li>Convert cubic yards to certified tons (2,700 lb/yd³): <span class="font-mono text-slate-900">4.97 cu yds × 1.35 tons/yd = 6.71 Tons</span></li>
+          <li>Pre-bagged alternative: <span class="font-mono text-slate-900">4.97 cu yds × 54 bags/yd = 268 bags (50-lb each)</span></li>
+        </ol>
+        <p class="text-xs text-slate-600 italic">
+          *Contractor note: Ordering 268 bags at retail prices ($4.50/bag = $1,206) is financially prohibitive compared to ordering 7 tons bulk delivered from a local quarry (~$420 total including delivery fee).
+        </p>
+      </section>
+
+      <!-- SECTION 2: Standard ASTM Aggregate Gradations -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-5">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Quarry Material Specifications</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-2">ASTM & AASHTO Aggregate Gradations: Sizing & Trade Names</h2>
+        </div>
+
+        <p class="text-sm text-slate-700 leading-relaxed">
+          Quarries crush and mechanically sieve mineral stone through standardized vibrating screens conforming to <strong>ASTM C33</strong> and <strong>AASHTO M43</strong> standards. Selecting the wrong aggregate gradation leads to drainage failure, rutting, or unstable footing:
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <!-- #57 Stone -->
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-bold text-slate-900">#57 Crushed Stone (3/4" Clean)</span>
+              <span class="text-[10px] font-mono bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded">Most Popular</span>
+            </div>
+            <div class="text-xs font-mono text-emerald-700 font-bold">2,700 lbs/yd³ · ~1.35 tons/yd³</div>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Angular stone ranging from 1/2" to 1" without stone dust. Washed clean for exceptional hydraulic drainage. The universal standard for driveway wearing surfaces, French drains, septic drain fields, and concrete aggregate.
+            </p>
+          </div>
+
+          <!-- Crusher Run -->
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-bold text-slate-900">Crusher Run (CR6 / DGA / 21A)</span>
+              <span class="text-[10px] font-mono bg-blue-100 text-blue-800 font-bold px-2 py-0.5 rounded">Heavy Sub-Base</span>
+            </div>
+            <div class="text-xs font-mono text-emerald-700 font-bold">3,000 lbs/yd³ · ~1.50 tons/yd³</div>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Dense graded aggregate containing angular stone from 3/4" down to fine rock dust. When moisture-conditioned and compacted with a vibratory roller, the fines fill voids, locking the aggregate into a near-concrete hardness.
+            </p>
+          </div>
+
+          <!-- Pea Gravel -->
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-bold text-slate-900">Pea Gravel (3/8" Washed River Rock)</span>
+              <span class="text-[10px] font-mono bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded">Pedestrian Only</span>
+            </div>
+            <div class="text-xs font-mono text-emerald-700 font-bold">2,800 lbs/yd³ · ~1.40 tons/yd³</div>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Naturally tumbled, rounded pebbles comfortable under bare feet. Never compacts or binds. Superb for garden walkways, dog runs, playground borders, and pipe bedding. Never use on vehicle access driveways.
+            </p>
+          </div>
+
+          <!-- #3 / #4 Ballast Rock -->
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-bold text-slate-900">#3 / #4 Ballast Rock (1.5" to 2.5")</span>
+              <span class="text-[10px] font-mono bg-purple-100 text-purple-800 font-bold px-2 py-0.5 rounded">Stabilization</span>
+            </div>
+            <div class="text-xs font-mono text-emerald-700 font-bold">2,600 lbs/yd³ · ~1.30 tons/yd³</div>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Heavy, coarse stone used to bridge soft, spongy clay and establish stable construction entrances. Resists being pushed into wet, muddy subgrades under 80,000-lb cement mixers.
+            </p>
+          </div>
+
+          <!-- Decomposed Granite -->
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-bold text-slate-900">Decomposed Granite (DG with Fines)</span>
+              <span class="text-[10px] font-mono bg-slate-200 text-slate-800 font-bold px-2 py-0.5 rounded">Pathway Paving</span>
+            </div>
+            <div class="text-xs font-mono text-emerald-700 font-bold">3,100 lbs/yd³ · ~1.55 tons/yd³</div>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Weathered granite fragments blended with natural rock fines. Compacts into a smooth, naturalistic, permeable pathway surface ideal for park trails, xeriscaping, and bocce courts.
+            </p>
+          </div>
+
+          <!-- River Rock / Egg Stone -->
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-bold text-slate-900">River Rock / Egg Stone (1" to 3")</span>
+              <span class="text-[10px] font-mono bg-rose-100 text-rose-800 font-bold px-2 py-0.5 rounded">Decorative & Swales</span>
+            </div>
+            <div class="text-xs font-mono text-emerald-700 font-bold">2,600 lbs/yd³ · ~1.30 tons/yd³</div>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Smooth river rock used in rain gardens, dry creek beds, bioswales, and foundation splash aprons. The smooth contour allows storm water to flow through without carrying sediment away.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 3: Engineering a Multi-Layer Gravel Driveway -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-5">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Civil Construction Best Practices</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-2">The Anatomy of a High-Performance Gravel Driveway</h2>
+        </div>
+
+        <p class="text-sm text-slate-700 leading-relaxed">
+          Dumping loose gravel directly onto undisturbed topsoil is the single biggest cause of driveway failure. Within six months, vehicles pump the stones into the soil, creating mud pits and potholes. Civil engineers design long-lasting unpaved access driveways using a three-layer structural profile:
+        </p>
+
+        <div class="space-y-4">
+          <div class="p-4 bg-slate-50 rounded-xl border-l-4 border-l-purple-600 border border-slate-200">
+            <div class="flex items-center justify-between mb-1">
+              <span class="font-bold text-slate-900 text-sm">Layer 1: Subgrade Preparation & Woven Geotextile Fabric</span>
+              <span class="text-xs font-mono font-bold text-purple-700">Tensile Separation</span>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Excavate 8 to 10 inches to remove all organic topsoil until virgin subsoil is exposed. Compact the subgrade with a vibratory roller. Roll out a heavy-duty <strong>woven geotextile fabric (such as 200W or 315W)</strong> with 18-inch overlaps. This prevents stone from sinking into subgrade clay under wheel loads.
+            </p>
+          </div>
+
+          <div class="p-4 bg-slate-50 rounded-xl border-l-4 border-l-blue-600 border border-slate-200">
+            <div class="flex items-center justify-between mb-1">
+              <span class="font-bold text-slate-900 text-sm">Layer 2: Compacted Aggregate Base (4" to 6" Crusher Run / DGA)</span>
+              <span class="text-xs font-mono font-bold text-blue-700">Structural Load Distribution</span>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Place 4 to 6 inches of Dense Graded Aggregate (CR6 or #21A). Moisture-condition with a hose and compact in maximum 3-inch lifts using a 1-ton ride-on roller or heavy vibratory plate compactor. This layer distributes the 4,000 to 10,000 lb axle loads of passenger vehicles across the subgrade.
+            </p>
+          </div>
+
+          <div class="p-4 bg-slate-50 rounded-xl border-l-4 border-l-emerald-600 border border-slate-200">
+            <div class="flex items-center justify-between mb-1">
+              <span class="font-bold text-slate-900 text-sm">Layer 3: Wearing Surface Course (2" to 3" #57 Crushed Stone)</span>
+              <span class="text-xs font-mono font-bold text-emerald-700">Traction & Drainage</span>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Apply 2 to 3 inches of 3/4" angular clean crushed stone. Grade with a <strong>2% to 4% center crown</strong> (1/2" drop per foot of width from center to shoulder) to ensure rainwater sheds instantly into roadside ditches rather than pooling and forming potholes.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 4: Bagged vs Bulk Cost Threshold -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-5">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Purchasing & Logistics</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-2">Bagged vs. Bulk Quarry Delivery: Financial Break-Even Analysis</h2>
+        </div>
+
+        <p class="text-sm text-slate-700 leading-relaxed">
+          Home centers sell bagged gravel in 0.5 cu ft bags (~50 lbs) for homeowner convenience. Commercial aggregate yards sell by the cubic yard or ton loaded into pickup beds or delivered by dump truck. Below is the real financial comparison:
+        </p>
+
+        <div class="overflow-x-auto rounded-xl border border-slate-200">
+          <table class="w-full text-xs text-left">
+            <thead class="bg-slate-900 text-white font-bold">
+              <tr>
+                <th class="px-3.5 py-2.5">Project Volume</th>
+                <th class="px-3 py-2.5 text-right">50-lb Bags Required</th>
+                <th class="px-3 py-2.5 text-right">Bagged Cost (@ $4.50/bag)</th>
+                <th class="px-3 py-2.5 text-right">Bulk Quarry Cost + Delivery</th>
+                <th class="px-3.5 py-2.5 text-center font-bold text-emerald-400">Recommended Method</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 text-slate-700">
+              <tr>
+                <td class="px-3.5 py-2 font-bold text-slate-900">0.25 cu yd (7 cu ft)</td>
+                <td class="px-3 py-2 text-right font-mono">14 bags</td>
+                <td class="px-3 py-2 text-right font-mono font-medium">$63.00</td>
+                <td class="px-3 py-2 text-right font-mono text-slate-500">$95.00 (min drop fee)</td>
+                <td class="px-3.5 py-2 text-center font-bold text-slate-700">Pre-Bagged (DIY Trunk)</td>
+              </tr>
+              <tr class="bg-slate-50/50">
+                <td class="px-3.5 py-2 font-bold text-slate-900">0.50 cu yd (13.5 cu ft)</td>
+                <td class="px-3 py-2 text-right font-mono">27 bags</td>
+                <td class="px-3 py-2 text-right font-mono font-medium">$121.50</td>
+                <td class="px-3 py-2 text-right font-mono text-slate-500">$105.00</td>
+                <td class="px-3.5 py-2 text-center font-bold text-slate-700">Break-Even / Pickup Bed</td>
+              </tr>
+              <tr>
+                <td class="px-3.5 py-2 font-bold text-slate-900">1.0 cu yd (27 cu ft)</td>
+                <td class="px-3 py-2 text-right font-mono">54 bags</td>
+                <td class="px-3 py-2 text-right font-mono font-medium text-rose-700">$243.00</td>
+                <td class="px-3 py-2 text-right font-mono font-bold text-emerald-700">$115.00</td>
+                <td class="px-3.5 py-2 text-center font-bold text-emerald-700">Bulk Delivery (Save $128)</td>
+              </tr>
+              <tr class="bg-slate-50/50">
+                <td class="px-3.5 py-2 font-bold text-slate-900">3.0 cu yds (81 cu ft)</td>
+                <td class="px-3 py-2 text-right font-mono">162 bags</td>
+                <td class="px-3 py-2 text-right font-mono font-medium text-rose-700">$729.00</td>
+                <td class="px-3 py-2 text-right font-mono font-bold text-emerald-700">$215.00</td>
+                <td class="px-3.5 py-2 text-center font-bold text-emerald-700">Bulk Delivery (Save $514)</td>
+              </tr>
+              <tr>
+                <td class="px-3.5 py-2 font-bold text-slate-900">10.0 cu yds (Tandem Load)</td>
+                <td class="px-3 py-2 text-right font-mono">540 bags</td>
+                <td class="px-3 py-2 text-right font-mono font-medium text-rose-700">$2,430.00</td>
+                <td class="px-3 py-2 text-right font-mono font-bold text-emerald-700">$550.00</td>
+                <td class="px-3.5 py-2 text-center font-bold text-emerald-700">Commercial Tandem (Save $1,880)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SECTION 5: FAQs -->
+      <section class="space-y-6">
+        <div>
+          <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Expert Guidance</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-1">Gravel Calculator FAQs</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {faqs.map((faq) => (
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-2xs">
+              <h3 class="font-bold text-slate-900 text-sm mb-2">{faq.question}</h3>
+              <p class="text-xs text-slate-600 leading-relaxed">{faq.answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Cross-Calculator Link Matrix -->
+      <RelatedCalculators currentPath={seo.canonicalUrl} />
+
+    </div>
+  </div>
+</BaseLayout>

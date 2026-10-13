@@ -1,0 +1,37 @@
+---
+export interface Props {
+  items: Array<{ name: string; href?: string }>;
+}
+
+const { items } = Astro.props;
+---
+
+<nav aria-label="Breadcrumb" class="mb-4">
+  <ol class="flex items-center space-x-2 text-xs text-slate-500" itemscope itemtype="https://schema.org/BreadcrumbList">
+    <li class="flex items-center space-x-2" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+      <a href="/" itemprop="item" class="hover:text-slate-900 transition-colors">
+        <span itemprop="name">Home</span>
+      </a>
+      <meta itemprop="position" content="1" />
+    </li>
+    {items.map((item, index) => {
+      const isLast = index === items.length - 1;
+      const position = index + 2;
+      return (
+        <li class="flex items-center space-x-2" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+          {isLast || !item.href ? (
+            <span class="text-slate-900 font-medium" aria-current="page" itemprop="name">{item.name}</span>
+          ) : (
+            <a href={item.href} itemprop="item" class="hover:text-slate-900 transition-colors">
+              <span itemprop="name">{item.name}</span>
+            </a>
+          )}
+          <meta itemprop="position" content={String(position)} />
+        </li>
+      );
+    })}
+  </ol>
+</nav>

@@ -1,0 +1,271 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import DirtCalculator from '../components/calc/DirtCalculator';
+import Breadcrumbs from '../components/seo/Breadcrumbs.astro';
+import SavedProjectsIsland from '../components/storage/SavedProjectsIsland';
+import RelatedCalculators from '../components/layout/RelatedCalculators.astro';
+
+const seo = {
+  title: 'Dirt Calculator | Fill Dirt & Yards of Dirt | CubicYardKit',
+  description:
+    'Calculate cubic yards and tons of fill dirt and subsoil. Built-in compaction factors, foundation slope grading specs (IRC R401.3), and dump truckload sizing.',
+  canonicalUrl: 'https://cubicyardkit.com/dirt-calculator/',
+};
+
+const faqs = [
+  {
+    question: 'How do you calculate how many cubic yards of dirt are needed?',
+    answer:
+      'Measure the area in feet and depth in inches. Multiply length (ft) by width (ft) to calculate square feet, multiply by depth in inches, and divide by 324 to find base cubic yards: (Length ft × Width ft × Depth in) ÷ 324 = Cubic Yards. Always add a 15% to 20% compaction factor because loose excavated dirt naturally settles and compresses once watered and tamped into place.',
+  },
+  {
+    question: 'What is the structural difference between fill dirt and topsoil?',
+    answer:
+      'Fill dirt is inorganic subsoil excavated from beneath the biological topsoil layer (the B-horizon). It contains virtually zero organic matter, seeds, or decomposing humus. Because organic matter decomposes and creates voids that cause structural sinking, fill dirt is strictly required for building foundations, backfilling retaining walls, swimming pool fills, and grading slopes. Topsoil contains 5% to 15% organic matter and is used solely for the upper 2 to 4 inches of lawn and garden root zones.',
+  },
+  {
+    question: 'How much does a cubic yard of dirt weigh?',
+    answer:
+      'Typical dry, loose fill dirt weighs approximately 2,000 to 2,200 pounds (1.0 to 1.1 US tons) per cubic yard. When moisture-conditioned and compacted, density rises to 2,400 to 2,600 lbs/yd³ (1.2 to 1.3 tons). Heavy excavated clay saturated with rainwater can exceed 2,700 to 2,800 pounds (1.35 to 1.4 tons) per cubic yard.',
+  },
+  {
+    question: 'How many cubic yards of dirt are in a dump truck?',
+    answer:
+      'A standard single-axle dump truck carries 5 to 7 cubic yards (6 to 8 tons). A commercial tandem-axle 10-wheeler carries 10 to 12 cubic yards (12 to 15 tons). A tri-axle dump truck carries 14 to 16 cubic yards (18 to 22 tons). Deliveries are limited primarily by Department of Transportation (DOT) gross vehicle weight restrictions.',
+  },
+  {
+    question: 'What is the IRC building code requirement for foundation dirt grading slope?',
+    answer:
+      'Section R401.3 of the International Residential Code (IRC) mandates that the ground adjacent to foundation walls must fall a minimum of 6 inches within the first 10 feet (a 5% downward slope away from the structure). If property boundaries or physical obstructions prevent a 10-foot slope, swales or French drains must direct water away from the foundation.',
+  },
+  {
+    question: 'Why must fill dirt be compacted in shallow lifts?',
+    answer:
+      'Civil engineering specifications require fill dirt to be placed in shallow lifts no deeper than 6 to 8 inches before running a mechanical plate compactor or jumping jack rammer. If you dump 18 to 24 inches of loose dirt at once and roll the surface, only the top 3 to 4 inches become densified, leaving uncompacted loose soil underneath that will settle irregularly over time.',
+  },
+  {
+    question: 'What is the difference between screened fill and unscreened fill?',
+    answer:
+      'Unscreened fill dirt is loaded directly from excavation sites and contains large rocks, heavy clay clumps, and tree roots. Screened fill dirt is processed through a mechanical rotating trommel screen to remove debris and stones larger than 1/2 or 3/4 inch, making it dramatically easier to spread, rake, and compact evenly around pipes and foundations.',
+  },
+  {
+    question: 'How do you convert bank yards to truck haul loads?',
+    answer:
+      'Virgin soil in the ground occupies Bank Cubic Yards (BCY). When excavated by an excavator, soil particles separate and expand with entrained air, creating a swell of 20% to 30%. To estimate the number of dump trucks required to haul away an excavation hole, multiply the bank volume by 1.25 to obtain Loose Cubic Yards (LCY).',
+  },
+];
+---
+
+<BaseLayout
+  title={seo.title}
+  description={seo.description}
+  canonicalUrl={seo.canonicalUrl}
+  faqs={faqs}
+  breadcrumbs={[{ name: 'Dirt Calculator', item: seo.canonicalUrl }]}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-5 sm:pt-7 pb-14 sm:pb-20">
+    <Breadcrumbs items={[{ name: 'Dirt Calculator' }]} />
+
+    <!-- Hero Banner — High contrast dark slate with amber aura -->
+    <div class="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-slate-900 border border-slate-800 px-6 sm:px-8 lg:px-10 py-7 sm:py-9 lg:py-10 mb-8 sm:mb-10 text-white shadow-md">
+      <div class="absolute -top-12 -right-12 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="relative flex flex-wrap items-end justify-between gap-6 lg:gap-8">
+        <div class="max-w-2xl">
+          <div class="inline-flex items-center gap-2 bg-amber-950/80 border border-amber-500/40 rounded-full px-3.5 py-1 text-xs font-bold text-amber-300 mb-3.5 sm:mb-4 shadow-xs">
+            <span class="w-1.5 h-1.5 bg-amber-400 rounded-full animate-pulse shadow-[0_0_8px_#f59e0b]"></span>
+            Excavation & Subgrade Grading · IRC R401.3 Drainage Codes · Compaction Physics
+          </div>
+
+          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-[1.08] mb-2.5 sm:mb-3">
+            Dirt Calculator
+          </h1>
+          <p class="text-sm sm:text-base text-slate-200 max-w-xl leading-relaxed">
+            Estimate cubic yards, tonnage, and dump truckloads of fill dirt. Accounts for mechanical compaction, natural settlement allowances, foundation grading slopes, and soil swell.
+          </p>
+        </div>
+
+        <!-- Trust indicators -->
+        <div class="flex flex-wrap sm:flex-nowrap gap-2.5 sm:gap-3 shrink-0 w-full sm:w-auto">
+          {[
+            { val: '15-20%', unit: 'settlement', label: 'Compaction Factor' },
+            { val: '2,200', unit: 'lb/yd³', label: 'Clean Fill Dirt' },
+            { val: '10', unit: 'yd³/truck', label: 'Tandem Dump Truck' },
+            { val: '6" / 10\'', unit: 'IRC Slope', label: 'Drainage Code' },
+          ].map(stat => (
+            <div class="flex-1 sm:flex-initial bg-slate-800/90 border border-slate-700/80 rounded-xl px-3.5 sm:px-4 py-2.5 sm:py-3 text-center min-w-[75px] sm:min-w-[90px] shadow-xs">
+              <div class="text-base sm:text-lg font-black text-white font-mono">{stat.val}</div>
+              <div class="text-[10px] text-amber-400 font-bold uppercase tracking-wider">{stat.unit}</div>
+              <div class="text-[10px] text-slate-300 font-medium mt-0.5">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive Island -->
+    <div class="mb-12 sm:mb-16">
+      <DirtCalculator client:load />
+    </div>
+
+    <!-- Educational & Technical Content -->
+    <div class="space-y-12 mb-16">
+
+      <!-- SECTION 1: How to Calculate Fill Dirt & Settlement -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-5">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-[11px] font-bold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Geotechnical Mechanics</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-2">How to Calculate Fill Dirt: Accounting for Soil Settlement</h2>
+        </div>
+
+        <p class="text-sm text-slate-700 leading-relaxed">
+          When excavated soil is dumped from a truck, it contains substantial entrained air voids. As rain falls and gravity acts over subsequent months—or when mechanical vibratory plates roll the surface—those voids collapse. If you order the exact geometric volume of an excavation hole, your finished grade will end up <strong>2 to 4 inches sunken below grade</strong>.
+        </p>
+
+        <div class="bg-slate-900 text-white p-5 rounded-xl space-y-3 font-mono text-xs">
+          <div class="text-amber-400 font-bold uppercase tracking-wider">Compacted Fill Dirt Equation</div>
+          <div class="text-sm sm:text-base font-bold bg-slate-800/80 p-3 rounded-lg border border-slate-700">
+            Ordered Cubic Yards = [ (Length ft × Width ft × Depth in) ÷ 324 ] × ( 1 + Settlement % ÷ 100 )
+          </div>
+          <div class="text-xs text-slate-300 leading-relaxed font-sans">
+            Where standard contractor settlement factor is <strong>15% for pre-compacted soils</strong> and <strong>20% for uncompacted landscape fill</strong>.
+          </div>
+        </div>
+
+        <h3 class="text-lg font-bold text-slate-900 pt-2">Worked Contractor Example: Filling a 40' × 20' Lawn Depression at 6" Depth</h3>
+        <p class="text-sm text-slate-700 leading-relaxed">
+          Suppose a property owner is repairing an eroded backyard hollow measuring <strong>40 feet long</strong> by <strong>20 feet wide</strong> with an average fill depth of <strong>6 inches</strong>:
+        </p>
+        <ol class="list-decimal list-inside text-sm text-slate-700 space-y-1.5 pl-2 font-medium">
+          <li>Calculate surface area: <span class="font-mono text-slate-900">40 ft × 20 ft = 800 sq ft</span></li>
+          <li>Calculate net geometric void volume: <span class="font-mono text-slate-900">(800 sq ft × 6 in) ÷ 324 = 14.81 cu yds</span></li>
+          <li>Add 18% compaction and natural settlement allowance: <span class="font-mono text-slate-900">14.81 × 1.18 = 17.48 cu yds</span></li>
+          <li>Convert cubic yards to scale weight (2,200 lb/yd³): <span class="font-mono text-slate-900">17.48 cu yds × 1.10 tons/yd = 19.23 Tons</span></li>
+          <li>Truckload calculation: <span class="font-mono text-slate-900">17.48 cu yds ÷ 10 yds/truck = 2 Tandem dump truckloads</span></li>
+        </ol>
+      </section>
+
+      <!-- SECTION 2: Fill Dirt vs Topsoil Geotechnical Reality -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-5">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-[11px] font-bold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Soil Physics</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-2">Fill Dirt vs. Topsoil: Soil Horizons and Structural Integrity</h2>
+        </div>
+
+        <p class="text-sm text-slate-700 leading-relaxed">
+          Soil science breaks the earth into vertical stratigraphic horizons. Confusing topsoil with fill dirt can cause severe structural property damage:
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="p-5 bg-amber-50/50 rounded-xl border border-amber-200 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-bold text-amber-950">Inorganic Fill Dirt (B-Horizon Subsoil)</span>
+              <span class="text-[10px] font-mono bg-amber-100 text-amber-900 font-bold px-2 py-0.5 rounded uppercase">Structural</span>
+            </div>
+            <p class="text-xs text-slate-700 leading-relaxed">
+              Excavated from 12+ inches beneath the surface. Consists strictly of broken mineral rock, clay, silt, and sand. <strong>Contains 0% organic decomposing matter.</strong> Because there is no organic material to rot and dissolve, it will not collapse into void pockets over decades. Required for backfilling building foundations, retaining walls, swimming pools, and under concrete slabs.
+            </p>
+          </div>
+
+          <div class="p-5 bg-green-50/50 rounded-xl border border-green-200 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-bold text-green-950">Organic Topsoil (A-Horizon Surface Layer)</span>
+              <span class="text-[10px] font-mono bg-green-100 text-green-900 font-bold px-2 py-0.5 rounded uppercase">Agronomic Only</span>
+            </div>
+            <p class="text-xs text-slate-700 leading-relaxed">
+              The biologically active top 2 to 8 inches of ground. Contains organic matter, humus, plant roots, and active microorganisms. If used as deep structural fill under driveways or foundations, the organic components will rot and decompose under moisture, shrinking by up to 40% and causing severe foundation subsidence, cracked footings, and collapsed slabs.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 3: Foundation Grading & IRC Building Codes -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-5">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-[11px] font-bold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Building Code Standards</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-2">Foundation Grading: Calculating Yardage for IRC R401.3 Compliance</h2>
+        </div>
+
+        <p class="text-sm text-slate-700 leading-relaxed">
+          Water accumulating around residential foundation walls creates hydrostatic pressure, causing basement leaks, cracked concrete blocks, and foundation shifting. The <strong>International Residential Code (IRC) Section R401.3</strong> governs site grading:
+        </p>
+
+        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 bg-amber-500 rounded-full"></span>
+            <span class="text-sm font-bold text-slate-900">IRC Section R401.3 Surface Drainage Rule:</span>
+          </div>
+          <p class="text-xs text-slate-700 leading-relaxed">
+            <em>"The ground immediately adjacent to foundation walls shall be sloped away from the building at not less than one unit vertical in 20 units horizontal (5-percent slope) for a minimum distance of 10 feet measured perpendicular to the face of the wall."</em>
+          </p>
+        </div>
+
+        <h3 class="text-base font-bold text-slate-900 pt-1">Worked Math: Correcting Negative Grade Along a 50-Foot Foundation Wall</h3>
+        <p class="text-sm text-slate-700 leading-relaxed">
+          Suppose a homeowner has flat or negative slope along a 50-foot rear foundation wall and needs to build a 6-inch downward grade wedge extending 10 feet out:
+        </p>
+        <div class="bg-slate-900 text-white p-4 rounded-xl font-mono text-xs space-y-2">
+          <div><strong>Cross-Section:</strong> Triangular prism where Height = 6 in (0.50 ft), Width = 10 ft, Length = 50 ft.</div>
+          <div class="text-emerald-400 font-bold">
+            Volume = [ 0.5 × Base ft × Height ft × Length ft ] ÷ 27
+          </div>
+          <div>Volume = [ 0.5 × 10 ft × 0.50 ft × 50 ft ] ÷ 27 = <strong>4.63 cu yds</strong></div>
+          <div>With 20% soil compaction factor: 4.63 × 1.20 = <strong class="text-emerald-400">5.56 cu yds of fill dirt</strong></div>
+        </div>
+      </section>
+
+      <!-- SECTION 4: Mechanical Compaction Methods -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-5">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-[11px] font-bold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Jobsite Execution</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-2">Mechanical Compaction Lifts & Equipment Selection</h2>
+        </div>
+
+        <p class="text-sm text-slate-700 leading-relaxed">
+          Achieving 95% standard Proctor density requires matching equipment to soil plasticity and placing dirt in controlled vertical lifts:
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-700">
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-1.5">
+            <span class="font-bold text-slate-900 block">Jumping Jack Rammer</span>
+            <span class="text-[10px] font-mono text-amber-700 font-bold">Cohesive Clay Subsoils</span>
+            <p class="text-slate-600 leading-relaxed">High impact force (up to 3,500 lbs/blow) kneads cohesive clay particles together in narrow utility trenches and around foundation walls.</p>
+          </div>
+
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-1.5">
+            <span class="font-bold text-slate-900 block">Vibratory Plate Compactor</span>
+            <span class="text-[10px] font-mono text-amber-700 font-bold">Granular Sand & Loam</span>
+            <p class="text-slate-600 leading-relaxed">High-frequency vibration (5,000+ vpm) agitates granular soil particles, allowing them to interlock tightly in 4-to-6-inch lifts.</p>
+          </div>
+
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-1.5">
+            <span class="font-bold text-slate-900 block">Water-Filled Lawn Roller</span>
+            <span class="text-[10px] font-mono text-amber-700 font-bold">Surface Finish Only</span>
+            <p class="text-slate-600 leading-relaxed">Provides minimal compaction depth (under 1.5 inches). Suitable solely for seating new grass sod onto topsoil; never use for deep fill.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 5: FAQs -->
+      <section class="space-y-6">
+        <div>
+          <span class="text-[11px] font-bold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Contractor FAQ</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-1">Dirt Calculator FAQs</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {faqs.map((faq) => (
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-2xs">
+              <h3 class="font-bold text-slate-900 text-sm mb-2">{faq.question}</h3>
+              <p class="text-xs text-slate-600 leading-relaxed">{faq.answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Cross-Calculator Link Matrix -->
+      <RelatedCalculators currentPath={seo.canonicalUrl} />
+
+    </div>
+  </div>
+</BaseLayout>

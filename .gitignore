@@ -1,0 +1,15 @@
+# Build & Cache
+dist/
+.astro/
+node_modules/
+.wrangler/
+
+# Environment & Logs
+.env*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS Files
+.DS_Store
+Thumbs.db

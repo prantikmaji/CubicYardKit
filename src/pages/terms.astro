@@ -1,0 +1,127 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/seo/Breadcrumbs.astro';
+
+const seo = {
+  title: 'Terms of Service | CubicYardKit',
+  description:
+    'Read the CubicYardKit Terms of Service governing the use of our construction material calculators, algorithms, project planners, and website services.',
+  canonicalUrl: 'https://cubicyardkit.com/terms/',
+};
+
+const breadcrumbs = [{ name: 'Terms of Service', href: '/terms/' }];
+---
+
+<BaseLayout
+  title={seo.title}
+  description={seo.description}
+  canonicalUrl={seo.canonicalUrl}
+  breadcrumbs={breadcrumbs}
+>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+    <Breadcrumbs items={breadcrumbs} />
+
+    <!-- Hero Header -->
+    <div class="relative overflow-hidden rounded-2xl bg-slate-900 border border-slate-800 p-6 sm:p-10 mb-10 text-white shadow-md">
+      <div class="absolute -top-12 -right-12 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="relative max-w-2xl">
+        <div class="inline-flex items-center gap-2 bg-emerald-950/80 border border-emerald-500/40 rounded-full px-3 py-1 text-xs font-bold text-emerald-300 mb-3.5 shadow-xs">
+          <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_8px_#34d399]"></span>
+          User Agreement · Permitted Commercial & Personal Use · Governing Terms
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-black text-white tracking-tight leading-tight mb-3">
+          Terms of Service
+        </h1>
+        <p class="text-sm sm:text-base text-slate-200 leading-relaxed">
+          These Terms of Service govern your access to and use of CubicYardKit.com, our calculation engines, interactive planning tools, and associated content.
+        </p>
+      </div>
+    </div>
+
+    <!-- Core Content Sections -->
+    <div class="space-y-8 text-slate-800 text-sm leading-relaxed">
+
+      <!-- Section 1: Agreement to Terms -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-3.5">
+        <div class="border-b border-slate-100 pb-3">
+          <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Agreement</span>
+          <h2 class="text-xl font-black text-slate-900 mt-2">1. Acceptance of Terms</h2>
+        </div>
+        <p>
+          By accessing or using <strong>CubicYardKit.com</strong> (the "Service"), you agree to be bound by these Terms of Service ("Terms") and our <a href="/privacy/" class="text-emerald-700 underline font-semibold">Privacy Policy</a>. If you do not agree to all terms and conditions, you must not access or use the Service.
+        </p>
+      </section>
+
+      <!-- Section 2: Permitted & Prohibited Use -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-4">
+        <div class="border-b border-slate-100 pb-3">
+          <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Usage Rights</span>
+          <h2 class="text-xl font-black text-slate-900 mt-2">2. Permitted & Prohibited Uses</h2>
+        </div>
+        <p>
+          <strong>Permitted Use:</strong> You are granted a non-exclusive, non-transferable, revocable license to use CubicYardKit for personal planning, residential DIY project estimation, commercial construction estimating, and contractor material takeoff preparation. You may print and export CSV bills of materials for your clients and suppliers.
+        </p>
+        <p>
+          <strong>Prohibited Activities:</strong> You agree not to:
+        </p>
+        <ul class="list-disc list-inside space-y-1.5 text-xs text-slate-700 ml-1">
+          <li>Scrape, crawl, harvest, or systematically download our calculation databases, codebases, or content via automated bots without prior written authorization.</li>
+          <li>Frame, mirror, or republish the calculation engines or interactive widgets within an external frame without attribution and consent.</li>
+          <li>Interfere with, bypass, or disrupt the security features, network integrity, or performance of the Service.</li>
+          <li>Use the Service in any manner that violates applicable federal, state, local, or international construction or consumer laws.</li>
+        </ul>
+      </section>
+
+      <!-- Section 3: Intellectual Property -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-3.5">
+        <div class="border-b border-slate-100 pb-3">
+          <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Proprietary Rights</span>
+          <h2 class="text-xl font-black text-slate-900 mt-2">3. Intellectual Property Rights</h2>
+        </div>
+        <p>
+          All content, software code, interactive islands, algorithms, visual designs, brand names, logos, formulas, and trade editorial text published on CubicYardKit.com are the exclusive intellectual property of CubicYardKit.com and its licensors, protected by United States and international copyright, trademark, and trade secret laws.
+        </p>
+      </section>
+
+      <!-- Section 4: Disclaimers & No Warranty -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-3.5">
+        <div class="border-b border-slate-100 pb-3">
+          <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Disclaimers</span>
+          <h2 class="text-xl font-black text-slate-900 mt-2">4. "As-Is" Provision & No Warranty</h2>
+        </div>
+        <p>
+          THE SERVICE IS PROVIDED ON AN "AS IS" AND "AS AVAILABLE" BASIS WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED. TO THE FULLEST EXTENT PERMISSIBLE UNDER APPLICABLE LAW, CUBICYARDKIT DISCLAIMS ALL WARRANTIES, INCLUDING IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR CONSTRUCTION PURPOSE, ACCURACY, AND NON-INFRINGEMENT.
+        </p>
+        <p>
+          WE DO NOT WARRANT THAT CALCULATIONS WILL MATCH EVERY SPECIFIC QUARRY BATCH SCALE WEIGHT OR READY-MIX DISPATCH SLIP, OR THAT OPERATION OF THE SITE WILL BE UNINTERRUPTED OR ERROR-FREE. ALWAYS CONSULT WITH A LICENSED PROFESSIONAL CONTRACTOR AND YOUR LOCAL SUPPLIER. REVIEW OUR <a href="/disclaimer/" class="text-emerald-700 underline font-semibold">ESTIMATING DISCLAIMER</a> FOR COMPREHENSIVE FIELD DETAILS.
+        </p>
+      </section>
+
+      <!-- Section 5: Third-Party Advertising & AdSense -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-3.5">
+        <div class="border-b border-slate-100 pb-3">
+          <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Third Parties</span>
+          <h2 class="text-xl font-black text-slate-900 mt-2">5. Third-Party Advertisements & Links</h2>
+        </div>
+        <p>
+          The Service may display advertisements provided by third-party advertising networks, including Google AdSense. We do not endorse, guarantee, or assume liability for any products, materials, or services advertised by third parties on our platform. Your interactions with advertisers are solely between you and the respective third party.
+        </p>
+      </section>
+
+      <!-- Section 6: Modifications & Contact -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-3.5">
+        <div class="border-b border-slate-100 pb-3">
+          <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Governing Law</span>
+          <h2 class="text-xl font-black text-slate-900 mt-2">6. Governing Law & Modifications</h2>
+        </div>
+        <p>
+          These Terms are governed by and construed in accordance with the laws of the United States. We reserve the right to modify these Terms at any time. Continued use of the Service following any updates constitutes your acceptance of the revised Terms.
+        </p>
+        <p class="text-xs text-slate-500 pt-2 border-t border-slate-100">
+          Last revised: October 2026. For legal or terms questions, contact <a href="mailto:legal@cubicyardkit.com" class="text-emerald-700 underline font-semibold">legal@cubicyardkit.com</a>.
+        </p>
+      </section>
+
+    </div>
+  </div>
+</BaseLayout>

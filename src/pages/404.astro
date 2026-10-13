@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const seo = {
+  title: 'Page Not Found | CubicYardKit',
+  description: 'The requested material calculator or guide could not be found.',
+  canonicalUrl: 'https://cubicyardkit.com/404/',
+};
+---
+
+<BaseLayout
+  title={seo.title}
+  description={seo.description}
+  canonicalUrl={seo.canonicalUrl}
+  noindex={true}
+>
+  <div class="max-w-3xl mx-auto px-4 py-20 text-center space-y-6">
+    <div class="flex justify-center mb-2">
+      <img
+        src="/cubicYardKit-icon.svg"
+        alt="CubicYardKit"
+        width="64"
+        height="64"
+        class="w-16 h-16 object-contain"
+      />
+    </div>
+    <div class="inline-flex p-4 rounded-2xl bg-slate-100 text-slate-800 font-black text-4xl">
+      404
+    </div>
+    <h1 class="text-3xl font-black text-slate-900 tracking-tight">
+      Calculator Page Not Found
+    </h1>
+    <p class="text-sm text-slate-600 max-w-md mx-auto leading-relaxed">
+      The page you were looking for doesn't exist or may have been relocated. Jump straight to our core material calculators below:
+    </p>
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 max-w-lg mx-auto pt-4 text-xs font-semibold">
+      <a href="/" class="p-3 bg-white rounded-xl border border-slate-200 hover:border-green-600 hover:text-green-700 shadow-2xs transition-all">
+        Cubic Yard Calculator
+      </a>
+      <a href="/gravel-calculator/" class="p-3 bg-white rounded-xl border border-slate-200 hover:border-green-600 hover:text-green-700 shadow-2xs transition-all">
+        Gravel Calculator
+      </a>
+      <a href="/dirt-calculator/" class="p-3 bg-white rounded-xl border border-slate-200 hover:border-green-600 hover:text-green-700 shadow-2xs transition-all">
+        Dirt Calculator
+      </a>
+      <a href="/topsoil-calculator/" class="p-3 bg-white rounded-xl border border-slate-200 hover:border-green-600 hover:text-green-700 shadow-2xs transition-all">
+        Topsoil Calculator
+      </a>
+      <a href="/concrete-calculator/" class="p-3 bg-white rounded-xl border border-slate-200 hover:border-green-600 hover:text-green-700 shadow-2xs transition-all">
+        Concrete Calculator
+      </a>
+      <a href="/planner/" class="p-3 bg-white rounded-xl border border-slate-200 hover:border-green-600 hover:text-green-700 shadow-2xs transition-all">
+        Patio Planner
+      </a>
+    </div>
+
+    <div class="pt-6">
+      <a href="/" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-green-700 hover:bg-green-800 text-white font-bold text-xs transition-colors shadow-xs">
+        Return to Homepage
+      </a>
+    </div>
+  </div>
+</BaseLayout>

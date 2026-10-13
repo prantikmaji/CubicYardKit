@@ -1,0 +1,118 @@
+---
+export interface Props {
+  currentPath: string;
+}
+
+const { currentPath } = Astro.props;
+
+interface ToolItem {
+  href: string;
+  title: string;
+  badge: string;
+  desc: string;
+}
+
+const ALL_TOOLS: Record<string, ToolItem> = {
+  home: {
+    href: '/',
+    title: 'Cubic Yard Calculator',
+    badge: 'Universal Hub',
+    desc: 'Calculate volume, tonnage, and bags from length, width, and depth with verified ASTM densities.',
+  },
+  gravel: {
+    href: '/gravel-calculator/',
+    title: 'Gravel & Pea Gravel',
+    badge: 'Yards & Tons',
+    desc: 'Estimate crushed stone, pea gravel, and driveway rock in cubic yards, tons, and 50-lb bags.',
+  },
+  dirt: {
+    href: '/dirt-calculator/',
+    title: 'Fill Dirt & Grading',
+    badge: 'Compaction Factor',
+    desc: 'Calculate subsoil excavation, grading volume, and 10-yard dump truckloads with settlement.',
+  },
+  topsoil: {
+    href: '/topsoil-calculator/',
+    title: 'Topsoil & Gardens',
+    badge: 'Sq Ft Coverage',
+    desc: 'Calculate screened topsoil volume for lawn leveling, new sod establishment, and raised planter beds.',
+  },
+  concrete: {
+    href: '/concrete-calculator/',
+    title: 'Concrete Slabs & Footings',
+    badge: '80lb & 60lb Bags',
+    desc: 'Order ready-mix truck yardage or calculate pre-mixed bagged concrete for slabs and sonotubes.',
+  },
+  concreteBlock: {
+    href: '/concrete-block-calculator/',
+    title: 'Concrete Block Walls',
+    badge: 'CMU & Mortar',
+    desc: 'Calculate standard 8x8x16 CMU blocks, window/door deductions, mortar bags, and core grout.',
+  },
+  planner: {
+    href: '/planner/',
+    title: 'Project Material Planner',
+    badge: 'Multi-Material',
+    desc: 'Estimate complete multi-layer paver patios with sub-base stone, bedding sand, and edging.',
+  },
+  quoteComparison: {
+    href: '/quote-comparison/',
+    title: 'Supplier Quote Comparison',
+    badge: 'Compare Bids',
+    desc: 'Normalize competing quotes across bulk yards, tons, and bags to find your lowest landed cost.',
+  },
+};
+
+// Map each path to 3 related tools
+const RELATED_MAP: Record<string, string[]> = {
+  '/gravel-calculator/': ['planner', 'dirt', 'concrete'],
+  '/dirt-calculator/': ['topsoil', 'gravel', 'home'],
+  '/topsoil-calculator/': ['dirt', 'planner', 'home'],
+  '/concrete-calculator/': ['concreteBlock', 'home', 'planner'],
+  '/concrete-block-calculator/': ['concrete', 'quoteComparison', 'home'],
+  '/planner/': ['gravel', 'quoteComparison', 'concrete'],
+  '/quote-comparison/': ['planner', 'gravel', 'concrete'],
+};
+
+const normalizedPath = currentPath.endsWith('/') ? currentPath : `${currentPath}/`;
+const relatedKeys = RELATED_MAP[normalizedPath] || ['gravel', 'dirt', 'concrete'];
+const tools = relatedKeys.map((key) => ALL_TOOLS[key]).filter(Boolean);
+---
+
+<div class="border-t border-slate-200/80 pt-10 mt-16 mb-4">
+  <div class="flex items-center justify-between mb-4">
+    <div>
+      <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md uppercase tracking-wider">Related Estimating Tools</span>
+      <h3 class="text-lg font-bold text-slate-900 mt-1">Explore Related Material Calculators</h3>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    {tools.map((tool) => (
+      <a
+        href={tool.href}
+        class="group p-4 bg-white rounded-xl border border-slate-200 hover:border-emerald-500 hover:shadow-xs transition-all card-interactive flex flex-col justify-between"
+      >
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold text-slate-900 group-hover:text-emerald-700 transition-colors">
+              {tool.title}
+            </span>
+            <span class="text-[10px] font-semibold bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">
+              {tool.badge}
+            </span>
+          </div>
+          <p class="text-xs text-slate-500 leading-relaxed">
+            {tool.desc}
+          </p>
+        </div>
+        <div class="mt-3 flex items-center text-xs font-bold text-emerald-700 group-hover:translate-x-0.5 transition-transform">
+          <span>Open Calculator</span>
+          <svg class="w-3.5 h-3.5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </div>
+      </a>
+    ))}
+  </div>
+</div>

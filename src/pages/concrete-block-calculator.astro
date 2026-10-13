@@ -1,0 +1,279 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ConcreteBlockCalculator from '../components/calc/ConcreteBlockCalculator';
+import Breadcrumbs from '../components/seo/Breadcrumbs.astro';
+import SavedProjectsIsland from '../components/storage/SavedProjectsIsland';
+import RelatedCalculators from '../components/layout/RelatedCalculators.astro';
+
+const seo = {
+  title: 'Concrete Block Calculator | Cinder Blocks & Core Fill | CubicYardKit',
+  description:
+    'Calculate 8x8x16 CMU concrete blocks, mortar bags, and core grout fill volume. Includes openings deductions, NCMA TEK 18-02B standards, and rebar cell spacing.',
+  canonicalUrl: 'https://cubicyardkit.com/concrete-block-calculator/',
+};
+
+const faqs = [
+  {
+    question: 'How do you calculate how many concrete blocks are needed for a wall?',
+    answer:
+      'Standard Concrete Masonry Units (CMU) have nominal dimensions of 8" high by 16" long (including standard 3/8" mortar joints). To calculate the number of blocks needed: calculate gross wall square footage (Length ft × Height ft), subtract all door and window openings, and multiply net square feet by 1.125. Formula: Blocks = Net Wall Sq Ft × 1.125. Always add a 5% to 8% allowance for cutting at corners and half-block jambs.',
+  },
+  {
+    question: 'Why does 1 square foot of wall require exactly 1.125 concrete blocks?',
+    answer:
+      'A modular 8x8x16 CMU block measures 8 inches high (8/12 = 2/3 ft) and 16 inches long (16/12 = 4/3 ft). Multiplying face height by face length gives an area of (2/3) × (4/3) = 8/9 square feet (0.8889 sq ft) per block. Dividing 1 square foot of wall by 8/9 square feet yields exactly 9/8, which equals 1.125 blocks per square foot. Thus, a 100 sq ft wall always requires exactly 112.5 blocks.',
+  },
+  {
+    question: 'How much mortar do I need per 100 concrete blocks?',
+    answer:
+      'Using standard face-shell mortar bedding with 3/8-inch joints, you need approximately 3.0 to 3.5 bags of 70-lb or 80-lb pre-mixed masonry cement (Type S or Type N) per 100 blocks. If you are laying solid-bed mortar courses (mortar applied to cross webs as well as outer face shells for heavy foundation loads), increase your mortar allowance to 4.5 bags per 100 blocks.',
+  },
+  {
+    question: 'What is the volume of core fill grout in an 8x8x16 block?',
+    answer:
+      'A standard two-cell hollow 8x8x16 CMU block contains approximately 0.44 cubic feet of void space (0.22 cubic feet per cell). If you are grouting 100% of cells solid for high retaining walls, multiply total blocks by 0.44 cu ft (or divide total blocks by 61.36 to find cubic yards of ready-mix grout). If grouting rebar cells every 32 inches on-center, multiply total blocks by 0.11 cu ft.',
+  },
+  {
+    question: 'What is the structural difference between a cinder block and a modern CMU?',
+    answer:
+      'Historic cinder blocks were manufactured using industrial coal ash cinders mixed with Portland cement, resulting in a dark, lightweight, porous block with low compressive strength. Modern Concrete Masonry Units (CMU) are hydraulically compressed using Portland cement, sand, and crushed stone to rigorous ASTM C90 standards, delivering certified compressive strengths of 2,000 to 3,000+ PSI for load-bearing walls.',
+  },
+  {
+    question: 'Should I use Type S or Type N mortar for concrete block walls?',
+    answer:
+      'Use Type S mortar (minimum 1,800 PSI compressive strength) for below-grade foundation walls, retaining walls, crawlspaces, and high-wind structural walls requiring superior lateral flexural bond strength. Type N mortar (minimum 750 PSI compressive strength) is designed for above-grade, non-load-bearing interior partition walls and exterior brick veneers.',
+  },
+  {
+    question: 'How do you reinforce a concrete block wall against lateral earth pressure?',
+    answer:
+      'Masonry retaining walls require three structural components: 1) Vertical steel rebar (typically #4 or #5 bars) tied into the concrete footing and placed in block cells at 16", 24", or 32" on-center; 2) High-slump masonry core grout (ASTM C476) poured into rebar cells to encase the steel; 3) Horizontal 9-gauge joint reinforcement ladder wire placed in the mortar bed joint every 16 inches (every 2 courses).',
+  },
+  {
+    question: 'How do you calculate opening deductions for doors and windows?',
+    answer:
+      'Calculate the area of each opening in square feet (Opening Width ft × Opening Height ft) and subtract it from the total gross wall area before applying the 1.125 block multiplier. For example, a 6 ft wide by 4 ft high window equals 24 sq ft, which deducts 27 blocks (24 × 1.125) from the total order.',
+  },
+];
+---
+
+<BaseLayout
+  title={seo.title}
+  description={seo.description}
+  canonicalUrl={seo.canonicalUrl}
+  faqs={faqs}
+  breadcrumbs={[{ name: 'Concrete Block Calculator', item: seo.canonicalUrl }]}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-5 sm:pt-7 pb-14 sm:pb-20">
+    <Breadcrumbs items={[{ name: 'Concrete Block Calculator' }]} />
+
+    <!-- Hero Banner — High contrast dark slate with masonry styling -->
+    <div class="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-slate-900 border border-slate-800 px-6 sm:px-8 lg:px-10 py-7 sm:py-9 lg:py-10 mb-8 sm:mb-10 text-white shadow-md">
+      <div class="absolute -top-12 -right-12 w-96 h-96 bg-slate-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="relative flex flex-wrap items-end justify-between gap-6 lg:gap-8">
+        <div class="max-w-2xl">
+          <div class="inline-flex items-center gap-2 bg-slate-800 border border-slate-700 rounded-full px-3.5 py-1 text-xs font-bold text-slate-200 mb-3.5 sm:mb-4 shadow-xs">
+            <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_8px_#34d399]"></span>
+            ASTM C90 Modular CMU · NCMA TEK 18-02B Grout Schedules · Mortar Estimating
+          </div>
+
+          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-[1.08] mb-2.5 sm:mb-3">
+            Concrete Block Calculator
+          </h1>
+          <p class="text-sm sm:text-base text-slate-200 max-w-xl leading-relaxed">
+            Estimate standard 8×8×16 CMU concrete blocks, mortar bags, and core fill grout volume for retaining walls, foundations, and garages with automatic door & window deductions.
+          </p>
+        </div>
+
+        <!-- Trust indicators -->
+        <div class="flex flex-wrap sm:flex-nowrap gap-2.5 sm:gap-3 shrink-0 w-full sm:w-auto">
+          {[
+            { val: '1.125', unit: 'blocks/sq ft', label: 'Modular Multiplier' },
+            { val: '3.5', unit: 'bags/100 blk', label: 'Type S Mortar' },
+            { val: '0.44', unit: 'cu ft/blk', label: 'Core Grout Void' },
+            { val: 'ASTM C90', unit: 'spec', label: 'Load-Bearing Code' },
+          ].map(stat => (
+            <div class="flex-1 sm:flex-initial bg-slate-800/90 border border-slate-700/80 rounded-xl px-3.5 sm:px-4 py-2.5 sm:py-3 text-center min-w-[75px] sm:min-w-[90px] shadow-xs">
+              <div class="text-base sm:text-lg font-black text-white font-mono">{stat.val}</div>
+              <div class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">{stat.unit}</div>
+              <div class="text-[10px] text-slate-300 font-medium mt-0.5">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive Island -->
+    <div class="mb-12 sm:mb-16">
+      <ConcreteBlockCalculator client:load />
+    </div>
+
+    <!-- Technical & Engineering Masonry Breakdown -->
+    <div class="space-y-12 mb-16">
+
+      <!-- SECTION 1: The 1.125 Multiplier Rule -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-5">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-[11px] font-bold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-md uppercase tracking-wider">Modular Masonry Mathematics</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-2">How to Calculate Concrete Blocks: The 1.125 Modular Multiplier</h2>
+        </div>
+
+        <p class="text-sm text-slate-700 leading-relaxed">
+          In North American commercial architecture, masonry units follow a strict 4-inch modular grid. A standard concrete masonry unit is designated as an <strong>8" × 8" × 16" block</strong>. However, the block itself is manufactured to actual physical dimensions of <strong>7-5/8" high × 7-5/8" wide × 15-5/8" long</strong>.
+        </p>
+        <p class="text-sm text-slate-700 leading-relaxed">
+          When placed in a wall with a standard <strong>3/8-inch bed and head mortar joint</strong>, the center-to-center modular dimensions measure exactly 8 inches high by 16 inches long:
+        </p>
+
+        <div class="bg-slate-900 text-white p-5 rounded-xl space-y-3 font-mono text-xs">
+          <div class="text-emerald-400 font-bold uppercase tracking-wider">The Mathematical Proof of the 1.125 Constant</div>
+          <div class="text-slate-300 space-y-1 leading-relaxed font-sans text-xs">
+            <div>1. Face Height in feet: <span class="font-mono text-white">8 in ÷ 12 in = 2/3 ft (0.6667 ft)</span></div>
+            <div>2. Face Length in feet: <span class="font-mono text-white">16 in ÷ 12 in = 4/3 ft (1.3333 ft)</span></div>
+            <div>3. Surface Area per installed block: <span class="font-mono text-white">(2/3 ft) × (4/3 ft) = 8/9 sq ft (0.8889 sq ft)</span></div>
+            <div>4. Blocks required per 1 sq ft of wall: <span class="font-mono text-emerald-300 font-bold">1 ÷ (8/9) = 9/8 = 1.125 blocks per sq ft</span></div>
+          </div>
+          <div class="text-sm font-bold bg-slate-800/80 p-3 rounded-lg border border-slate-700 text-emerald-400">
+            Total Blocks = [ ( Gross Wall Area - Openings Area ) × 1.125 ] × ( 1 + Waste % ÷ 100 )
+          </div>
+        </div>
+
+        <h3 class="text-lg font-bold text-slate-900 pt-2">Worked Contractor Example: 40' × 8' Garage Stem Wall with Door & Window</h3>
+        <p class="text-sm text-slate-700 leading-relaxed">
+          Suppose a builder is estimating an 8-inch CMU stem wall measuring <strong>40 feet long by 8 feet high</strong>. The wall incorporates one <strong>3' × 7' entry door</strong> and one <strong>4' × 3' window opening</strong>:
+        </p>
+        <ol class="list-decimal list-inside text-sm text-slate-700 space-y-1.5 pl-2 font-medium">
+          <li>Calculate gross wall area: <span class="font-mono text-slate-900">40 ft × 8 ft = 320 sq ft</span></li>
+          <li>Calculate door opening: <span class="font-mono text-slate-900">3 ft × 7 ft = 21 sq ft</span></li>
+          <li>Calculate window opening: <span class="font-mono text-slate-900">4 ft × 3 ft = 12 sq ft</span></li>
+          <li>Net wall face area: <span class="font-mono text-slate-900">320 - (21 + 12) = 287 sq ft</span></li>
+          <li>Apply the 1.125 multiplier: <span class="font-mono text-slate-900">287 sq ft × 1.125 = 322.9 blocks</span></li>
+          <li>Add 6% waste for end corner cuts and half-blocks: <span class="font-mono text-slate-900">323 × 1.06 = 342 CMU blocks</span></li>
+          <li>Mortar bags required (3.5 bags per 100 blocks): <span class="font-mono text-slate-900">(342 ÷ 100) × 3.5 = 12 bags (80-lb Type S)</span></li>
+        </ol>
+      </section>
+
+      <!-- SECTION 2: Mortar Engineering & ASTM C270 Classifications -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-5">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-[11px] font-bold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-md uppercase tracking-wider">ASTM C270 Standards</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-2">Mortar Selection: Type S vs. Type N vs. Type M</h2>
+        </div>
+
+        <p class="text-sm text-slate-700 leading-relaxed">
+          Mortar provides adhesive bonding, water tightness, and structural load transfer between masonry units. ASTM C270 establishes standardized proportion formulations:
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-700">
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <span class="font-bold text-slate-900 block text-sm">Type S Mortar</span>
+            <span class="text-[10px] font-mono text-emerald-700 font-bold block">1,800 PSI Compressive · High Flexural Bond</span>
+            <p class="text-slate-600 leading-relaxed">
+              The mandatory standard for below-grade foundation walls, retaining walls, basements, and structural walls exposed to seismic lateral soil pressures. Delivers extreme bond strength.
+            </p>
+          </div>
+
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <span class="font-bold text-slate-900 block text-sm">Type N Mortar</span>
+            <span class="text-[10px] font-mono text-slate-600 font-bold block">750 PSI Compressive · High Workability</span>
+            <p class="text-slate-600 leading-relaxed">
+              General-purpose mortar intended for above-grade exterior walls, interior partition walls, and decorative chimneys not subjected to heavy soil retention or severe lateral loads.
+            </p>
+          </div>
+
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <span class="font-bold text-slate-900 block text-sm">Type M Mortar</span>
+            <span class="text-[10px] font-mono text-slate-600 font-bold block">2,500 PSI Compressive · High Axial Load</span>
+            <p class="text-slate-600 leading-relaxed">
+              Highest compressive strength mortar. Engineered for heavy industrial pilasters, foundation manholes, and massive load-bearing columns. Lower tensile flexibility than Type S.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 3: Core Grout Volume & Rebar Spacing Schedule -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-5">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-[11px] font-bold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-md uppercase tracking-wider">NCMA Structural Guidelines</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-2">Core Fill Grout Volume & Vertical Rebar Schedules</h2>
+        </div>
+
+        <p class="text-sm text-slate-700 leading-relaxed">
+          Standard two-core 8x8x16 CMU blocks contain hollow cells designed to accommodate vertical steel rebar encased in high-slump masonry grout (ASTM C476). The table below outlines grout volume requirements based on rebar cell spacing:
+        </p>
+
+        <div class="overflow-x-auto rounded-xl border border-slate-200">
+          <table class="w-full text-xs text-left">
+            <thead class="bg-slate-900 text-white font-bold">
+              <tr>
+                <th class="px-3.5 py-2.5">Grout Fill Schedule</th>
+                <th class="px-3 py-2.5 text-right">Cells Filled per Block</th>
+                <th class="px-3 py-2.5 text-right">Grout Volume per Block</th>
+                <th class="px-3 py-2.5 text-right">Grout Volume per 100 Blocks</th>
+                <th class="px-3.5 py-2.5">Typical Structural Application</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 text-slate-700">
+              <tr>
+                <td class="px-3.5 py-2 font-bold text-slate-900">100% Solid Grouting</td>
+                <td class="px-3 py-2 text-right font-mono">2 of 2 (All cells)</td>
+                <td class="px-3 py-2 text-right font-mono font-bold text-emerald-700">0.44 cu ft</td>
+                <td class="px-3 py-2 text-right font-mono font-bold text-emerald-700">1.63 cu yds (44 cu ft)</td>
+                <td class="px-3.5 py-2">Heavy earth retaining walls (&gt;6 ft), storm shelters</td>
+              </tr>
+              <tr class="bg-slate-50/50">
+                <td class="px-3.5 py-2 font-bold text-slate-900">16" On-Center Grout</td>
+                <td class="px-3 py-2 text-right font-mono">1 of 2 cells</td>
+                <td class="px-3 py-2 text-right font-mono font-medium">0.22 cu ft</td>
+                <td class="px-3 py-2 text-right font-mono font-medium">0.81 cu yds (22 cu ft)</td>
+                <td class="px-3.5 py-2">Basement foundation walls, garage stem walls</td>
+              </tr>
+              <tr>
+                <td class="px-3.5 py-2 font-bold text-slate-900">32" On-Center Grout</td>
+                <td class="px-3 py-2 text-right font-mono">1 of 4 cells</td>
+                <td class="px-3 py-2 text-right font-mono font-medium">0.11 cu ft</td>
+                <td class="px-3 py-2 text-right font-mono font-medium">0.41 cu yds (11 cu ft)</td>
+                <td class="px-3.5 py-2">Standard crawlspace foundation walls, perimeter fences</td>
+              </tr>
+              <tr class="bg-slate-50/50">
+                <td class="px-3.5 py-2 font-bold text-slate-900">48" On-Center Grout</td>
+                <td class="px-3 py-2 text-right font-mono">1 of 6 cells</td>
+                <td class="px-3 py-2 text-right font-mono font-medium">0.073 cu ft</td>
+                <td class="px-3 py-2 text-right font-mono font-medium">0.27 cu yds (7.3 cu ft)</td>
+                <td class="px-3.5 py-2">Light duty landscape garden walls (&lt;3 ft)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs text-slate-700 space-y-1">
+          <span class="font-bold text-slate-900 block">Masonry Grout vs Standard Ready-Mix Concrete:</span>
+          <p class="leading-relaxed">
+            Never pour standard gravel slab concrete into hollow block cores. Standard concrete has coarse aggregates and a low slump (3 to 4 inches), causing aggregate to wedge in tight block cells and bridge over rebar, creating hollow air voids. Structural masonry grout uses fine aggregate (pea gravel or sand) with a fluid <strong>8 to 10 inch slump</strong> (ASTM C476), allowing it to completely encapsulate vertical steel rebar.
+          </p>
+        </div>
+      </section>
+
+      <!-- SECTION 4: FAQs -->
+      <section class="space-y-6">
+        <div>
+          <span class="text-[11px] font-bold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-md uppercase tracking-wider">Masonry FAQs</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-1">Concrete Block Calculator FAQs</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {faqs.map((faq) => (
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-2xs">
+              <h3 class="font-bold text-slate-900 text-sm mb-2">{faq.question}</h3>
+              <p class="text-xs text-slate-600 leading-relaxed">{faq.answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Cross-Calculator Link Matrix -->
+      <RelatedCalculators currentPath={seo.canonicalUrl} />
+
+    </div>
+  </div>
+</BaseLayout>

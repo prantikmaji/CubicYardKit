@@ -1,0 +1,221 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PatioPlannerIsland from '../../components/planner/PatioPlannerIsland';
+import Breadcrumbs from '../../components/seo/Breadcrumbs.astro';
+import RelatedCalculators from '../../components/layout/RelatedCalculators.astro';
+
+const seo = {
+  title: 'Project Material Planner | Paver Patio Estimator | CubicYardKit',
+  description:
+    'Plan multi-material construction and landscaping projects. Estimate pavers, crushed base, bedding sand, edge restraints, and export a complete ICPI bill of materials.',
+  canonicalUrl: 'https://cubicyardkit.com/planner/',
+};
+
+const faqs = [
+  {
+    question: 'Why do I need a multi-material project planner for a paver patio?',
+    answer:
+      'A paver patio is not a single material purchase; it is a multi-layered geotechnical assembly. Each layer requires distinct dimensional allowances, density conversions, and purchasing units: subgrade excavation (cubic yards of spoil to haul away), crushed base aggregate (tons of #21A or CR6 with a 15% compaction allowance), bedding sand (cubic yards of uncompacted ASTM C33 concrete sand), pavers (piece counts and square feet plus 10% cutting waste), edge restraints (linear feet and steel spikes), and polymeric sand (50-lb moisture-activated bags).',
+  },
+  {
+    question: 'How deep should the crushed stone base be for a paver patio?',
+    answer:
+      'According to Interlocking Concrete Pavement Institute (ICPI) standards: for pedestrian patios and walkways on well-draining sandy loam soil, a minimum of 4 inches of compacted dense-graded aggregate (CR6 / #21A) is standard. For northern freeze-thaw climates or poorly draining clay subsoils, 6 to 8 inches of compacted base aggregate is mandatory to prevent frost heave and settlement.',
+  },
+  {
+    question: 'Why must the base aggregate extend 6 inches beyond the paver perimeter?',
+    answer:
+      'ICPI guidelines mandate that the compacted crushed aggregate base extend at least 6 inches past the outer edge of the pavers on all unrestrained sides. This 6-inch shoulder provides a solid, load-bearing foundation into which the 10-inch or 12-inch steel spikes can anchor the edge restraints. Without this shoulder, edge restraint spikes would be driven into soft subsoil, allowing outer pavers to shift outward under foot traffic.',
+  },
+  {
+    question: 'Can I use stone dust or limestone screenings instead of bedding sand?',
+    answer:
+      'No. Hardscape engineers strictly advise against stone dust or screenings for the 1-inch bedding layer. Stone dust contains fine particles that wash away under heavy rainfall, creating low pockets and loose pavers. Furthermore, stone dust holds moisture against paver undersides, causing severe white mineral efflorescence. Always use coarse, washed concrete sand conforming to ASTM C33.',
+  },
+  {
+    question: 'How thick should the bedding sand layer be, and should it be compacted before laying pavers?',
+    answer:
+      'The bedding sand must be screeded at a uniform thickness of exactly 1 inch (maximum 1.25 inches). Crucially, bedding sand must NEVER be compacted before the pavers are placed. Pavers are set on loose, uncompacted sand and then vibrated into place using a rubber-padded plate compactor, which forces sand up into the bottom 1/4 to 1/2 inch of the paver joints to establish initial interlock.',
+  },
+  {
+    question: 'What is polymeric sand and how many bags do I need?',
+    answer:
+      'Polymeric sand is a blend of graded sand and special binding polymers that activates upon water misting. Once cured, it forms a durable, rubber-like joint that flexes with temperature shifts while stopping ant tunneling, weed growth, and joint erosion. A standard 50-lb bag covers approximately 60 to 85 square feet of standard pavers with 1/8" joints.',
+  },
+  {
+    question: 'How do you calculate excavation depth for a paver patio?',
+    answer:
+      'Total excavation depth equals the sum of all layer thicknesses: Compacted Base (4" to 6") + Bedding Sand (1") + Paver Thickness (typically 2-3/8" or 60 mm) = 7-3/8" to 9-3/8" total depth from finished surface grade.',
+  },
+  {
+    question: 'How do you prevent pavers from tipping or creeping at the edges?',
+    answer:
+      'Install commercial-grade heavy-duty L-shaped polymer or aluminum edge restraints anchored with 10-inch spiral steel spikes driven directly into the extended crushed aggregate base every 12 to 18 inches. Along curved patio borders, snip the edging spine to bend smoothly along the radius.',
+  },
+];
+---
+
+<BaseLayout
+  title={seo.title}
+  description={seo.description}
+  canonicalUrl={seo.canonicalUrl}
+  faqs={faqs}
+  breadcrumbs={[{ name: 'Project Material Planner', item: seo.canonicalUrl }]}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-5 sm:pt-7 pb-14 sm:pb-20">
+    <Breadcrumbs items={[{ name: 'Project Material Planner' }]} />
+
+    <!-- Hero Banner — High contrast dark slate with emerald aura -->
+    <div class="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-slate-900 border border-slate-800 px-6 sm:px-8 lg:px-10 py-7 sm:py-9 lg:py-10 mb-8 sm:mb-10 text-white shadow-md">
+      <div class="absolute -top-12 -right-12 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="relative flex flex-wrap items-end justify-between gap-6 lg:gap-8">
+        <div class="max-w-2xl">
+          <div class="inline-flex items-center gap-2 bg-emerald-950/80 border border-emerald-500/40 rounded-full px-3.5 py-1 text-xs font-bold text-emerald-300 mb-3.5 sm:mb-4 shadow-xs">
+            <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_8px_#34d399]"></span>
+            Multi-Layer Strata Estimator · Complete ICPI Bill of Materials · Instant Takeoff
+          </div>
+
+          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-[1.08] mb-2.5 sm:mb-3">
+            Project Material Planner
+          </h1>
+          <p class="text-sm sm:text-base text-slate-200 max-w-xl leading-relaxed">
+            Estimate complete multi-layer paver patio installations in one unified workflow. Generate exact quantities for pavers, crushed aggregate sub-base, ASTM C33 bedding sand, edge restraints, and polymeric jointing sand.
+          </p>
+        </div>
+
+        <!-- Trust indicators -->
+        <div class="flex flex-wrap sm:flex-nowrap gap-2.5 sm:gap-3 shrink-0 w-full sm:w-auto">
+          {[
+            { val: 'ICPI', unit: 'standard', label: 'Layer Specification' },
+            { val: '4-8"', unit: 'sub-base', label: 'Crushed Stone Depth' },
+            { val: '1"', unit: 'bedding', label: 'ASTM C33 Washed Sand' },
+            { val: '6"', unit: 'shoulder', label: 'Extended Base Edge' },
+          ].map(stat => (
+            <div class="flex-1 sm:flex-initial bg-slate-800/90 border border-slate-700/80 rounded-xl px-3.5 sm:px-4 py-2.5 sm:py-3 text-center min-w-[75px] sm:min-w-[90px] shadow-xs">
+              <div class="text-base sm:text-lg font-black text-white font-mono">{stat.val}</div>
+              <div class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">{stat.unit}</div>
+              <div class="text-[10px] text-slate-300 font-medium mt-0.5">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive Planner Island -->
+    <div class="mb-12 sm:mb-16">
+      <PatioPlannerIsland client:load />
+    </div>
+
+    <!-- Technical & ICPI Hardscape Specifications -->
+    <div class="space-y-12 mb-16">
+
+      <!-- SECTION 1: The ICPI Multi-Layer Strata Cross-Section -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-5">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md uppercase tracking-wider">ICPI Installation Standards</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-2">The Engineering Anatomy of an Interlocking Paver Assembly</h2>
+        </div>
+
+        <p class="text-sm text-slate-700 leading-relaxed">
+          An interlocking concrete paver patio is a flexible pavement structure engineered to distribute surface loads across sequential subterranean layers. The Interlocking Concrete Pavement Institute (ICPI) establishes strict layer specifications:
+        </p>
+
+        <div class="space-y-3.5">
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-bold text-slate-900">1. Subgrade Geotextile Separation Fabric</span>
+              <span class="text-[10px] font-mono bg-purple-100 text-purple-800 font-bold px-2 py-0.5 rounded">Tensile Barrier</span>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              After excavating 7 to 9 inches down to virgin subsoil and compacting with a vibratory tamper, lay a woven or non-woven geotextile separation fabric across the entire footprint. This fabric permanently prevents the crushed stone base from punching down into the subgrade clay while allowing groundwater to percolate downward.
+            </p>
+          </div>
+
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-bold text-slate-900">2. Compacted Aggregate Base (4" to 6" Dense Graded Base / CR6)</span>
+              <span class="text-xs font-mono bg-blue-100 text-blue-800 font-bold px-2 py-0.5 rounded">Structural Sub-Base</span>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Install 4 to 6 inches of crushed dense-graded aggregate (Crusher Run, #21A, or 3/4" minus) in maximum 2-inch lifts, compacting each lift with a commercial vibratory plate compactor. <strong>The base must extend 6 inches past the final paver edge</strong> on all unrestrained sides to create a stable anchor shoulder for edge restraint spikes.
+            </p>
+          </div>
+
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-bold text-slate-900">3. Screeded Bedding Sand (1" Coarse Washed ASTM C33 Concrete Sand)</span>
+              <span class="text-xs font-mono bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded">Uncompacted Setting Bed</span>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Place 1" outside-diameter screed pipes across the compacted stone base and screed washed concrete sand (ASTM C33) perfectly flat. <strong>Never compact bedding sand before laying pavers.</strong> Never substitute limestone dust or masonry sand, which hold stagnant moisture and wash out over time.
+            </p>
+          </div>
+
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-bold text-slate-900">4. Pavers & Spike-Anchored Edge Restraints</span>
+              <span class="text-xs font-mono bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded">Surface Course</span>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Lay concrete pavers (typically 2-3/8" or 60 mm thick) in your desired pattern (herringbone, running bond, or modular ashlar). Secure all perimeter borders with heavy-duty L-shaped polymer edge restraints fastened with 10" to 12" spiral steel spikes driven every 12 to 18 inches into the extended aggregate shoulder.
+            </p>
+          </div>
+
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-bold text-slate-900">5. Polymeric Jointing Sand Consolidation</span>
+              <span class="text-xs font-mono bg-slate-200 text-slate-800 font-bold px-2 py-0.5 rounded">Interlocking Seal</span>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Sweep dry polymeric sand into joints. Run a vibratory plate compactor equipped with a protective rubber urethane mat over the pavers. The vibration seats the pavers into the bedding sand and consolidates the joint sand. Sweep off all residual surface dust and mist lightly with water to activate polymers.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 2: Complete Worked Bill of Materials Math -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-5">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Field Estimation Math</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-2">Worked Takeoff: Complete Bill of Materials for a 16' × 20' Patio</h2>
+        </div>
+
+        <p class="text-sm text-slate-700 leading-relaxed">
+          Examine the exact step-by-step arithmetic used by hardscape estimators for a <strong>16 ft × 20 ft (320 sq ft) rectangular patio</strong> with 4 inches of base rock and standard 60 mm pavers:
+        </p>
+
+        <div class="bg-slate-900 text-white p-5 rounded-xl font-mono text-xs space-y-2.5">
+          <div><strong>1. Finished Paver Area:</strong> 16 ft × 20 ft = 320 sq ft. Pavers to order (+10% cutting waste): 320 × 1.10 = <span class="text-emerald-400 font-bold">352 sq ft of pavers</span>.</div>
+          <div><strong>2. Extended Base Excavation Footprint:</strong> Base extends 6" (0.5 ft) past outer perimeter on 3 sides: (16 + 1.0 ft) × (20 + 0.5 ft) = 17 ft × 20.5 ft = 348.5 sq ft.</div>
+          <div><strong>3. Excavation Spoil Volume (8" total depth):</strong> (348.5 sq ft × 8 in) ÷ 324 = <span class="text-emerald-400 font-bold">8.60 cu yds of soil</span> to excavate and haul away.</div>
+          <div><strong>4. Compacted Crushed Stone Base (4" depth):</strong> (348.5 sq ft × 4 in) ÷ 324 = 4.30 cu yds. Compaction allowance (+15%): 4.30 × 1.15 = 4.95 cu yds. Base Tonnage (1.5 tons/yd): 4.95 × 1.5 = <span class="text-emerald-400 font-bold">7.43 Tons Crusher Run</span>.</div>
+          <div><strong>5. Bedding Sand (1" depth over 320 sq ft):</strong> (320 sq ft × 1 in) ÷ 324 = 0.99 cu yds (approx. <span class="text-emerald-400 font-bold">1.34 Tons washed concrete sand</span>).</div>
+          <div><strong>6. Edge Restraint:</strong> Exposed perimeter = (16 + 20 + 16) = 52 linear ft. Order <span class="text-emerald-400 font-bold">54 linear ft of edging + 45 steel spikes</span>.</div>
+          <div><strong>7. Polymeric Sand:</strong> 320 sq ft ÷ 75 sq ft/bag = <span class="text-emerald-400 font-bold">4.5 (order 5 bags)</span> of 50-lb polymeric joint sand.</div>
+        </div>
+      </section>
+
+      <!-- SECTION 3: FAQs -->
+      <section class="space-y-6">
+        <div>
+          <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Hardscape FAQ</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-1">Project Material Planner FAQs</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {faqs.map((faq) => (
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-2xs">
+              <h3 class="font-bold text-slate-900 text-sm mb-2">{faq.question}</h3>
+              <p class="text-xs text-slate-600 leading-relaxed">{faq.answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Cross-Calculator Link Matrix -->
+      <RelatedCalculators currentPath={seo.canonicalUrl} />
+
+    </div>
+  </div>
+</BaseLayout>

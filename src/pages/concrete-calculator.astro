@@ -1,0 +1,380 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ConcreteCalculator from '../components/calc/ConcreteCalculator';
+import Breadcrumbs from '../components/seo/Breadcrumbs.astro';
+import SavedProjectsIsland from '../components/storage/SavedProjectsIsland';
+import RelatedCalculators from '../components/layout/RelatedCalculators.astro';
+
+const seo = {
+  title: 'Concrete Calculator | Yards & Bags for Slabs, Footings & Columns | CubicYardKit',
+  description:
+    'Calculate concrete in cubic yards and 80lb/60lb bags for slabs, footings, and cylindrical sonotubes. ASTM C94 ready-mix dispatch rules, slump specs, and bag break-even economics.',
+  canonicalUrl: 'https://cubicyardkit.com/concrete-calculator/',
+};
+
+const faqs = [
+  {
+    question: 'How do you calculate cubic yards of concrete for a slab?',
+    answer:
+      'Measure the length and width of the slab in feet, and thickness in inches. Multiply length by width to find square footage, multiply by thickness in inches, and divide by 324: Formula: Cubic Yards = (Length ft × Width ft × Thickness in) ÷ 324. Always add an 8% to 10% waste allowance to compensate for subgrade unevenness, formwork deflection, and spillage. For example, a 20 ft by 20 ft slab at 4 inches thick requires (20 × 20 × 4) ÷ 324 = 4.94 cu yds + 10% = 5.43 cubic yards.',
+  },
+  {
+    question: 'How many 80-lb or 60-lb bags of concrete make one cubic yard?',
+    answer:
+      'Based on ASTM C387 volumetric specifications: an 80-lb bag yields approximately 0.60 cubic feet, requiring exactly 45 bags per cubic yard (27 ÷ 0.60 = 45). A 60-lb bag yields approximately 0.45 cubic feet, requiring exactly 60 bags per cubic yard (27 ÷ 0.45 = 60). A 50-lb fast-setting bag yields 0.375 cubic feet, requiring 72 bags per cubic yard.',
+  },
+  {
+    question: 'When should I order a ready-mix truck instead of mixing bags by hand?',
+    answer:
+      'The contractor rule of thumb is 1.5 cubic yards. Any project requiring more than 1.5 cubic yards (68 eighty-pound bags, or over 5,400 lbs of dry material) should be ordered from a ready-mix batch plant. Hand-mixing that volume in a wheelbarrow takes hours, creating dangerous "cold joints" where previously placed batches begin setting before new batches are poured. For pours under 1.0 to 1.5 yards, bagged mix avoids ready-mix short-load fees.',
+  },
+  {
+    question: 'What is a ready-mix short-load fee?',
+    answer:
+      'Commercial ready-mix concrete suppliers operate large transit mixer trucks with 9 to 11 cubic yard drum capacities. Because running an 80,000-lb truck with a small load costs nearly as much in fuel and driver labor as a full load, suppliers charge a "short-load fee" (typically $120 to $250) on orders smaller than 4 to 5 cubic yards.',
+  },
+  {
+    question: 'What is the ASTM C94 90-minute concrete discharge rule?',
+    answer:
+      'ASTM C94 (Standard Specification for Ready-Mixed Concrete) mandates that concrete must be discharged from the truck drum within 90 minutes after batch water is added to the cement at the plant, or before the drum has turned 300 revolutions. In ambient summer temperatures exceeding 85°F (29°C), hydration accelerates and this window narrows to 60 minutes.',
+  },
+  {
+    question: 'How much concrete is needed for a cylindrical post hole or sonotube?',
+    answer:
+      'Calculate cylindrical volume using the equation: Volume (yd³) = [ π × (Diameter in ft ÷ 2)² × Depth ft ] ÷ 27. For example, a standard 10-inch diameter post hole (0.417 ft radius) dug 3 feet deep holds [3.14159 × (0.417)² × 3] ÷ 27 = 0.0608 cu yds (1.64 cu ft). That equals approximately 2.7 eighty-pound bags (round to 3 bags) per post hole.',
+  },
+  {
+    question: 'What concrete compressive strength (PSI) should I specify?',
+    answer:
+      'For residential applications: use 2,500 PSI for non-structural fence posts and stepping pads; 3,000 PSI for standard walkways, shed floors, and basement slabs; 4,000 PSI for garage slabs, driveways, and all exterior flatwork in northern freeze-thaw climates (accompanied by 5% to 7% air entrainment to resist road salts).',
+  },
+  {
+    question: 'Why does adding water on the jobsite weaken concrete?',
+    answer:
+      'Concrete cures through a chemical reaction called hydration, not drying. Adding excessive water on the jobsite increases workability (slump) but dilutes the water-cement ratio. Every additional gallon of unapproved water added to a 10-yard mixer truck increases slump by about 1 inch but permanently reduces compressive strength by 150 to 200 PSI and increases drying shrinkage cracking.',
+  },
+];
+---
+
+<BaseLayout
+  title={seo.title}
+  description={seo.description}
+  canonicalUrl={seo.canonicalUrl}
+  faqs={faqs}
+  breadcrumbs={[{ name: 'Concrete Calculator', item: seo.canonicalUrl }]}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-5 sm:pt-7 pb-14 sm:pb-20">
+    <Breadcrumbs items={[{ name: 'Concrete Calculator' }]} />
+
+    <!-- Hero Banner — High contrast dark slate with industrial blue aura -->
+    <div class="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-slate-900 border border-slate-800 px-6 sm:px-8 lg:px-10 py-7 sm:py-9 lg:py-10 mb-8 sm:mb-10 text-white shadow-md">
+      <div class="absolute -top-12 -right-12 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="relative flex flex-wrap items-end justify-between gap-6 lg:gap-8">
+        <div class="max-w-2xl">
+          <div class="inline-flex items-center gap-2 bg-blue-950/80 border border-blue-500/40 rounded-full px-3.5 py-1 text-xs font-bold text-blue-300 mb-3.5 sm:mb-4 shadow-xs">
+            <span class="w-1.5 h-1.5 bg-blue-400 rounded-full animate-pulse shadow-[0_0_8px_#60a5fa]"></span>
+            Ready-Mix Dispatch · ASTM C94 / C387 Standards · Bag Yields & Post Holes
+          </div>
+
+          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-[1.08] mb-2.5 sm:mb-3">
+            Concrete Calculator
+          </h1>
+          <p class="text-sm sm:text-base text-slate-200 max-w-xl leading-relaxed">
+            Calculate concrete in cubic yards and 80-lb, 60-lb, or 50-lb pre-mixed bags for slabs, footings, cylindrical sonotubes, and fence posts. Compare ready-mix batch delivery against bagged mix economics.
+          </p>
+        </div>
+
+        <!-- Trust indicators -->
+        <div class="flex flex-wrap sm:flex-nowrap gap-2.5 sm:gap-3 shrink-0 w-full sm:w-auto">
+          {[
+            { val: '45', unit: 'bags/yd³', label: '80-lb Bag Yield' },
+            { val: '60', unit: 'bags/yd³', label: '60-lb Bag Yield' },
+            { val: '4,050', unit: 'lb/yd³', label: 'Wet Density' },
+            { val: '90 min', unit: 'ASTM C94', label: 'Discharge Limit' },
+          ].map(stat => (
+            <div class="flex-1 sm:flex-initial bg-slate-800/90 border border-slate-700/80 rounded-xl px-3.5 sm:px-4 py-2.5 sm:py-3 text-center min-w-[75px] sm:min-w-[90px] shadow-xs">
+              <div class="text-base sm:text-lg font-black text-white font-mono">{stat.val}</div>
+              <div class="text-[10px] text-blue-400 font-bold uppercase tracking-wider">{stat.unit}</div>
+              <div class="text-[10px] text-slate-300 font-medium mt-0.5">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive Island -->
+    <div class="mb-12 sm:mb-16">
+      <ConcreteCalculator client:load />
+    </div>
+
+    <!-- Technical & Engineering Concrete Breakdown -->
+    <div class="space-y-12 mb-16">
+
+      <!-- SECTION 1: How to Calculate Concrete Yards -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-5">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-[11px] font-bold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Volumetric Engineering</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-2">How to Calculate Concrete Yards: Formulas for Slabs & Cylinders</h2>
+        </div>
+
+        <p class="text-sm text-slate-700 leading-relaxed">
+          Commercial ready-mix plants batch concrete in <strong>cubic yards (27 cubic feet)</strong>. Formwork lumber, excavation depth, and post holes are measured in inches. Dimensional consistency is essential:
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4 font-mono text-xs">
+          <div class="bg-slate-900 text-white p-4 rounded-xl space-y-2">
+            <span class="text-emerald-400 font-bold block uppercase tracking-wider">Rectangular Slabs & Footings</span>
+            <div class="text-sm font-bold bg-slate-800/80 p-2.5 rounded border border-slate-700">
+              Cubic Yards = ( Length ft × Width ft × Depth in ) ÷ 324
+            </div>
+            <p class="text-slate-300 font-sans text-xs pt-1">
+              Add 8% to 10% allowance for form board deflection and uneven subgrade gravel.
+            </p>
+          </div>
+
+          <div class="bg-slate-900 text-white p-4 rounded-xl space-y-2">
+            <span class="text-emerald-400 font-bold block uppercase tracking-wider">Cylindrical Sonotubes & Post Holes</span>
+            <div class="text-sm font-bold bg-slate-800/80 p-2.5 rounded border border-slate-700">
+              Cubic Yards = [ π × (Radius ft)² × Depth ft ] ÷ 27
+            </div>
+            <p class="text-slate-300 font-sans text-xs pt-1">
+              Where Radius in feet = (Diameter in inches ÷ 2) ÷ 12.
+            </p>
+          </div>
+        </div>
+
+        <h3 class="text-lg font-bold text-slate-900 pt-2">Worked Contractor Example: 24' × 24' Garage Slab at 4" Thickness</h3>
+        <p class="text-sm text-slate-700 leading-relaxed">
+          Suppose you are pouring a standard two-car residential garage slab measuring <strong>24 feet by 24 feet</strong> with a <strong>4-inch nominal thickness</strong>:
+        </p>
+        <ol class="list-decimal list-inside text-sm text-slate-700 space-y-1.5 pl-2 font-medium">
+          <li>Calculate surface area: <span class="font-mono text-slate-900">24 ft × 24 ft = 576 sq ft</span></li>
+          <li>Calculate net geometric volume: <span class="font-mono text-slate-900">(576 sq ft × 4 in) ÷ 324 = 7.11 cu yds</span></li>
+          <li>Add 10% allowance for 2x4 form flex and subgrade variation: <span class="font-mono text-slate-900">7.11 × 1.10 = 7.82 cu yds</span></li>
+          <li>Ready-Mix Plant Order: Round up to <strong class="text-slate-900 font-mono">8.00 cubic yards</strong> (plants batch in 0.25-yd increments).</li>
+          <li>Bagged mix alternative: <span class="font-mono text-slate-900">7.82 cu yds × 45 bags/yd = 352 eighty-pound bags (approx. 28,160 lbs)</span></li>
+        </ol>
+      </section>
+
+      <!-- SECTION 2: Ready-Mix Truck Ordering & Batch Plant Rules -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-5">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-[11px] font-bold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Commercial Batching Logistics</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-2">Ready-Mix Truck Ordering: Short-Load Fees & Dispatch Rules</h2>
+        </div>
+
+        <p class="text-sm text-slate-700 leading-relaxed">
+          Coordinating a concrete pour requires navigating commercial dispatch regulations:
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-700">
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <span class="font-bold text-slate-900 block text-sm">Truck Drum Capacity</span>
+            <span class="text-[10px] font-mono text-blue-700 font-bold block">9 to 11 Cubic Yards</span>
+            <p class="text-slate-600 leading-relaxed">
+              Standard 3-axle or 4-axle front/rear discharge mixer trucks carry up to 10 yards. Gross vehicle weight exceeds 65,000 to 75,000 lbs. Ensure jobsite access routes can support the weight.
+            </p>
+          </div>
+
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <span class="font-bold text-slate-900 block text-sm">Short-Load Surcharges</span>
+            <span class="text-[10px] font-mono text-amber-700 font-bold block">$120 to $250 Below 4–5 Yds</span>
+            <p class="text-slate-600 leading-relaxed">
+              Ordering less than a minimum load incurs an under-load fee. For pours between 1.0 and 3.5 yards, calculate whether the fee still makes ready-mix cheaper than 150 bags of dry concrete.
+            </p>
+          </div>
+
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <span class="font-bold text-slate-900 block text-sm">The 90-Minute Rule</span>
+            <span class="text-[10px] font-mono text-rose-700 font-bold block">ASTM C94 Hydration Clock</span>
+            <p class="text-slate-600 leading-relaxed">
+              Concrete must be discharged within 90 minutes of plant water contact. Plants provide 5 to 7 minutes per cubic yard of free unloading time, billing $2 to $4/minute for delays.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 3: Bagged vs Ready Mix Break-Even -->
+      <section id="bags" class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-5 scroll-mt-20">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-[11px] font-bold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Financial & Labor Thresholds</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-2">Bagged Concrete vs. Ready-Mix Truck: Financial & Labor Thresholds</h2>
+        </div>
+
+        <p class="text-sm text-slate-700 leading-relaxed">
+          The decision between bags and a truck is both economic and structural:
+        </p>
+
+        <div class="overflow-x-auto rounded-xl border border-slate-200">
+          <table class="w-full text-xs text-left">
+            <thead class="bg-slate-900 text-white font-bold">
+              <tr>
+                <th class="px-3.5 py-2.5">Volume Required</th>
+                <th class="px-3 py-2.5 text-right">80-lb Bags (0.60 cu ft)</th>
+                <th class="px-3 py-2.5 text-right">Total Bag Weight</th>
+                <th class="px-3 py-2.5 text-right">Estimated Bagged Cost</th>
+                <th class="px-3 py-2.5 text-right">Ready-Mix Truck Cost</th>
+                <th class="px-3.5 py-2.5 text-center font-bold text-blue-400">Recommended Method</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 text-slate-700">
+              <tr>
+                <td class="px-3.5 py-2 font-bold text-slate-900">0.5 cu yd (13.5 cu ft)</td>
+                <td class="px-3 py-2 text-right font-mono">23 bags</td>
+                <td class="px-3 py-2 text-right font-mono">1,840 lbs</td>
+                <td class="px-3 py-2 text-right font-mono font-medium">$138.00</td>
+                <td class="px-3 py-2 text-right font-mono text-slate-500">$275.00 (min fee)</td>
+                <td class="px-3.5 py-2 text-center font-bold text-slate-700">Bagged (Wheelbarrow Mix)</td>
+              </tr>
+              <tr class="bg-slate-50/50">
+                <td class="px-3.5 py-2 font-bold text-slate-900">1.0 cu yd (27.0 cu ft)</td>
+                <td class="px-3 py-2 text-right font-mono">45 bags</td>
+                <td class="px-3 py-2 text-right font-mono">3,600 lbs</td>
+                <td class="px-3 py-2 text-right font-mono font-medium">$270.00</td>
+                <td class="px-3 py-2 text-right font-mono text-slate-500">$310.00 (short-load)</td>
+                <td class="px-3.5 py-2 text-center font-bold text-slate-700">Towable Drum Mixer / Bags</td>
+              </tr>
+              <tr>
+                <td class="px-3.5 py-2 font-bold text-slate-900">2.0 cu yds (54.0 cu ft)</td>
+                <td class="px-3 py-2 text-right font-mono">90 bags</td>
+                <td class="px-3 py-2 text-right font-mono">7,200 lbs</td>
+                <td class="px-3 py-2 text-right font-mono font-medium text-rose-700">$540.00</td>
+                <td class="px-3 py-2 text-right font-mono font-bold text-emerald-700">$380.00</td>
+                <td class="px-3.5 py-2 text-center font-bold text-emerald-700">Ready-Mix Truck (Save $160)</td>
+              </tr>
+              <tr class="bg-slate-50/50">
+                <td class="px-3.5 py-2 font-bold text-slate-900">6.0 cu yds (162.0 cu ft)</td>
+                <td class="px-3 py-2 text-right font-mono">270 bags</td>
+                <td class="px-3 py-2 text-right font-mono">21,600 lbs</td>
+                <td class="px-3 py-2 text-right font-mono font-medium text-rose-700">$1,620.00</td>
+                <td class="px-3 py-2 text-right font-mono font-bold text-emerald-700">$840.00</td>
+                <td class="px-3.5 py-2 text-center font-bold text-emerald-700">Ready-Mix Truck (Save $780)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="bg-blue-50 p-4 rounded-xl border border-blue-200 text-xs text-blue-900 space-y-1">
+          <span class="font-bold block">The Cold Joint Risk:</span>
+          <p class="leading-relaxed">
+            The primary danger of hand-mixing large concrete slabs in a wheelbarrow is the formation of <strong>cold joints</strong>. Concrete begins initial setting within 60 to 90 minutes. If you mix 50 bags by hand, the first section will begin stiffening before you finish pouring the middle. When the two batches meet, they will not knit together, leaving a permanent structural fissure that cracks under freezing weather.
+          </p>
+        </div>
+      </section>
+
+      <!-- SECTION 4: PSI Mix Designs, Slump & Sonotube Frost Depths -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-5">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-[11px] font-bold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Mix Engineering & Frost Codes</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-2">Compressive Strength (PSI), Slump & Cylindrical Sonotube Depths</h2>
+        </div>
+
+        <p class="text-sm text-slate-700 leading-relaxed">
+          Specifying concrete requires balancing compressive strength (pounds per square inch after 28 days of moist curing) and workability (slump measured via the ASTM C143 slump cone test):
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-700">
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-1.5">
+            <span class="font-bold text-slate-900 block text-sm">2,500 to 3,000 PSI Mix</span>
+            <span class="text-[10px] font-mono text-blue-700 font-bold block">4" Slump · Non-Vehicle Flatwork</span>
+            <p class="text-slate-600 leading-relaxed">
+              Standard mix for residential sidewalks, air conditioner pads, post footings, and interior basement slabs protected from freezing temperatures.
+            </p>
+          </div>
+
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-1.5">
+            <span class="font-bold text-slate-900 block text-sm">3,500 to 4,000 PSI Mix</span>
+            <span class="text-[10px] font-mono text-blue-700 font-bold block">4" Slump · Driveways & Patios</span>
+            <p class="text-slate-600 leading-relaxed">
+              Required for passenger vehicle driveways and garage floors. In northern regions, specify <strong>5% to 7% air entrainment</strong> to resist freeze-thaw spalling and winter deicing salts.
+            </p>
+          </div>
+
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-1.5">
+            <span class="font-bold text-slate-900 block text-sm">4,500+ PSI High Early Mix</span>
+            <span class="text-[10px] font-mono text-blue-700 font-bold block">5" Slump · Commercial Pavements</span>
+            <p class="text-slate-600 leading-relaxed">
+              Engineered for heavy delivery truck loading, commercial approach ramps, and rapid form stripping. Contains high Portland cement ratios and water-reducing admixtures.
+            </p>
+          </div>
+        </div>
+
+        <h3 class="text-lg font-bold text-slate-900 pt-2">Sonotube Post Hole & Pier Concrete Requirements</h3>
+        <p class="text-sm text-slate-700 leading-relaxed">
+          Deck footings, pergolas, and pole barns must extend below local geographic frost lines (typically 36" to 48" in northern US states) to prevent winter frost heaving. The reference table below details volume and bag requirements per cylindrical pier:
+        </p>
+
+        <div class="overflow-x-auto rounded-xl border border-slate-200">
+          <table class="w-full text-xs text-left">
+            <thead class="bg-slate-900 text-white font-bold">
+              <tr>
+                <th class="px-3.5 py-2">Sonotube Diameter</th>
+                <th class="px-3 py-2 text-right">Hole Depth</th>
+                <th class="px-3 py-2 text-right">Volume (cu ft)</th>
+                <th class="px-3 py-2 text-right">Volume (cu yds)</th>
+                <th class="px-3 py-2 text-right font-bold text-blue-400">80-lb Bags per Pier</th>
+                <th class="px-3.5 py-2">Typical Pier Application</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 text-slate-700">
+              <tr>
+                <td class="px-3.5 py-2 font-bold text-slate-900">8-Inch Round Tube</td>
+                <td class="px-3 py-2 text-right font-mono">36 inches (3 ft)</td>
+                <td class="px-3 py-2 text-right font-mono">1.05 cu ft</td>
+                <td class="px-3 py-2 text-right font-mono">0.039 yd³</td>
+                <td class="px-3 py-2 text-right font-mono font-bold text-emerald-700">1.8 (use 2)</td>
+                <td class="px-3.5 py-2">Standard fence post, mailbox</td>
+              </tr>
+              <tr class="bg-slate-50/50">
+                <td class="px-3.5 py-2 font-bold text-slate-900">10-Inch Round Tube</td>
+                <td class="px-3 py-2 text-right font-mono">36 inches (3 ft)</td>
+                <td class="px-3 py-2 text-right font-mono">1.64 cu ft</td>
+                <td class="px-3 py-2 text-right font-mono">0.061 yd³</td>
+                <td class="px-3 py-2 text-right font-mono font-bold text-emerald-700">2.7 (use 3)</td>
+                <td class="px-3.5 py-2">Single-level residential deck pier</td>
+              </tr>
+              <tr>
+                <td class="px-3.5 py-2 font-bold text-slate-900">10-Inch Round Tube</td>
+                <td class="px-3 py-2 text-right font-mono">48 inches (4 ft)</td>
+                <td class="px-3 py-2 text-right font-mono">2.18 cu ft</td>
+                <td class="px-3 py-2 text-right font-mono">0.081 yd³</td>
+                <td class="px-3 py-2 text-right font-mono font-bold text-emerald-700">3.6 (use 4)</td>
+                <td class="px-3.5 py-2">Deep frost deck footing (Northern US)</td>
+              </tr>
+              <tr class="bg-slate-50/50">
+                <td class="px-3.5 py-2 font-bold text-slate-900">12-Inch Round Tube</td>
+                <td class="px-3 py-2 text-right font-mono">48 inches (4 ft)</td>
+                <td class="px-3 py-2 text-right font-mono">3.14 cu ft</td>
+                <td class="px-3 py-2 text-right font-mono">0.116 yd³</td>
+                <td class="px-3 py-2 text-right font-mono font-bold text-emerald-700">5.2 (use 6)</td>
+                <td class="px-3.5 py-2">Multi-story deck column, porch roof support</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SECTION 5: FAQs -->
+      <section class="space-y-6">
+        <div>
+          <span class="text-[11px] font-bold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Concrete Trade FAQs</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-1">Concrete Calculator FAQs</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {faqs.map((faq) => (
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-2xs">
+              <h3 class="font-bold text-slate-900 text-sm mb-2">{faq.question}</h3>
+              <p class="text-xs text-slate-600 leading-relaxed">{faq.answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Cross-Calculator Link Matrix -->
+      <RelatedCalculators currentPath={seo.canonicalUrl} />
+
+    </div>
+  </div>
+</BaseLayout>

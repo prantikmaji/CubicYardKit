@@ -1,0 +1,494 @@
+---
+import SavedProjectsIsland from '../storage/SavedProjectsIsland';
+
+// Normalize current path for reliable active matching with trailing slash
+const rawPath = Astro.url.pathname;
+const currentPath = rawPath.endsWith('/') ? rawPath : `${rawPath}/`;
+
+const materialCalculators = [
+  {
+    href: '/gravel-calculator/',
+    label: 'Gravel & Pea Gravel',
+    badge: 'Yards & Tons',
+    desc: 'Crushed stone, pea gravel, driveway rock & 50-lb bags',
+    iconColor: 'bg-amber-100 text-amber-800 border-amber-200',
+    type: 'gravel',
+  },
+  {
+    href: '/dirt-calculator/',
+    label: 'Fill Dirt & Grading',
+    badge: 'Compaction Factor',
+    desc: 'Subsoil excavation, leveling & 10-yard dump truckloads',
+    iconColor: 'bg-orange-100 text-orange-800 border-orange-200',
+    type: 'dirt',
+  },
+  {
+    href: '/topsoil-calculator/',
+    label: 'Topsoil & Turf',
+    badge: 'Sq Ft Coverage',
+    desc: 'Lawn topdressing, sod preparation & raised planter soil',
+    iconColor: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+    type: 'topsoil',
+  },
+  {
+    href: '/concrete-calculator/',
+    label: 'Concrete Slabs & Footings',
+    badge: '80lb & 60lb Bags',
+    desc: 'Ready-mix truck yardage, slabs, pads & round sonotubes',
+    iconColor: 'bg-blue-100 text-blue-800 border-blue-200',
+    type: 'concrete',
+  },
+  {
+    href: '/concrete-block-calculator/',
+    label: 'Concrete Block (CMU)',
+    badge: 'Blocks & Mortar',
+    desc: 'Standard 8x8x16 masonry walls, mortar & core grout',
+    iconColor: 'bg-slate-100 text-slate-800 border-slate-200',
+    type: 'block',
+  },
+];
+
+const isMaterialActive = materialCalculators.some((m) => m.href === currentPath);
+---
+
+<header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/90 shadow-2xs no-print">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      
+      <!-- Brand Logo (Canonical Rebrand SVG) -->
+      <a
+        href="/"
+        class="flex items-center shrink-0 group focus:outline-hidden focus:ring-2 focus:ring-emerald-600 rounded-lg transition-opacity hover:opacity-95"
+        aria-label="CubicYardKit.com Home"
+      >
+        <img
+          src="/cubicYardKit-header.svg"
+          alt="CubicYardKit.com"
+          width="173"
+          height="36"
+          class="h-8.5 sm:h-9 w-auto object-contain"
+          loading="eager"
+        />
+      </a>
+
+      <!-- Desktop Navigation (Clean 4-Item Architecture) -->
+      <nav class="hidden lg:flex items-center gap-1.5" aria-label="Main Navigation">
+        
+        <!-- 1. Universal Calculator Hub -->
+        <a
+          href="/"
+          class={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors ${
+            currentPath === '/'
+              ? 'bg-emerald-50 text-emerald-900 border border-emerald-200/80 shadow-2xs font-bold'
+              : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+          }`}
+          aria-current={currentPath === '/' ? 'page' : undefined}
+        >
+          Cubic Yard
+        </a>
+
+        <!-- 2. Material Calculators Dropdown Menu -->
+        <div class="relative group">
+          <button
+            type="button"
+            class={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors cursor-pointer select-none ${
+              isMaterialActive
+                ? 'bg-emerald-50 text-emerald-900 border border-emerald-200/80 shadow-2xs font-bold'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+            }`}
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            <span>Calculators</span>
+            <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-700 transition-transform duration-200 group-hover:rotate-180 group-focus-within:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+
+          <!-- Dropdown Panel (with invisible bridge to prevent hover loss) -->
+          <div class="absolute top-full left-0 pt-1.5 w-84 invisible opacity-0 translate-y-1 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 group-focus-within:visible group-focus-within:opacity-100 group-focus-within:translate-y-0 transition-all duration-150 z-50">
+            <div class="bg-white rounded-xl shadow-xl border border-slate-200/90 py-2 ring-1 ring-slate-900/5">
+              <div class="px-3.5 py-1.5 border-b border-slate-100 text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center justify-between">
+                <span>Material Calculators</span>
+                <span class="text-[9px] text-emerald-700 font-semibold bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-200/60">5 Specific Tools</span>
+              </div>
+
+              <div class="p-1 space-y-0.5">
+                {materialCalculators.map((item) => {
+                  const isActive = currentPath === item.href;
+                  return (
+                    <a
+                      href={item.href}
+                      class={`flex items-start gap-3 p-2.5 rounded-lg transition-colors group/item ${
+                        isActive
+                          ? 'bg-emerald-50/90 text-emerald-900 border border-emerald-200/60 font-semibold'
+                          : 'hover:bg-slate-50 text-slate-700'
+                      }`}
+                      aria-current={isActive ? 'page' : undefined}
+                    >
+                      <div class={`w-7 h-7 rounded-md flex items-center justify-center shrink-0 border mt-0.5 ${item.iconColor}`}>
+                        {item.type === 'gravel' && (
+                          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <circle cx="7" cy="8" r="3" stroke-width="2"/>
+                            <circle cx="16" cy="7" r="2.5" stroke-width="2"/>
+                            <circle cx="12" cy="15" r="4" stroke-width="2"/>
+                          </svg>
+                        )}
+                        {item.type === 'dirt' && (
+                          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                          </svg>
+                        )}
+                        {item.type === 'topsoil' && (
+                          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2v8m0 0c-3 0-6 2-6 5a6 6 0 0012 0c0-3-3-5-6-5zm-5 7h10"/>
+                          </svg>
+                        )}
+                        {item.type === 'concrete' && (
+                          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                          </svg>
+                        )}
+                        {item.type === 'block' && (
+                          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <rect x="3" y="4" width="18" height="16" rx="2" stroke-width="2"/>
+                            <line x1="3" y1="12" x2="21" y2="12" stroke-width="2"/>
+                            <line x1="12" y1="4" x2="12" y2="12" stroke-width="2"/>
+                            <line x1="8" y1="12" x2="8" y2="20" stroke-width="2"/>
+                            <line x1="16" y1="12" x2="16" y2="20" stroke-width="2"/>
+                          </svg>
+                        )}
+                      </div>
+                      <div class="flex-1 min-w-0">
+                        <div class="flex items-center justify-between gap-1">
+                          <span class="text-xs font-bold text-slate-900 group-hover/item:text-emerald-700 transition-colors">
+                            {item.label}
+                          </span>
+                          <span class="text-[9px] font-medium text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">
+                            {item.badge}
+                          </span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 leading-snug truncate mt-0.5">
+                          {item.desc}
+                        </p>
+                      </div>
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Patio Planner -->
+        <a
+          href="/planner/"
+          class={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors ${
+            currentPath === '/planner/'
+              ? 'bg-emerald-50 text-emerald-900 border border-emerald-200/80 shadow-2xs font-bold'
+              : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+          }`}
+          aria-current={currentPath === '/planner/' ? 'page' : undefined}
+        >
+          <span>Patio Planner</span>
+          <span class="text-[9px] font-bold px-1.5 py-0.2 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300/60">
+            Multi-Layer
+          </span>
+        </a>
+
+        <!-- 4. Compare Quotes -->
+        <a
+          href="/quote-comparison/"
+          class={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors ${
+            currentPath === '/quote-comparison/'
+              ? 'bg-emerald-50 text-emerald-900 border border-emerald-200/80 shadow-2xs font-bold'
+              : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+          }`}
+          aria-current={currentPath === '/quote-comparison/' ? 'page' : undefined}
+        >
+          Compare Quotes
+        </a>
+      </nav>
+
+      <!-- Right Action Controls -->
+      <div class="flex items-center gap-2 shrink-0">
+        <!-- Saved Projects Dialog Island -->
+        <SavedProjectsIsland client:load />
+
+        <!-- Quick Start Plan CTA Button (Tablet & Desktop) -->
+        <a
+          href="/planner/"
+          class="hidden sm:inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white shadow-xs transition-colors shrink-0"
+        >
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+          </svg>
+          <span>Plan Patio</span>
+        </a>
+
+        <!-- Mobile Drawer Menu Trigger Button -->
+        <button
+          id="mobile-nav-toggle"
+          type="button"
+          class="lg:hidden p-2 rounded-lg text-slate-700 hover:text-slate-900 hover:bg-slate-100 focus:outline-hidden focus:ring-2 focus:ring-emerald-600 transition-colors cursor-pointer"
+          aria-label="Open navigation menu"
+          aria-expanded="false"
+          aria-controls="mobile-nav-drawer"
+        >
+          <svg id="hamburger-icon" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Mobile Drawer Backdrop Overlay -->
+  <div
+    id="mobile-nav-backdrop"
+    class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden opacity-0 transition-opacity duration-300"
+    aria-hidden="true"
+  ></div>
+
+  <!-- Mobile Drawer Slide-Over Sheet -->
+  <aside
+    id="mobile-nav-drawer"
+    class="fixed top-0 right-0 bottom-0 w-[85vw] max-w-sm bg-white shadow-2xl z-50 flex flex-col translate-x-full transition-transform duration-300 ease-in-out border-l border-slate-200 overflow-hidden"
+    aria-label="Mobile Navigation"
+  >
+    <!-- Drawer Header -->
+    <div class="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+      <a href="/" class="flex items-center" aria-label="CubicYardKit.com Home">
+        <img
+          src="/cubicYardKit-header.svg"
+          alt="CubicYardKit.com"
+          width="154"
+          height="32"
+          class="h-7 w-auto object-contain"
+        />
+      </a>
+
+      <button
+        id="mobile-nav-close"
+        type="button"
+        class="p-1.5 rounded-md text-slate-500 hover:text-slate-900 hover:bg-slate-200/70 transition-colors cursor-pointer"
+        aria-label="Close navigation menu"
+      >
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Drawer Body -->
+    <div class="p-4 overflow-y-auto flex-1 space-y-6">
+      
+      <!-- Section 1: Universal Hub -->
+      <div>
+        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">
+          Universal Hub
+        </div>
+        <a
+          href="/"
+          class={`flex items-center justify-between p-3 rounded-xl border transition-colors ${
+            currentPath === '/'
+              ? 'bg-emerald-50 text-emerald-950 border-emerald-300 font-bold'
+              : 'bg-white text-slate-800 border-slate-200 hover:bg-slate-50'
+          }`}
+          aria-current={currentPath === '/' ? 'page' : undefined}
+        >
+          <div class="flex items-center gap-2.5">
+            <div class="w-6 h-6 rounded bg-emerald-700 text-white flex items-center justify-center text-xs font-bold">
+              yd³
+            </div>
+            <div>
+              <div class="text-xs font-bold text-slate-900">Cubic Yard Calculator</div>
+              <div class="text-[11px] text-slate-500">Universal L × W × D formula</div>
+            </div>
+          </div>
+          <span class="text-xs text-slate-400">→</span>
+        </a>
+      </div>
+
+      <!-- Section 2: Material-Specific Calculators -->
+      <div>
+        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center justify-between">
+          <span>Material Calculators</span>
+          <span class="text-[9px] text-emerald-700 font-bold">5 Tools</span>
+        </div>
+        <div class="space-y-1.5">
+          {materialCalculators.map((item) => {
+            const isActive = currentPath === item.href;
+            return (
+              <a
+                href={item.href}
+                class={`flex items-start gap-3 p-2.5 rounded-lg border transition-colors ${
+                  isActive
+                    ? 'bg-emerald-50 text-emerald-950 border-emerald-300 font-semibold'
+                    : 'bg-white text-slate-800 border-slate-200/80 hover:bg-slate-50'
+                }`}
+                aria-current={isActive ? 'page' : undefined}
+              >
+                <div class={`w-6 h-6 rounded flex items-center justify-center shrink-0 border mt-0.5 ${item.iconColor}`}>
+                  {item.type === 'gravel' && (
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <circle cx="7" cy="8" r="3" stroke-width="2"/>
+                      <circle cx="16" cy="7" r="2.5" stroke-width="2"/>
+                      <circle cx="12" cy="15" r="4" stroke-width="2"/>
+                    </svg>
+                  )}
+                  {item.type === 'dirt' && (
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                    </svg>
+                  )}
+                  {item.type === 'topsoil' && (
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2v8m0 0c-3 0-6 2-6 5a6 6 0 0012 0c0-3-3-5-6-5zm-5 7h10"/>
+                    </svg>
+                  )}
+                  {item.type === 'concrete' && (
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                    </svg>
+                  )}
+                  {item.type === 'block' && (
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <rect x="3" y="4" width="18" height="16" rx="2" stroke-width="2"/>
+                      <line x1="3" y1="12" x2="21" y2="12" stroke-width="2"/>
+                      <line x1="12" y1="4" x2="12" y2="12" stroke-width="2"/>
+                      <line x1="8" y1="12" x2="8" y2="20" stroke-width="2"/>
+                      <line x1="16" y1="12" x2="16" y2="20" stroke-width="2"/>
+                    </svg>
+                  )}
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-900">{item.label}</span>
+                    <span class="text-[9px] text-slate-500 font-medium bg-slate-100 px-1 py-0.2 rounded">
+                      {item.badge}
+                    </span>
+                  </div>
+                  <div class="text-[11px] text-slate-500 truncate mt-0.5">{item.desc}</div>
+                </div>
+              </a>
+            );
+          })}
+        </div>
+      </div>
+
+      <!-- Section 3: Project Planning & Pricing -->
+      <div>
+        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">
+          Project Tools
+        </div>
+        <div class="space-y-1.5">
+          <a
+            href="/planner/"
+            class={`flex items-center justify-between p-2.5 rounded-lg border transition-colors ${
+              currentPath === '/planner/'
+                ? 'bg-emerald-50 text-emerald-950 border-emerald-300 font-semibold'
+                : 'bg-white text-slate-800 border-slate-200/80 hover:bg-slate-50'
+            }`}
+            aria-current={currentPath === '/planner/' ? 'page' : undefined}
+          >
+            <div>
+              <div class="text-xs font-bold text-slate-900">Patio Material Planner</div>
+              <div class="text-[11px] text-slate-500">Sub-base stone, bedding sand & edging</div>
+            </div>
+            <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800">
+              Multi-Layer
+            </span>
+          </a>
+
+          <a
+            href="/quote-comparison/"
+            class={`flex items-center justify-between p-2.5 rounded-lg border transition-colors ${
+              currentPath === '/quote-comparison/'
+                ? 'bg-emerald-50 text-emerald-950 border-emerald-300 font-semibold'
+                : 'bg-white text-slate-800 border-slate-200/80 hover:bg-slate-50'
+            }`}
+            aria-current={currentPath === '/quote-comparison/' ? 'page' : undefined}
+          >
+            <div>
+              <div class="text-xs font-bold text-slate-900">Supplier Quote Comparison</div>
+              <div class="text-[11px] text-slate-500">Normalize bulk yards, tons & bags</div>
+            </div>
+            <span class="text-xs text-slate-400">→</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Drawer Footer -->
+    <div class="p-4 border-t border-slate-200 bg-slate-50 space-y-2">
+      <a
+        href="/planner/"
+        class="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs transition-colors shadow-xs"
+      >
+        <span>Start New Patio Plan</span>
+        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+        </svg>
+      </a>
+      <div class="text-center text-[10px] text-slate-400">
+        ASTM, ACI & NCMA Industry Standards
+      </div>
+    </div>
+  </aside>
+</header>
+
+<script>
+  function setupMobileNav() {
+    const toggleBtn = document.getElementById('mobile-nav-toggle');
+    const closeBtn = document.getElementById('mobile-nav-close');
+    const backdrop = document.getElementById('mobile-nav-backdrop');
+    const drawer = document.getElementById('mobile-nav-drawer');
+
+    if (!toggleBtn || !drawer || !backdrop) return;
+
+    function openMenu() {
+      toggleBtn?.setAttribute('aria-expanded', 'true');
+      backdrop?.classList.remove('hidden');
+      requestAnimationFrame(() => {
+        backdrop?.classList.add('opacity-100');
+        backdrop?.classList.remove('opacity-0');
+        drawer?.classList.remove('translate-x-full');
+      });
+      document.body.classList.add('overflow-hidden');
+    }
+
+    function closeMenu() {
+      toggleBtn?.setAttribute('aria-expanded', 'false');
+      drawer?.classList.add('translate-x-full');
+      backdrop?.classList.add('opacity-0');
+      backdrop?.classList.remove('opacity-100');
+      setTimeout(() => {
+        backdrop?.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+      }, 300);
+    }
+
+    toggleBtn.addEventListener('click', openMenu);
+    closeBtn?.addEventListener('click', closeMenu);
+    backdrop.addEventListener('click', closeMenu);
+
+    // Escape key listener
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !drawer.classList.contains('translate-x-full')) {
+        closeMenu();
+      }
+    });
+
+    // Close on any link clicked in drawer
+    drawer.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', closeMenu);
+    });
+  }
+
+  // Initialize on load and on Astro page transitions
+  setupMobileNav();
+  document.addEventListener('astro:page-load', setupMobileNav);
+</script>

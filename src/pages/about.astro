@@ -1,0 +1,168 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/seo/Breadcrumbs.astro';
+
+const seo = {
+  title: 'About Us | CubicYardKit — Precision Material Estimating',
+  description:
+    'Learn about CubicYardKit: our engineering mission, verified ASTM & ACI calculation standards, and our commitment to transparent construction estimating.',
+  canonicalUrl: 'https://cubicyardkit.com/about/',
+};
+
+const breadcrumbs = [{ name: 'About Us', href: '/about/' }];
+---
+
+<BaseLayout
+  title={seo.title}
+  description={seo.description}
+  canonicalUrl={seo.canonicalUrl}
+  breadcrumbs={breadcrumbs}
+>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+    <Breadcrumbs items={breadcrumbs} />
+
+    <!-- Hero Header -->
+    <div class="relative overflow-hidden rounded-2xl bg-slate-900 border border-slate-800 p-6 sm:p-10 mb-10 text-white shadow-md">
+      <div class="absolute -top-12 -right-12 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="relative max-w-2xl">
+        <div class="inline-flex items-center gap-2 bg-emerald-950/80 border border-emerald-500/40 rounded-full px-3 py-1 text-xs font-bold text-emerald-300 mb-3.5 shadow-xs">
+          <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_8px_#34d399]"></span>
+          Engineering Precision · ASTM & ACI Benchmarks · Zero Hidden Assumptions
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-black text-white tracking-tight leading-tight mb-3">
+          About CubicYardKit
+        </h1>
+        <p class="text-sm sm:text-base text-slate-200 leading-relaxed">
+          CubicYardKit was engineered to bring commercial-grade volumetric calculations, verified aggregate densities, and transparent project takeoff planning to US homeowners, earthwork contractors, and landscapers.
+        </p>
+      </div>
+    </div>
+
+    <!-- Core Editorial Content -->
+    <div class="space-y-10 text-slate-800 text-sm leading-relaxed">
+
+      <!-- Section 1: The Problem We Solved -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-4">
+        <div class="border-b border-slate-100 pb-3">
+          <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Our Mission</span>
+          <h2 class="text-xl sm:text-2xl font-black text-slate-900 mt-2">Why Standard Calculators Cause Jobsite Shortages</h2>
+        </div>
+        <p>
+          Every construction season, thousands of projects suffer costly material shortages, emergency short-load surcharges, or massive piles of leftover gravel. The primary root cause is surprisingly simple: <strong>unit inconsistency and arbitrary density assumptions</strong>.
+        </p>
+        <p>
+          On job sites, lengths and widths are surveyed in <strong>feet</strong>, while slab depths and gravel layers are measured in <strong>inches</strong>. Multiplying length by width by depth directly without normalizing units introduces an immediate 1,200% error. Furthermore, many generic online tools fabricate an arbitrary conversion (such as claiming all gravel weighs 1.5 tons per yard or all concrete bags yield the same volume), ignoring geotechnical compaction and moisture content.
+        </p>
+        <p>
+          <strong>CubicYardKit was built to eliminate this guesswork.</strong> We provide mathematically rigorous calculation engines built upon verified physical material densities, standard ASTM bulk weights, and transparent waste allowances.
+        </p>
+      </section>
+
+      <!-- Section 2: Adherence to US Industry Standards -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-5">
+        <div class="border-b border-slate-100 pb-3">
+          <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Trade Standards</span>
+          <h2 class="text-xl sm:text-2xl font-black text-slate-900 mt-2">Engineered to US Trade & Code Standards</h2>
+        </div>
+        <p>
+          Our calculation formulas and reference databases are directly cross-referenced against established American industry benchmarks:
+        </p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-900">ASTM C33 & AASHTO M43</span>
+              <span class="text-[10px] bg-amber-100 text-amber-800 font-bold px-1.5 py-0.5 rounded">Aggregates</span>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Standard specifications for concrete aggregates and graded crushed stone (#57 stone at 2,700 lb/yd³, pea gravel at 2,800 lb/yd³, crusher run at 3,000 lb/yd³).
+            </p>
+          </div>
+
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-900">ACI 318 & ASTM C94</span>
+              <span class="text-[10px] bg-blue-100 text-blue-800 font-bold px-1.5 py-0.5 rounded">Concrete</span>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Ready-mix batch tolerance guidelines, 90-minute discharge limits, and pre-mixed bag yields (80-lb bag = 0.60 cu ft; 60-lb bag = 0.45 cu ft).
+            </p>
+          </div>
+
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-900">ASTM C90 & NCMA TEK</span>
+              <span class="text-[10px] bg-slate-200 text-slate-800 font-bold px-1.5 py-0.5 rounded">Masonry</span>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Standard CMU hollow block geometry (1.125 blocks/sq ft with 3/8" mortar joint), ASTM C270 mortar schedules, and core grout fill volume.
+            </p>
+          </div>
+
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-900">ICPI & IRC R401.3</span>
+              <span class="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.5 rounded">Hardscaping</span>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Interlocking Concrete Pavement Institute multi-layer strata specifications (sub-base aggregate, bedding sand, edge restraints) and foundation drainage slope codes.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Our Core Pillars -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-4">
+        <div class="border-b border-slate-100 pb-3">
+          <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Platform Integrity</span>
+          <h2 class="text-xl sm:text-2xl font-black text-slate-900 mt-2">The CubicYardKit Guarantees</h2>
+        </div>
+        <div class="space-y-3.5">
+          <div class="flex items-start gap-3">
+            <div class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">✓</div>
+            <div>
+              <h3 class="text-xs font-bold text-slate-900">Zero Fabricated Densities</h3>
+              <p class="text-xs text-slate-600 mt-0.5">We clearly document the verified laboratory weight of every material in pounds per cubic yard and tons per cubic yard, while giving contractors the freedom to input regional quarry scale numbers.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3">
+            <div class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">✓</div>
+            <div>
+              <h3 class="text-xs font-bold text-slate-900">Mathematical Proofs & Formulas</h3>
+              <p class="text-xs text-slate-600 mt-0.5">We don't hide our calculations behind a black box. Every calculator page includes step-by-step mathematical proofs, worked trade examples, and formula derivations.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3">
+            <div class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">✓</div>
+            <div>
+              <h3 class="text-xs font-bold text-slate-900">100% Client-Side Privacy</h3>
+              <p class="text-xs text-slate-600 mt-0.5">Your project takeoffs and bills of materials are saved directly in your browser's LocalStorage. No user accounts, passwords, or server database tracking required.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Contact & Feedback -->
+      <section class="bg-slate-50 p-6 sm:p-8 rounded-2xl border border-slate-200 space-y-4">
+        <h2 class="text-lg font-bold text-slate-900">Have Questions or Suggestions?</h2>
+        <p class="text-xs text-slate-600">
+          Our engineering team continuously refines density tables and regional aggregate data based on contractor feedback. If you have questions, notice a calculation discrepancy, or want to suggest a new material preset, please reach out to our team:
+        </p>
+        <div class="pt-2 flex flex-wrap gap-3">
+          <a
+            href="/contact/"
+            class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs shadow-xs transition-colors"
+          >
+            Contact Editorial Team →
+          </a>
+          <a
+            href="/"
+            class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 font-semibold text-xs shadow-2xs transition-colors"
+          >
+            Explore Calculators
+          </a>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</BaseLayout>

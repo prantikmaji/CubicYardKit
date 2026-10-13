@@ -1,0 +1,135 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/seo/Breadcrumbs.astro';
+
+const seo = {
+  title: 'Material Estimating Disclaimer | CubicYardKit',
+  description:
+    'Important legal and engineering disclaimer regarding material estimating, geotechnical variances, compaction factors, and contractor responsibilities.',
+  canonicalUrl: 'https://cubicyardkit.com/disclaimer/',
+};
+
+const breadcrumbs = [{ name: 'Estimating Disclaimer', href: '/disclaimer/' }];
+---
+
+<BaseLayout
+  title={seo.title}
+  description={seo.description}
+  canonicalUrl={seo.canonicalUrl}
+  breadcrumbs={breadcrumbs}
+>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+    <Breadcrumbs items={breadcrumbs} />
+
+    <!-- Hero Header -->
+    <div class="relative overflow-hidden rounded-2xl bg-slate-900 border border-slate-800 p-6 sm:p-10 mb-10 text-white shadow-md">
+      <div class="absolute -top-12 -right-12 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="relative max-w-2xl">
+        <div class="inline-flex items-center gap-2 bg-emerald-950/80 border border-emerald-500/40 rounded-full px-3 py-1 text-xs font-bold text-emerald-300 mb-3.5 shadow-xs">
+          <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_8px_#34d399]"></span>
+          Legal & Engineering Notice · Field Tolerances · Geotechnical Variances
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-black text-white tracking-tight leading-tight mb-3">
+          Material Estimating Disclaimer
+        </h1>
+        <p class="text-sm sm:text-base text-slate-200 leading-relaxed">
+          Please read this engineering and liability disclosure before ordering materials, signing supplier delivery tickets, or excavating jobsites based on CubicYardKit calculations.
+        </p>
+      </div>
+    </div>
+
+    <!-- Core Content Sections -->
+    <div class="space-y-8 text-slate-800 text-sm leading-relaxed">
+
+      <!-- Section 1: Informational Purposes Only -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-3.5">
+        <div class="border-b border-slate-100 pb-3">
+          <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Scope of Service</span>
+          <h2 class="text-xl font-black text-slate-900 mt-2">1. Mathematical & Informational Estimation Only</h2>
+        </div>
+        <p>
+          All calculators, algorithms, bills of materials, and conversion formulas provided by <strong>CubicYardKit.com</strong> are offered strictly for educational, informational, and preliminary planning purposes. 
+        </p>
+        <p>
+          Calculations are derived from theoretical geometric formulas ($Length \times Width \times Depth \div 27$) and established published average material bulk densities (such as ASTM C33 and ACI 318 guidelines). CubicYardKit does not provide certified civil engineering, structural design, land surveying, architectural consulting, or licensed professional contractor services. Nothing on this website constitutes a stamped engineering plan or a legally binding construction guarantee.
+        </p>
+      </section>
+
+      <!-- Section 2: Real-World Geotechnical & Jobsite Variances -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-4">
+        <div class="border-b border-slate-100 pb-3">
+          <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Field Tolerances</span>
+          <h2 class="text-xl font-black text-slate-900 mt-2">2. Geotechnical, Moisture & Compaction Variances</h2>
+        </div>
+        <p>
+          Physical materials on actual construction jobsites rarely behave with mathematical perfection. Actual requirements will deviate from theoretical calculations due to several physical field factors:
+        </p>
+        
+        <div class="space-y-3 pt-1">
+          <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+            <strong class="text-slate-900 block text-xs">A. Mechanical Compaction & Consolidation</strong>
+            <p class="text-xs text-slate-600 mt-0.5">
+              Aggregates, crushed stone, fill dirt, and topsoil undergo volume reduction when compacted with plate compactors, jumping jacks, or heavy equipment rollers. A 100 cubic yard excavation of loose soil will consolidate into 80–85 cubic yards of compacted fill depending on standard Proctor soil density.
+            </p>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+            <strong class="text-slate-900 block text-xs">B. Moisture Content & Quarry Scale Weights</strong>
+            <p class="text-xs text-slate-600 mt-0.5">
+              Aggregate tonnage conversions (lbs per cubic yard) fluctuate with ambient moisture. Freshly excavated or rained-on gravel carries significant water weight, increasing certified scale ticket weight without expanding physical cubic volume.
+            </p>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+            <strong class="text-slate-900 block text-xs">C. Subgrade Irregularities & Formwork Deflection</strong>
+            <p class="text-xs text-slate-600 mt-0.5">
+              Hand-dug trenches, natural grade undulations, subgrade dips, and formwork deflection (concrete forms bowing outward by even 1/4 inch across a 20-foot pour) can increase volumetric requirements by 5% to 15%.
+            </p>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+            <strong class="text-slate-900 block text-xs">D. Bagged Yield Tolerances & Residue Loss</strong>
+            <p class="text-xs text-slate-600 mt-0.5">
+              Pre-mixed dry bagged concrete and mortar yields depend on water-cement ratios and mixing drum retention. Residue left in wheelbarrows, spillage, and test batches reduce effective placement yield.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Contractor Verification Responsibility -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-3.5">
+        <div class="border-b border-slate-100 pb-3">
+          <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Verification Duty</span>
+          <h2 class="text-xl font-black text-slate-900 mt-2">3. User Responsibility to Verify Orders</h2>
+        </div>
+        <p>
+          It is the sole responsibility of the user (whether homeowner, builder, or estimator) to physically survey the project site, double-check string-line elevations, account for local soil conditions, and verify final order quantities with local building material suppliers, quarries, or ready-mix dispatchers before placing commercial orders.
+        </p>
+        <p>
+          Always confirm regional supplier batching rules, minimum truckload deliveries (typically 4–6 cubic yards for ready-mix concrete), and short-load delivery surcharges with your specific supplier.
+        </p>
+      </section>
+
+      <!-- Section 4: Limitation of Liability -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-3.5">
+        <div class="border-b border-slate-100 pb-3">
+          <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Liability Protection</span>
+          <h2 class="text-xl font-black text-slate-900 mt-2">4. Limitation of Liability</h2>
+        </div>
+        <p>
+          To the maximum extent permitted by applicable law, <strong>CubicYardKit.com</strong>, its owners, operators, developers, and affiliates expressly disclaim any and all liability for:
+        </p>
+        <ul class="list-disc list-inside space-y-1.5 text-xs text-slate-700 ml-1">
+          <li>Any direct, indirect, incidental, consequential, or punitive damages arising from the use or inability to use this website.</li>
+          <li>Financial costs incurred from material overages, leftover aggregate disposal, or restocking fees.</li>
+          <li>Financial losses resulting from material shortages, contractor downtime, pump truck rescheduling fees, or emergency short-load surcharges.</li>
+          <li>Structural failures, foundation defects, settlement, or code compliance citations related to construction projects.</li>
+        </ul>
+        <p class="text-xs text-slate-500 pt-2 border-t border-slate-100">
+          Last revised: October 2026. For questions regarding our calculations, review our <a href="/about/" class="text-emerald-700 underline font-semibold">About Us</a> page or contact us at <a href="mailto:math@cubicyardkit.com" class="text-emerald-700 underline font-semibold">math@cubicyardkit.com</a>.
+        </p>
+      </section>
+
+    </div>
+  </div>
+</BaseLayout>

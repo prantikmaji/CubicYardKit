@@ -1,0 +1,794 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CubicYardCalculator from '../components/calc/CubicYardCalculator';
+import SavedProjectsIsland from '../components/storage/SavedProjectsIsland';
+import { KEYWORD_MAP } from '../data/keyword-map';
+
+const seo = {
+  title: 'Cubic Yard Calculator | Calculate Cubic Yards | CubicYardKit',
+  description:
+    'Calculate cubic yards, tonnage, and bags from length, width, and depth. Complete trade reference with material densities, formulas, compaction rates, and hauling specs.',
+  canonicalUrl: 'https://cubicyardkit.com/',
+};
+
+const faqs = [
+  {
+    question: 'How do you calculate cubic yards from feet and inches?',
+    answer:
+      'To calculate cubic yards when dimensions are in feet and depth is in inches: multiply length in feet by width in feet, multiply by (depth in inches ÷ 12) to calculate total cubic feet, and divide the result by 27. Alternatively, use the direct shortcut: (Length in ft × Width in ft × Depth in inches) ÷ 324 = Cubic Yards. For example, a 20 ft by 10 ft patio poured at 4 inches depth equals (20 × 10 × 4) ÷ 324 = 2.47 cubic yards.',
+  },
+  {
+    question: 'How many cubic feet are in one cubic yard?',
+    answer:
+      'There are exactly 27 cubic feet in one cubic yard. A cubic yard represents a three-dimensional cube measuring 3 feet wide, 3 feet long, and 3 feet deep (3 ft × 3 ft × 3 ft = 27 ft³). In liquid volume, 1 cubic yard equals approximately 201.97 US liquid gallons or 764.55 liters.',
+  },
+  {
+    question: 'What is the formula to convert square feet directly into cubic yards?',
+    answer:
+      'Multiply your total surface area in square feet by the desired material thickness in inches, then divide by 324. Formula: Cubic Yards = (Square Feet × Depth in Inches) ÷ 324. This mathematical shortcut works because 1 cubic yard (27 cu ft) equals 324 square feet of coverage at exactly 1 inch thickness.',
+  },
+  {
+    question: 'How much does a cubic yard of material weigh?',
+    answer:
+      'Weight depends entirely on material density and moisture content. One cubic yard of crushed #57 gravel weighs approximately 2,700 lbs (1.35 tons); dry screened topsoil weighs about 2,100 lbs (1.05 tons); wet excavated clay can exceed 2,600 lbs (1.3 tons); dense crusher run aggregate weighs 3,000 lbs (1.5 tons); and standard ready-mix wet concrete weighs roughly 4,050 lbs (2.025 tons).',
+  },
+  {
+    question: 'How many wheelbarrows make a cubic yard?',
+    answer:
+      'A standard residential contractor wheelbarrow has a tray capacity of 3 cubic feet, requiring exactly 9 full level loads (27 ÷ 3 = 9) to move 1 cubic yard. Smaller residential consumer wheelbarrows (2 cubic feet) require 13.5 loads. Heavy-duty 6 cubic foot commercial landscaping wheelbarrows move 1 cubic yard in approximately 4.5 trips.',
+  },
+  {
+    question: 'How many bags of concrete or gravel make 1 cubic yard?',
+    answer:
+      'For pre-bagged concrete: one 80-lb bag yields approximately 0.60 cubic feet, requiring 45 bags per cubic yard. One 60-lb bag yields approximately 0.45 cubic feet, requiring 60 bags per cubic yard. For standard pre-bagged gravel or soil sold in 0.5-cubic-foot bags (approx. 50 lbs), you need exactly 54 bags (27 ÷ 0.5) to equal 1 cubic yard.',
+  },
+  {
+    question: 'What is the difference between a square yard and a cubic yard?',
+    answer:
+      'A square yard is a two-dimensional measurement of flat surface area (3 ft × 3 ft = 9 square feet), used for carpeting, sod rolls, and fabric. A cubic yard is a three-dimensional measurement of volume (3 ft × 3 ft × 3 ft = 27 cubic feet), used for bulk materials with depth like dirt, concrete, gravel, and mulch.',
+  },
+  {
+    question: 'How many cubic yards can a standard pickup truck carry?',
+    answer:
+      'While a standard 6.5-foot or 8-foot pickup truck bed physically holds 1.5 to 2.5 cubic yards of volumetric space, payload weight is the limiting safety factor. A half-ton truck (F-150, Silverado 1500) has a typical payload limit of 1,500 to 2,000 lbs, accommodating only 0.5 to 0.75 cubic yards of heavy gravel or wet soil. Lightweight dry mulch (600–800 lbs/yd³) can safely fill the full 2 cubic yard bed capacity.',
+  },
+];
+
+const toolCards = [
+  {
+    href: '/gravel-calculator/',
+    title: 'Gravel & Pea Gravel',
+    badge: 'Yards & Tons',
+    desc: 'Estimate crushed stone, pea gravel, and driveway rock in cubic yards, tons, and 50-lb bags with quarry scaling.',
+    icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />`,
+    accentColor: 'border-t-slate-400 hover:border-green-500',
+    hoverText: 'group-hover:text-green-700',
+    iconBg: 'bg-slate-100',
+    iconColor: 'text-slate-600',
+  },
+  {
+    href: '/dirt-calculator/',
+    title: 'Fill Dirt & Grading',
+    badge: 'Settlement Factor',
+    desc: 'Calculate subsoil excavation, grading volume, and 10-yard dump truckloads with mechanical compaction factors.',
+    icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />`,
+    accentColor: 'border-t-amber-300 hover:border-amber-500',
+    hoverText: 'group-hover:text-amber-700',
+    iconBg: 'bg-amber-50',
+    iconColor: 'text-amber-600',
+  },
+  {
+    href: '/topsoil-calculator/',
+    title: 'Topsoil & Gardens',
+    badge: 'Sq Ft Coverage',
+    desc: 'Calculate screened topsoil volume for lawn leveling, new sod establishment, and raised planter bed blends.',
+    icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />`,
+    accentColor: 'border-t-green-300 hover:border-green-500',
+    hoverText: 'group-hover:text-green-700',
+    iconBg: 'bg-green-50',
+    iconColor: 'text-green-600',
+  },
+  {
+    href: '/concrete-calculator/',
+    title: 'Concrete Slabs & Footings',
+    badge: '80lb & 60lb Bags',
+    desc: 'Order ready-mix truck yardage or calculate pre-mixed bagged concrete for slabs, post holes, and structural footings.',
+    icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />`,
+    accentColor: 'border-t-blue-300 hover:border-blue-500',
+    hoverText: 'group-hover:text-blue-700',
+    iconBg: 'bg-blue-50',
+    iconColor: 'text-blue-600',
+  },
+  {
+    href: '/concrete-block-calculator/',
+    title: 'Concrete Block Walls',
+    badge: 'CMU & Mortar',
+    desc: 'Calculate standard 8x8x16 CMU blocks, window/door deductions, mortar bags, and structural core fill grout volume.',
+    icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />`,
+    accentColor: 'border-t-slate-400 hover:border-slate-600',
+    hoverText: 'group-hover:text-slate-700',
+    iconBg: 'bg-slate-100',
+    iconColor: 'text-slate-600',
+  },
+  {
+    href: '/planner/',
+    title: 'Project Material Planner',
+    badge: 'Multi-Material Bill',
+    desc: 'Estimate complete multi-layer paver patios with sub-base stone, bedding sand, edge restraints, and printable BOM.',
+    icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />`,
+    accentColor: 'border-t-emerald-500 hover:border-emerald-600',
+    hoverText: 'group-hover:text-emerald-700',
+    iconBg: 'bg-emerald-50',
+    iconColor: 'text-emerald-700',
+  },
+];
+---
+
+<BaseLayout
+  title={seo.title}
+  description={seo.description}
+  canonicalUrl={seo.canonicalUrl}
+  faqs={faqs}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-5 sm:pt-7 pb-14 sm:pb-20">
+
+    <!-- Saved Projects in top-right corner on mobile -->
+    <div class="flex justify-end mb-4 lg:hidden">
+      <SavedProjectsIsland client:load />
+    </div>
+
+    <!-- Hero Banner — High contrast dark slate with emerald aura -->
+    <div class="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-slate-900 border border-slate-800 px-6 sm:px-8 lg:px-10 py-7 sm:py-9 lg:py-10 mb-8 sm:mb-10 text-white shadow-md">
+      <div class="absolute -top-12 -right-12 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="relative flex flex-wrap items-end justify-between gap-6 lg:gap-8">
+        <div class="max-w-2xl">
+          <div class="inline-flex items-center gap-2 bg-emerald-950/80 border border-emerald-500/40 rounded-full px-3.5 py-1 text-xs font-bold text-emerald-300 mb-3.5 sm:mb-4 shadow-xs">
+            <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_8px_#34d399]"></span>
+            Trade Estimating Platform · ASTM Bulk Densities · Zero Assumptions
+          </div>
+
+          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-[1.08] mb-2.5 sm:mb-3">
+            Cubic Yard<br class="hidden sm:block" /> Calculator
+          </h1>
+          <p class="text-sm sm:text-base text-slate-200 max-w-xl leading-relaxed">
+            Calculate exact cubic yards, scale weight tonnage, and bag counts from length, width, and depth. Built to professional engineering standards for earthwork contractors, landscapers, and builders across the United States.
+          </p>
+        </div>
+
+        <!-- Trust indicators -->
+        <div class="flex flex-wrap sm:flex-nowrap gap-2.5 sm:gap-3 shrink-0 w-full sm:w-auto">
+          {[
+            { val: '27', unit: 'cu ft / yd³', label: 'ASTM Standard' },
+            { val: '14+', unit: 'materials', label: 'Verified Densities' },
+            { val: '6', unit: 'calculators', label: 'Trade Tools' },
+          ].map(stat => (
+            <div class="flex-1 sm:flex-initial bg-slate-800/90 border border-slate-700/80 rounded-xl px-3.5 sm:px-4 py-2.5 sm:py-3 text-center min-w-[75px] sm:min-w-[90px] shadow-xs">
+              <div class="text-base sm:text-lg font-black text-white font-mono">{stat.val}</div>
+              <div class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">{stat.unit}</div>
+              <div class="text-[10px] text-slate-300 font-medium mt-0.5">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <!-- Primary Interactive Island -->
+    <div class="mb-12 sm:mb-16">
+      <CubicYardCalculator client:load />
+    </div>
+
+    <!-- Specialized Material Calculators Bento Grid -->
+    <div class="mb-16">
+      <div class="flex items-center justify-between mb-5">
+        <div>
+          <h2 class="text-xl font-bold text-slate-900">Specialized Material Calculators</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Need certified quarry aggregate weights, CMU wall schedules, or bagged ready-mix counts? Select a specialized tool:</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {toolCards.map(card => (
+          <a
+            href={card.href}
+            class={`group p-5 bg-white rounded-xl border-t-4 border border-slate-200 card-interactive ${card.accentColor}`}
+          >
+            <div class="flex items-start justify-between mb-3">
+              <div class={`w-9 h-9 rounded-lg ${card.iconBg} flex items-center justify-center`}>
+                <svg class={`w-5 h-5 ${card.iconColor}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <Fragment set:html={card.icon} />
+                </svg>
+              </div>
+              <span class="text-[10px] font-semibold bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">{card.badge}</span>
+            </div>
+            <span class={`text-sm font-bold text-slate-900 ${card.hoverText} transition-colors`}>{card.title}</span>
+            <p class="text-xs text-slate-500 leading-relaxed mt-1">
+              {card.desc}
+            </p>
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <!-- Quick Navigation Anchor Strip -->
+    <div class="bg-white border border-slate-200 rounded-xl p-3.5 mb-12 shadow-2xs overflow-x-auto text-xs font-semibold text-slate-600 flex items-center gap-2 whitespace-nowrap">
+      <span class="text-slate-400 font-bold uppercase tracking-wider text-[10px] mr-1">Contents:</span>
+      <a href="#geometry" class="px-2.5 py-1 rounded-md hover:bg-slate-100 hover:text-slate-900 transition-colors">1. Geometry & Formula</a>
+      <span class="text-slate-300">·</span>
+      <a href="#irregular-shapes" class="px-2.5 py-1 rounded-md hover:bg-slate-100 hover:text-slate-900 transition-colors">2. Irregular Footprints</a>
+      <span class="text-slate-300">·</span>
+      <a href="#density-index" class="px-2.5 py-1 rounded-md hover:bg-slate-100 hover:text-slate-900 transition-colors">3. Master Density Index</a>
+      <span class="text-slate-300">·</span>
+      <a href="#geotechnical" class="px-2.5 py-1 rounded-md hover:bg-slate-100 hover:text-slate-900 transition-colors">4. Bank vs Loose vs Compacted</a>
+      <span class="text-slate-300">·</span>
+      <a href="#hauling-logistics" class="px-2.5 py-1 rounded-md hover:bg-slate-100 hover:text-slate-900 transition-colors">5. Dump Truck Hauling</a>
+      <span class="text-slate-300">·</span>
+      <a href="#contractor-scenarios" class="px-2.5 py-1 rounded-md hover:bg-slate-100 hover:text-slate-900 transition-colors">6. Field Scenarios</a>
+      <span class="text-slate-300">·</span>
+      <a href="#waste-matrix" class="px-2.5 py-1 rounded-md hover:bg-slate-100 hover:text-slate-900 transition-colors">7. Waste Factors</a>
+      <span class="text-slate-300">·</span>
+      <a href="#faq" class="px-2.5 py-1 rounded-md hover:bg-slate-100 hover:text-slate-900 transition-colors">8. Construction FAQs</a>
+    </div>
+
+    <!-- Editorial Core Sections -->
+    <div class="space-y-12 mb-16">
+
+      <!-- SECTION 1: The Geometry of a Cubic Yard -->
+      <section id="geometry" class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-5 scroll-mt-20">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Engineering Fundamentals</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-2">The Geometry of a Cubic Yard: Mathematical Dimensional Analysis</h2>
+        </div>
+
+        <p class="text-sm text-slate-700 leading-relaxed">
+          In US commercial construction, landscape estimating, and earthmoving logistics, the <strong>cubic yard</strong> (abbreviated as <code class="text-xs font-mono bg-slate-100 px-1.5 py-0.5 rounded text-slate-800">yd³</code> or <code class="text-xs font-mono bg-slate-100 px-1.5 py-0.5 rounded text-slate-800">cu yd</code>) is the standard unit of volumetric commerce. A cubic yard represents the three-dimensional space enclosed within an equilateral cube measuring exactly <strong>3 feet (36 inches) wide, 3 feet long, and 3 feet deep</strong>.
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5 my-4">
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Imperial Foot Equivalent</span>
+            <div class="text-xl font-bold font-mono text-slate-900 mt-1">27 cu ft</div>
+            <p class="text-xs text-slate-600 mt-1">3 ft × 3 ft × 3 ft = exactly 27 cubic feet.</p>
+          </div>
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Imperial Inch Equivalent</span>
+            <div class="text-xl font-bold font-mono text-slate-900 mt-1">46,656 cu in</div>
+            <p class="text-xs text-slate-600 mt-1">36 in × 36 in × 36 in = 46,656 cubic inches.</p>
+          </div>
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider block">SI Metric Equivalent</span>
+            <div class="text-xl font-bold font-mono text-slate-900 mt-1">0.76455 m³</div>
+            <p class="text-xs text-slate-600 mt-1">Exact SI conversion factor (764.55 liters).</p>
+          </div>
+        </div>
+
+        <h3 class="text-lg font-bold text-slate-900 pt-2">The Dimensional Mismatch Trap: Why Divide by 27?</h3>
+        <p class="text-sm text-slate-700 leading-relaxed">
+          The most prevalent calculation error encountered on jobsites stems from unit inconsistency. On physical job sites, plan dimensions (length and width) are surveyed in <strong>feet</strong>, whereas excavation depths, concrete slab thicknesses, and gravel sub-bases are surveyed with tape measures in <strong>inches</strong> (e.g., a 4-inch sidewalk, 6-inch base, or 2-inch topdressing).
+        </p>
+        <p class="text-sm text-slate-700 leading-relaxed">
+          Multiplying length in feet by width in feet by depth in inches directly without unit conversion corrupts the volume by a factor of 12 (1,200% over-calculation). Depth must always be normalized to feet prior to computing cubic footage:
+        </p>
+
+        <div class="bg-slate-900 text-white p-5 rounded-xl space-y-3 font-mono">
+          <div class="text-xs font-bold uppercase tracking-wider text-emerald-400">Standard Dimensional Equations</div>
+          <div class="text-sm sm:text-base font-bold text-white bg-slate-800/80 p-3 rounded-lg border border-slate-700">
+            Cubic Yards = [ Length (ft) × Width (ft) × ( Depth (in) ÷ 12 ) ] ÷ 27
+          </div>
+          <div class="text-xs text-slate-300 leading-relaxed font-sans">
+            <strong>The Direct Estimator's Shortcut:</strong> Because <span class="font-mono text-emerald-300">12 × 27 = 324</span>, estimators simplify this two-step arithmetic into a single operation:
+          </div>
+          <div class="text-sm sm:text-base font-bold text-emerald-300 bg-slate-800/80 p-3 rounded-lg border border-slate-700">
+            Cubic Yards = ( Length in ft × Width in ft × Depth in inches ) ÷ 324
+          </div>
+        </div>
+
+        <p class="text-xs text-slate-600 italic">
+          *Note: The 324 divisor represents the fundamental coverage theorem of material estimating: exactly 1 cubic yard of any substance will coat 324 square feet of surface area at a depth of exactly 1 inch.
+        </p>
+      </section>
+
+      <!-- SECTION 2: Geometric Formulas for Irregular Footprints -->
+      <section id="irregular-shapes" class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-5 scroll-mt-20">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Geometric Profiles</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-2">Formulas for Irregular Footprints, Columns & Swales</h2>
+        </div>
+
+        <p class="text-sm text-slate-700 leading-relaxed">
+          Civil earthwork and architectural hardscaping rarely conform solely to perfect rectangles. Estimating volume for sonotube piers, circular pads, drainage trenches, and graded swales requires dedicated geometric formulas. Always convert all constituent measurements to feet before computing:
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Cylinder / Sonotube -->
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-900">Cylindrical Columns & Post Holes</span>
+              <span class="text-[10px] font-mono bg-blue-100 text-blue-800 font-bold px-1.5 py-0.5 rounded">Sonotubes</span>
+            </div>
+            <p class="text-xs text-slate-600">
+              For cylindrical concrete piers, fence posts, and columnar footings:
+            </p>
+            <div class="bg-slate-900 text-emerald-400 p-2.5 rounded-lg text-xs font-mono font-bold">
+              Volume (yd³) = [ π × (Radius ft)² × Depth ft ] ÷ 27
+            </div>
+            <p class="text-[11px] text-slate-500">
+              Example: A 12-inch diameter sonotube (0.5 ft radius) at 4 feet frost depth = [3.14159 × (0.5)² × 4] ÷ 27 = <strong>0.116 cu yds</strong>.
+            </p>
+          </div>
+
+          <!-- Circular Pad -->
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-900">Circular Fire Pits & Tree Rings</span>
+              <span class="text-[10px] font-mono bg-green-100 text-green-800 font-bold px-1.5 py-0.5 rounded">Circles</span>
+            </div>
+            <p class="text-xs text-slate-600">
+              For circular patios, round fire pit pads, and mulch rings around trees:
+            </p>
+            <div class="bg-slate-900 text-emerald-400 p-2.5 rounded-lg text-xs font-mono font-bold">
+              Volume (yd³) = [ π × (Diameter ft ÷ 2)² × (Depth in ÷ 12) ] ÷ 27
+            </div>
+            <p class="text-[11px] text-slate-500">
+              Example: A 14-foot diameter round patio with 3 inches of gravel base = [3.14159 × 7² × (3 ÷ 12)] ÷ 27 = <strong>1.425 cu yds</strong>.
+            </p>
+          </div>
+
+          <!-- Triangular Berm / French Drain -->
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-900">Triangular Trenches & French Drains</span>
+              <span class="text-[10px] font-mono bg-amber-100 text-amber-800 font-bold px-1.5 py-0.5 rounded">V-Ditches</span>
+            </div>
+            <p class="text-xs text-slate-600">
+              For V-notch drainage swales, berm backfills, and triangular soil cuts:
+            </p>
+            <div class="bg-slate-900 text-emerald-400 p-2.5 rounded-lg text-xs font-mono font-bold">
+              Volume (yd³) = [ 0.5 × Base ft × Depth ft × Length ft ] ÷ 27
+            </div>
+            <p class="text-[11px] text-slate-500">
+              Example: A 100-foot trench, 2 feet wide at top, tapering to base at 1.5 feet depth = [0.5 × 2 × 1.5 × 100] ÷ 27 = <strong>5.56 cu yds</strong>.
+            </p>
+          </div>
+
+          <!-- Trapezoidal Swale -->
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-900">Trapezoidal Swales & Retention Channels</span>
+              <span class="text-[10px] font-mono bg-purple-100 text-purple-800 font-bold px-1.5 py-0.5 rounded">Channels</span>
+            </div>
+            <p class="text-xs text-slate-600">
+              For flat-bottomed drainage channels with sloped banks:
+            </p>
+            <div class="bg-slate-900 text-emerald-400 p-2.5 rounded-lg text-xs font-mono font-bold">
+              Volume (yd³) = [ ((Top Width + Bottom Width) ÷ 2) × Depth × Length ] ÷ 27
+            </div>
+            <p class="text-[11px] text-slate-500">
+              Example: 8 ft top, 4 ft bottom, 2 ft depth, 50 ft length = [((8 + 4) ÷ 2) × 2 × 50] ÷ 27 = <strong>22.22 cu yds</strong>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 3: Master Material Density & Conversion Index -->
+      <section id="density-index" class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-5 scroll-mt-20">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Material Science & Density</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-2">Master Material Density & Conversion Index</h2>
+        </div>
+
+        <p class="text-sm text-slate-700 leading-relaxed">
+          While cubic yards measure geometric volume, commercial quarries, sand yards, and asphalt plants sell products by <strong>certified weight (US tons = 2,000 lbs)</strong> recorded on scale houses. Conversely, home centers sell by <strong>pre-bagged dry weights</strong>.
+        </p>
+        <p class="text-sm text-slate-700 leading-relaxed">
+          The table below provides engineering reference bulk densities, quarry conversion multipliers, coverage metrics, and standard compaction allowances based on ASTM standards:
+        </p>
+
+        <!-- Structured Responsive Table -->
+        <div class="overflow-x-auto rounded-xl border border-slate-200">
+          <table class="w-full text-xs text-left">
+            <thead class="bg-slate-900 text-white font-bold">
+              <tr>
+                <th class="px-3.5 py-2.5">Material Classification</th>
+                <th class="px-3 py-2.5 text-right font-mono">Bulk Density (lbs/yd³)</th>
+                <th class="px-3 py-2.5 text-right font-mono">Tons per cu yd</th>
+                <th class="px-3 py-2.5 text-right font-mono">Coverage @ 2" (sq ft)</th>
+                <th class="px-3 py-2.5 text-right font-mono">Coverage @ 4" (sq ft)</th>
+                <th class="px-3.5 py-2.5 text-center">Compaction Factor</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 text-slate-700">
+              <tr class="hover:bg-slate-50 transition-colors">
+                <td class="px-3.5 py-2.5 font-bold text-slate-900">Screened Topsoil (Dry Loam)</td>
+                <td class="px-3 py-2.5 text-right font-mono font-medium">2,100</td>
+                <td class="px-3 py-2.5 text-right font-mono font-bold text-emerald-700">1.05</td>
+                <td class="px-3 py-2.5 text-right font-mono">162</td>
+                <td class="px-3 py-2.5 text-right font-mono">81</td>
+                <td class="px-3.5 py-2.5 text-center font-medium text-amber-700">15%–20%</td>
+              </tr>
+              <tr class="hover:bg-slate-50 transition-colors bg-slate-50/50">
+                <td class="px-3.5 py-2.5 font-bold text-slate-900">Common Fill Dirt (Inorganic Subsoil)</td>
+                <td class="px-3 py-2.5 text-right font-mono font-medium">2,200</td>
+                <td class="px-3 py-2.5 text-right font-mono font-bold text-emerald-700">1.10</td>
+                <td class="px-3 py-2.5 text-right font-mono">162</td>
+                <td class="px-3 py-2.5 text-right font-mono">81</td>
+                <td class="px-3.5 py-2.5 text-center font-medium text-amber-700">18%–25%</td>
+              </tr>
+              <tr class="hover:bg-slate-50 transition-colors">
+                <td class="px-3.5 py-2.5 font-bold text-slate-900">Excavated Heavy Clay (Moist)</td>
+                <td class="px-3 py-2.5 text-right font-mono font-medium">2,500</td>
+                <td class="px-3 py-2.5 text-right font-mono font-bold text-emerald-700">1.25</td>
+                <td class="px-3 py-2.5 text-right font-mono">162</td>
+                <td class="px-3 py-2.5 text-right font-mono">81</td>
+                <td class="px-3.5 py-2.5 text-center font-medium text-amber-700">20%–30%</td>
+              </tr>
+              <tr class="hover:bg-slate-50 transition-colors bg-slate-50/50">
+                <td class="px-3.5 py-2.5 font-bold text-slate-900">Washed Concrete Sand (ASTM C33)</td>
+                <td class="px-3 py-2.5 text-right font-mono font-medium">2,700</td>
+                <td class="px-3 py-2.5 text-right font-mono font-bold text-emerald-700">1.35</td>
+                <td class="px-3 py-2.5 text-right font-mono">162</td>
+                <td class="px-3 py-2.5 text-right font-mono">81</td>
+                <td class="px-3.5 py-2.5 text-center font-medium text-emerald-700">5%–8%</td>
+              </tr>
+              <tr class="hover:bg-slate-50 transition-colors">
+                <td class="px-3.5 py-2.5 font-bold text-slate-900">Crushed Stone #57 (3/4" Clean)</td>
+                <td class="px-3 py-2.5 text-right font-mono font-medium">2,700</td>
+                <td class="px-3 py-2.5 text-right font-mono font-bold text-emerald-700">1.35</td>
+                <td class="px-3 py-2.5 text-right font-mono">162</td>
+                <td class="px-3 py-2.5 text-right font-mono">81</td>
+                <td class="px-3.5 py-2.5 text-center font-medium text-emerald-700">5%–10%</td>
+              </tr>
+              <tr class="hover:bg-slate-50 transition-colors bg-slate-50/50">
+                <td class="px-3.5 py-2.5 font-bold text-slate-900">Crusher Run / Dense Graded (CR6 / 21A)</td>
+                <td class="px-3 py-2.5 text-right font-mono font-medium">3,000</td>
+                <td class="px-3 py-2.5 text-right font-mono font-bold text-emerald-700">1.50</td>
+                <td class="px-3 py-2.5 text-right font-mono">162</td>
+                <td class="px-3 py-2.5 text-right font-mono">81</td>
+                <td class="px-3.5 py-2.5 text-center font-medium text-amber-700">15%–20%</td>
+              </tr>
+              <tr class="hover:bg-slate-50 transition-colors">
+                <td class="px-3.5 py-2.5 font-bold text-slate-900">Pea Gravel (3/8" Smooth River Rock)</td>
+                <td class="px-3 py-2.5 text-right font-mono font-medium">2,800</td>
+                <td class="px-3 py-2.5 text-right font-mono font-bold text-emerald-700">1.40</td>
+                <td class="px-3 py-2.5 text-right font-mono">162</td>
+                <td class="px-3 py-2.5 text-right font-mono">81</td>
+                <td class="px-3.5 py-2.5 text-center font-medium text-emerald-700">5%–8%</td>
+              </tr>
+              <tr class="hover:bg-slate-50 transition-colors bg-slate-50/50">
+                <td class="px-3.5 py-2.5 font-bold text-slate-900">River Rock / Egg Stone (1"–3" Smooth)</td>
+                <td class="px-3 py-2.5 text-right font-mono font-medium">2,600</td>
+                <td class="px-3 py-2.5 text-right font-mono font-bold text-emerald-700">1.30</td>
+                <td class="px-3 py-2.5 text-right font-mono">162</td>
+                <td class="px-3 py-2.5 text-right font-mono">81</td>
+                <td class="px-3.5 py-2.5 text-center font-medium text-emerald-700">3%–5%</td>
+              </tr>
+              <tr class="hover:bg-slate-50 transition-colors">
+                <td class="px-3.5 py-2.5 font-bold text-slate-900">Decomposed Granite (Screened & Fines)</td>
+                <td class="px-3 py-2.5 text-right font-mono font-medium">3,100</td>
+                <td class="px-3 py-2.5 text-right font-mono font-bold text-emerald-700">1.55</td>
+                <td class="px-3 py-2.5 text-right font-mono">162</td>
+                <td class="px-3 py-2.5 text-right font-mono">81</td>
+                <td class="px-3.5 py-2.5 text-center font-medium text-amber-700">15%–20%</td>
+              </tr>
+              <tr class="hover:bg-slate-50 transition-colors bg-slate-50/50">
+                <td class="px-3.5 py-2.5 font-bold text-slate-900">Double-Shredded Hardwood Bark Mulch</td>
+                <td class="px-3 py-2.5 text-right font-mono font-medium">700</td>
+                <td class="px-3 py-2.5 text-right font-mono font-bold text-emerald-700">0.35</td>
+                <td class="px-3 py-2.5 text-right font-mono">162</td>
+                <td class="px-3 py-2.5 text-right font-mono">81</td>
+                <td class="px-3.5 py-2.5 text-center font-medium text-amber-700">15%–25%</td>
+              </tr>
+              <tr class="hover:bg-slate-50 transition-colors">
+                <td class="px-3.5 py-2.5 font-bold text-slate-900">Aged Organic Compost (Leaf / Yard)</td>
+                <td class="px-3 py-2.5 text-right font-mono font-medium">1,200</td>
+                <td class="px-3 py-2.5 text-right font-mono font-bold text-emerald-700">0.60</td>
+                <td class="px-3 py-2.5 text-right font-mono">162</td>
+                <td class="px-3 py-2.5 text-right font-mono">81</td>
+                <td class="px-3.5 py-2.5 text-center font-medium text-amber-700">20%–30%</td>
+              </tr>
+              <tr class="hover:bg-slate-50 transition-colors bg-slate-50/50">
+                <td class="px-3.5 py-2.5 font-bold text-slate-900">Ready-Mix Wet Concrete (Normal Weight)</td>
+                <td class="px-3 py-2.5 text-right font-mono font-medium">4,050</td>
+                <td class="px-3 py-2.5 text-right font-mono font-bold text-emerald-700">2.025</td>
+                <td class="px-3 py-2.5 text-right font-mono">162</td>
+                <td class="px-3 py-2.5 text-right font-mono">81</td>
+                <td class="px-3.5 py-2.5 text-center font-medium text-emerald-700">0% (Form Waste 5–8%)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-xl space-y-1 text-xs text-amber-900">
+          <span class="font-bold block">Quarry Scale Moisture Swings:</span>
+          <p class="leading-relaxed">
+            Unlike bagged materials sealed in polyethylene, quarry stockpiles are stored outdoors. After heavy rainfall, porous crushed limestone, concrete sand, and topsoil absorb between <strong>4% and 12% moisture by weight</strong>. When purchasing by the ton at commercial scales on damp days, you receive less net mineral aggregate per ton paid for. Always specify cubic yard delivery or confirm dry tare weights when purchasing bulk aggregates.
+          </p>
+        </div>
+      </section>
+
+      <!-- SECTION 4: Bank Yards vs. Loose Yards vs. Compacted Yards -->
+      <section id="geotechnical" class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-5 scroll-mt-20">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Geotechnical Earthwork</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-2">Bank Yards vs. Loose Yards vs. Compacted Yards (Swell Mechanics)</h2>
+        </div>
+
+        <p class="text-sm text-slate-700 leading-relaxed">
+          In civil engineering and site grading, earth does not occupy constant volume throughout the construction lifecycle. Soil particles naturally settle over millennia into an in-situ matrix. Once excavated by a backhoe, voids and air pockets expand the volume. When rolled under a vibratory compactor, voids collapse. Earthwork contracts strictly differentiate three volumetric states:
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+            <span class="text-xs font-mono font-bold text-blue-700 block">BCY · Bank Cubic Yards</span>
+            <div class="text-sm font-bold text-slate-900 mt-1">In-Situ / Natural State</div>
+            <p class="text-xs text-slate-600 mt-1.5 leading-relaxed">
+              Material in its virgin, undisturbed natural ground condition prior to excavation or blasting. Earthwork cut surveys quantify volume in BCY.
+            </p>
+          </div>
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+            <span class="text-xs font-mono font-bold text-amber-700 block">LCY · Loose Cubic Yards</span>
+            <div class="text-sm font-bold text-slate-900 mt-1">Excavated / Truck Bed State</div>
+            <p class="text-xs text-slate-600 mt-1.5 leading-relaxed">
+              Material after excavation and disturbance. Entrained air causes soil particles to swell. <strong>Dump truck hauling capacities and disposal fees are calculated in LCY.</strong>
+            </p>
+          </div>
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+            <span class="text-xs font-mono font-bold text-emerald-700 block">CCY · Compacted Cubic Yards</span>
+            <div class="text-sm font-bold text-slate-900 mt-1">Mechanically Densified State</div>
+            <p class="text-xs text-slate-600 mt-1.5 leading-relaxed">
+              Material placed, moisture-conditioned, and compacted with heavy rollers or vibratory plates into structural fill. Fill placement contracts quantify volume in CCY.
+            </p>
+          </div>
+        </div>
+
+        <h3 class="text-lg font-bold text-slate-900 pt-2">The Swell & Shrinkage Equations</h3>
+        <p class="text-sm text-slate-700 leading-relaxed">
+          To calculate how many dump trucks you need to haul away an excavation hole, multiply Bank Yards by the material's swell percentage:
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 font-mono text-xs">
+          <div class="bg-slate-900 text-white p-3.5 rounded-xl border border-slate-800">
+            <span class="text-amber-400 font-bold block mb-1">Hauling Equation (Swell):</span>
+            LCY = BCY × (1 + Swell Percentage)
+          </div>
+          <div class="bg-slate-900 text-white p-3.5 rounded-xl border border-slate-800">
+            <span class="text-emerald-400 font-bold block mb-1">Fill Equation (Shrinkage):</span>
+            CCY = LCY × (1 - Shrinkage Percentage)
+          </div>
+        </div>
+
+        <div class="overflow-x-auto rounded-xl border border-slate-200 mt-3">
+          <table class="w-full text-xs text-left">
+            <thead class="bg-slate-100 text-slate-800 font-bold">
+              <tr>
+                <th class="px-3.5 py-2">Soil Classification</th>
+                <th class="px-3 py-2 text-right">Swell % (In-Bank to Loose)</th>
+                <th class="px-3 py-2 text-right">Shrinkage % (Loose to Compacted)</th>
+                <th class="px-3.5 py-2">Typical Earthwork Application</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 text-slate-700">
+              <tr>
+                <td class="px-3.5 py-2 font-bold text-slate-900">Clean Washed Sand & Gravel</td>
+                <td class="px-3 py-2 text-right font-mono font-semibold text-amber-700">10%–15%</td>
+                <td class="px-3 py-2 text-right font-mono font-semibold text-emerald-700">8%–12%</td>
+                <td class="px-3.5 py-2">Pipe bedding, drainage trenches</td>
+              </tr>
+              <tr class="bg-slate-50/50">
+                <td class="px-3.5 py-2 font-bold text-slate-900">Common Loam & Organic Topsoil</td>
+                <td class="px-3 py-2 text-right font-mono font-semibold text-amber-700">20%–25%</td>
+                <td class="px-3 py-2 text-right font-mono font-semibold text-emerald-700">15%–20%</td>
+                <td class="px-3.5 py-2">Lawn grading, landscape berms</td>
+              </tr>
+              <tr>
+                <td class="px-3.5 py-2 font-bold text-slate-900">Dense Stiff Clay</td>
+                <td class="px-3 py-2 text-right font-mono font-semibold text-amber-700">30%–35%</td>
+                <td class="px-3 py-2 text-right font-mono font-semibold text-emerald-700">20%–25%</td>
+                <td class="px-3.5 py-2">Basement digs, pond embankments</td>
+              </tr>
+              <tr class="bg-slate-50/50">
+                <td class="px-3.5 py-2 font-bold text-slate-900">Blasted Rock / Solid Hardpan</td>
+                <td class="px-3 py-2 text-right font-mono font-semibold text-amber-700">50%–60%</td>
+                <td class="px-3 py-2 text-right font-mono font-semibold text-emerald-700">15%–20%</td>
+                <td class="px-3.5 py-2">Quarry rip-rap, road base embankments</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SECTION 5: Commercial Hauling & Dump Truck Logistics -->
+      <section id="hauling-logistics" class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-5 scroll-mt-20">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Logistics & Jobsite Delivery</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-2">Dump Truck Hauling & Commercial Delivery Logistics</h2>
+        </div>
+
+        <p class="text-sm text-slate-700 leading-relaxed">
+          Ordering bulk materials requires understanding highway weight regulations and truck axle physics. In the United States, commercial dump truck loads are strictly capped by <strong>State Department of Transportation (DOT) Gross Vehicle Weight Ratings (GVWR)</strong> and the <strong>Federal Bridge Formula</strong>. Even if a dump body has volumetric space remaining, dense materials (stone, wet soil, concrete) hit weight limits long before the bed is filled.
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3.5">
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-1.5">
+            <span class="text-[10px] font-mono font-bold bg-slate-200 text-slate-800 px-2 py-0.5 rounded uppercase">Class 6/7 Chassis</span>
+            <div class="text-base font-bold text-slate-900">Single-Axle Dump</div>
+            <div class="text-emerald-700 font-mono font-bold text-sm">5 to 7 cu yds</div>
+            <p class="text-xs text-slate-600">Payload limit: <strong>7 to 8 US tons</strong>. Ideal for tight residential driveways, alleys, and smaller renovations.</p>
+          </div>
+
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-1.5">
+            <span class="text-[10px] font-mono font-bold bg-slate-200 text-slate-800 px-2 py-0.5 rounded uppercase">Class 8 10-Wheeler</span>
+            <div class="text-base font-bold text-slate-900">Tandem-Axle Dump</div>
+            <div class="text-emerald-700 font-mono font-bold text-sm">10 to 12 cu yds</div>
+            <p class="text-xs text-slate-600">Payload limit: <strong>13 to 15 US tons</strong>. The standard workhorse commercial hauling truck across American quarries.</p>
+          </div>
+
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-1.5">
+            <span class="text-[10px] font-mono font-bold bg-slate-200 text-slate-800 px-2 py-0.5 rounded uppercase">Lift Axle Chassis</span>
+            <div class="text-base font-bold text-slate-900">Tri-Axle Dump</div>
+            <div class="text-emerald-700 font-mono font-bold text-sm">14 to 16 cu yds</div>
+            <p class="text-xs text-slate-600">Payload limit: <strong>18 to 22 US tons</strong>. Highest payload efficiency for major site preparation and roadway base.</p>
+          </div>
+
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-1.5">
+            <span class="text-[10px] font-mono font-bold bg-slate-200 text-slate-800 px-2 py-0.5 rounded uppercase">Trailer / Semi</span>
+            <div class="text-base font-bold text-slate-900">Super Dump / End Dump</div>
+            <div class="text-emerald-700 font-mono font-bold text-sm">18 to 22 cu yds</div>
+            <p class="text-xs text-slate-600">Payload limit: <strong>24 to 26 US tons</strong>. Bulk deliveries requiring vast turnaround access and wide turning radius.</p>
+          </div>
+        </div>
+
+        <h3 class="text-lg font-bold text-slate-900 pt-2">Pre-Delivery Jobsite Clearance Checklist</h3>
+        <p class="text-sm text-slate-700 leading-relaxed">
+          Before scheduling a 60,000-lb commercial truck delivery, verify the following structural site parameters to prevent property damage and driver drop refusals:
+        </p>
+
+        <ul class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs text-slate-700">
+          <li class="flex items-start gap-2 bg-slate-50 p-3 rounded-lg border border-slate-200">
+            <span class="text-emerald-600 font-bold shrink-0">✓</span>
+            <div><strong>Vertical Overhead Clearance:</strong> Requires 14 feet clear driving height and 20 to 24 feet vertical clearance with dump bed fully elevated. Inspect power drops, cable lines, and overhanging tree limbs.</div>
+          </li>
+          <li class="flex items-start gap-2 bg-slate-50 p-3 rounded-lg border border-slate-200">
+            <span class="text-emerald-600 font-bold shrink-0">✓</span>
+            <div><strong>Underground Utility & Septic Setback:</strong> Never permit tandem or tri-axle trucks to drive across septic tanks, drainage fields, water meters, or shallow irrigation manifolds. Keep 20 ft minimum separation.</div>
+          </li>
+          <li class="flex items-start gap-2 bg-slate-50 p-3 rounded-lg border border-slate-200">
+            <span class="text-emerald-600 font-bold shrink-0">✓</span>
+            <div><strong>Driveway Surface Integrity:</strong> Standard residential concrete driveways (3.5" unreinforced) fracture under the axle weight of a fully loaded tri-axle. Stage deliveries on the street curb or lay double-thick 3/4" plywood tracks.</div>
+          </li>
+          <li class="flex items-start gap-2 bg-slate-50 p-3 rounded-lg border border-slate-200">
+            <span class="text-emerald-600 font-bold shrink-0">✓</span>
+            <div><strong>Slope & Tipping Hazards:</strong> Dump beds raised 20 feet shift the truck's center of gravity drastically. Drivers will not elevate beds on sideways cross-slopes exceeding 5 degrees due to immediate turnover rollover hazard.</div>
+          </li>
+        </ul>
+
+        <h3 class="text-base font-bold text-slate-900 pt-1">The Tailgate Spreading Technique</h3>
+        <p class="text-sm text-slate-700 leading-relaxed">
+          When surfacing long aggregate driveways, experienced drivers can execute a <strong>tailgate spread</strong>. The driver chains the lower tailgate pins, allowing an opening of 3 to 5 inches, raises the hoist slightly, and drives forward in low gear at 3 to 5 mph. This deposits aggregate in an even 2-to-3-inch ribbon along the driveway centerline, cutting manual wheelbarrow and skid steer grading time by up to 75%. Tailgate spreading requires a straight path free from steep inclines or overhead obstacles.
+        </p>
+      </section>
+
+      <!-- SECTION 6: Three Worked Field Scenarios -->
+      <section id="contractor-scenarios" class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-6 scroll-mt-20">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Field Case Studies</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-2">Three Step-by-Step Field Scenarios with Exact Contractor Math</h2>
+        </div>
+
+        <p class="text-sm text-slate-700 leading-relaxed">
+          Examine three realistic project estimating proofs showing how commercial estimators calculate net volume, apply geometric adjustments, and account for delivery minimums:
+        </p>
+
+        <!-- Scenario A: Garage Slab with Footing -->
+        <div class="p-5 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-2">
+            <h3 class="text-base font-bold text-slate-900">Scenario A: 24' × 24' × 4" Detached Garage Slab with Turned-Down Perimeter Footings</h3>
+            <span class="text-xs font-mono font-bold bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded-full">Ready-Mix Concrete</span>
+          </div>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            A builder is framing a 24 ft by 24 ft garage. The design calls for a 4-inch reinforced slab with a monolithic turned-down edge footing around the entire 96-ft perimeter. The footing trench measures 12 inches wide and extends 8 inches below the slab (total 12 inches deep from the top of the pour).
+          </p>
+          <div class="bg-white p-3.5 rounded-lg border border-slate-200 font-mono text-xs text-slate-800 space-y-1.5">
+            <div><strong>Step 1: Main Slab Volume:</strong> 24 ft × 24 ft × (4 in ÷ 12) = 192 cu ft ÷ 27 = <span class="font-bold text-slate-900">7.11 cu yds</span></div>
+            <div><strong>Step 2: Perimeter Footing Trench Volume:</strong> Perimeter = (24 + 24 + 24 + 24) = 96 linear ft. Footing width = 1.0 ft (12 in), Depth below slab = 0.667 ft (8 in). Volume = 96 ft × 1.0 ft × 0.667 ft = 64 cu ft ÷ 27 = <span class="font-bold text-slate-900">2.37 cu yds</span></div>
+            <div><strong>Step 3: Net Geometric Concrete Volume:</strong> 7.11 + 2.37 = <span class="font-bold text-slate-900">9.48 cu yds</span></div>
+            <div><strong>Step 4: Contractor Form-Flex & Subgrade Waste Allowance (8%):</strong> 9.48 cu yds × 1.08 = <span class="font-bold text-emerald-700">10.24 cu yds</span></div>
+            <div class="pt-1 text-slate-600 font-sans"><strong>Dispatch Order:</strong> Ready-mix plants batch in 0.25-yard increments. Order exactly <strong class="text-slate-900 font-mono">10.25 cubic yards</strong> of 4,000 PSI concrete (one full 10-yard mixer truck + one 0.5-yard short-load run).</div>
+          </div>
+        </div>
+
+        <!-- Scenario B: Long Gravel Driveway -->
+        <div class="p-5 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-2">
+            <h3 class="text-base font-bold text-slate-900">Scenario B: 120-Foot Country Driveway Installation (Multi-Layer Aggregate)</h3>
+            <span class="text-xs font-mono font-bold bg-amber-100 text-amber-800 px-2.5 py-0.5 rounded-full">Crushed Stone & Tonnage</span>
+          </div>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Surfacing a 120 ft long by 10 ft wide private residential driveway. Design calls for a 6-inch compacted base of Crusher Run (Dense Graded Aggregate / CR6) topped with a 2-inch surface wearing course of #57 angular crushed limestone.
+          </p>
+          <div class="bg-white p-3.5 rounded-lg border border-slate-200 font-mono text-xs text-slate-800 space-y-1.5">
+            <div><strong>Step 1: Surface Area:</strong> 120 ft × 10 ft = 1,200 sq ft</div>
+            <div><strong>Step 2: Base Layer Volume (6" Crusher Run):</strong> (1,200 sq ft × 6 in) ÷ 324 = 22.22 cu yds. Compaction allowance (+15%): 22.22 × 1.15 = <span class="font-bold text-slate-900">25.55 cu yds</span></div>
+            <div><strong>Step 3: Base Tonnage (1.50 tons/yd³):</strong> 25.55 cu yds × 1.50 = <span class="font-bold text-emerald-700">38.33 Tons Crusher Run</span></div>
+            <div><strong>Step 4: Surface Layer Volume (2" #57 Stone):</strong> (1,200 sq ft × 2 in) ÷ 324 = 7.41 cu yds. Compaction allowance (+8%): 7.41 × 1.08 = <span class="font-bold text-slate-900">8.00 cu yds</span></div>
+            <div><strong>Step 5: Surface Tonnage (1.35 tons/yd³):</strong> 8.00 cu yds × 1.35 = <span class="font-bold text-emerald-700">10.80 Tons #57 Stone</span></div>
+            <div class="pt-1 text-slate-600 font-sans"><strong>Dispatch Order:</strong> 2 Tri-Axle truckloads of Crusher Run (approx. 19.2 tons each) + 1 Tandem-Axle load of #57 Stone (10.8 tons).</div>
+          </div>
+        </div>
+
+        <!-- Scenario C: Lawn Grading & Topsoil Cap -->
+        <div class="p-5 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-2">
+            <h3 class="text-base font-bold text-slate-900">Scenario C: Correcting Slope on an 1,800 Sq Ft Lawn with Fill Dirt & Topsoil</h3>
+            <span class="text-xs font-mono font-bold bg-green-100 text-green-800 px-2.5 py-0.5 rounded-full">Grading & Organic Soils</span>
+          </div>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            A landscaper is repairing a settling depression across an 1,800 sq ft backyard. The project requires an average of 4 inches of inorganic fill dirt to restore grade, topped with 2 inches of screened organic topsoil for new sod establishment.
+          </p>
+          <div class="bg-white p-3.5 rounded-lg border border-slate-200 font-mono text-xs text-slate-800 space-y-1.5">
+            <div><strong>Step 1: Fill Dirt Volume:</strong> (1,800 sq ft × 4 in) ÷ 324 = 22.22 cu yds. Natural settlement factor (+18%): 22.22 × 1.18 = <span class="font-bold text-slate-900">26.22 cu yds</span> (approx. 28.8 tons)</div>
+            <div><strong>Step 2: Topsoil Cap Volume:</strong> (1,800 sq ft × 2 in) ÷ 324 = 11.11 cu yds. Fluff & settlement factor (+12%): 11.11 × 1.12 = <span class="font-bold text-slate-900">12.44 cu yds</span> (approx. 13.1 tons)</div>
+            <div class="pt-1 text-slate-600 font-sans"><strong>Dispatch Order:</strong> Order 26.5 cubic yards of fill dirt (two tandem truckloads) and 12.5 cubic yards of screened topsoil (one tandem truckload).</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 7: Waste Allowance Matrix -->
+      <section id="waste-matrix" class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-5 scroll-mt-20">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Estimating Risk Management</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-2">Waste Allowance Matrix: Preventing Jobsite Material Shortages</h2>
+        </div>
+
+        <p class="text-sm text-slate-700 leading-relaxed">
+          A common mistake made by entry-level estimators is ordering exact net geometric volume. In physical construction, material is lost to substrate undulation, subgrade sinking, formwork bowing, wheelbarrow spillage, and perimeter cutting. Ordering exact volume leads to <strong>emergency short-load fees, cold joints in concrete, and idle labor hours</strong>.
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+            <span class="text-xs font-mono font-bold text-emerald-700 block">5% to 8%</span>
+            <div class="text-sm font-bold text-slate-900 mt-1">Formed Concrete Slabs</div>
+            <p class="text-xs text-slate-600 mt-1">Rigid form boards contain material cleanly. Waste accounts for 2x4 form deflection, screeding spillage, and pump hopper residue.</p>
+          </div>
+
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+            <span class="text-xs font-mono font-bold text-blue-700 block">10% to 12%</span>
+            <div class="text-sm font-bold text-slate-900 mt-1">Footings & Trenches</div>
+            <p class="text-xs text-slate-600 mt-1">Excavated earth walls are naturally irregular. Backhoe bucket teeth leave scalloped edges that absorb additional volume.</p>
+          </div>
+
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+            <span class="text-xs font-mono font-bold text-amber-700 block">12% to 15%</span>
+            <div class="text-sm font-bold text-slate-900 mt-1">Gravel Sub-Bases</div>
+            <p class="text-xs text-slate-600 mt-1">Heavy crushed stone embeds 0.5 to 1 inch directly into underlying soft clay or subsoil under vibratory plate compaction.</p>
+          </div>
+
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+            <span class="text-xs font-mono font-bold text-purple-700 block">15% to 20%</span>
+            <div class="text-sm font-bold text-slate-900 mt-1">Loose Dirt & Mulch</div>
+            <p class="text-xs text-slate-600 mt-1">Fluffed organic material naturally settles and compresses upon watering and wind exposure. Edge raking results in minor dispersion.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 8: Frequently Asked Questions -->
+      <section id="faq" class="space-y-6 scroll-mt-20">
+        <div>
+          <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Trade Reference</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-1">Frequently Asked Questions: Volumetric & Material Estimation</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {faqs.map((faq) => (
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-2xs">
+              <h3 class="font-bold text-slate-900 text-sm mb-2">{faq.question}</h3>
+              <p class="text-xs text-slate-600 leading-relaxed">{faq.answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+    </div>
+
+  </div>
+</BaseLayout>

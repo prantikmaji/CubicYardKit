@@ -10,23 +10,42 @@ export interface Props {
 
 const { title, description, canonicalUrl, type = 'calculator', faqs, breadcrumbs } = Astro.props;
 
+const orgSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  '@id': 'https://cubicyardkit.com/#organization',
+  name: 'CubicYardKit',
+  url: 'https://cubicyardkit.com',
+  logo: {
+    '@type': 'ImageObject',
+    url: 'https://cubicyardkit.com/favicon.svg',
+    width: 512,
+    height: 512,
+  },
+  description: 'US-focused construction and landscaping material calculator and project planning platform.',
+};
+
 const websiteSchema = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
+  '@id': 'https://cubicyardkit.com/#website',
   name: 'CubicYardKit',
   url: 'https://cubicyardkit.com',
   description: 'US-focused construction and landscaping material calculator and project planning platform.',
+  publisher: { '@id': 'https://cubicyardkit.com/#organization' },
 };
 
 const appSchema = type === 'calculator' ? {
   '@context': 'https://schema.org',
-  '@type': 'WebApplication',
+  '@type': 'SoftwareApplication',
   name: title,
   description: description,
   url: canonicalUrl,
   applicationCategory: 'UtilitiesApplication',
   operatingSystem: 'All',
   browserRequirements: 'Requires JavaScript. Requires HTML5.',
+  creator: { '@id': 'https://cubicyardkit.com/#organization' },
+  provider: { '@id': 'https://cubicyardkit.com/#organization' },
   offers: {
     '@type': 'Offer',
     price: '0',
@@ -67,7 +86,9 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
 } : null;
 ---
 
+<script type="application/ld+json" set:html={JSON.stringify(orgSchema)} />
 <script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
 {appSchema && <script type="application/ld+json" set:html={JSON.stringify(appSchema)} />}
 {faqSchema && <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />}
 {breadcrumbSchema && <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />}
+

@@ -61,6 +61,18 @@ const ALL_TOOLS: Record<string, ToolItem> = {
     badge: 'Compare Bids',
     desc: 'Normalize competing quotes across bulk yards, tons, and bags to find your lowest landed cost.',
   },
+  concreteSlabCost: {
+    href: '/concrete-slab-cost-calculator/',
+    title: 'Concrete Slab Cost',
+    badge: 'Full Budget',
+    desc: 'Estimate complete concrete slab project cost: volume, bags, labor, delivery, and finishing.',
+  },
+  concreteDriveway: {
+    href: '/concrete-driveway-cost-calculator/',
+    title: 'Concrete Driveway Cost',
+    badge: 'New & Replacement',
+    desc: 'Estimate complete driveway cost: volume, demolition, base, rebar, delivery, and finishing.',
+  },
 };
 
 // Map each path to 3 related tools
@@ -68,8 +80,10 @@ const RELATED_MAP: Record<string, string[]> = {
   '/gravel-calculator/': ['planner', 'dirt', 'concrete'],
   '/dirt-calculator/': ['topsoil', 'gravel', 'home'],
   '/topsoil-calculator/': ['dirt', 'planner', 'home'],
-  '/concrete-calculator/': ['concreteBlock', 'home', 'planner'],
+  '/concrete-calculator/': ['concreteSlabCost', 'concreteDriveway', 'home'],
   '/concrete-block-calculator/': ['concrete', 'quoteComparison', 'home'],
+  '/concrete-slab-cost-calculator/': ['concreteDriveway', 'concrete', 'planner'],
+  '/concrete-driveway-cost-calculator/': ['concreteSlabCost', 'concrete', 'gravel'],
   '/planner/': ['gravel', 'quoteComparison', 'concrete'],
   '/quote-comparison/': ['planner', 'gravel', 'concrete'],
 };

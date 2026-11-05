@@ -300,3 +300,327 @@ describe('Supplier Quote Evaluation', () => {
     expect(lowest?.supplierName).toBe('Bulk Yard Delivery');
   });
 });
+
+
+import { calculateConcreteSlabCost } from '../../src/lib/calc/concrete-slab-cost';
+
+describe('Concrete Slab Cost Calculator', () => {
+  const baseInput = {
+    areas: [{ length: 12, lengthUnit: 'feet' as const, width: 20, widthUnit: 'feet' as const }],
+    thicknessInches: 4,
+    wastePercent: 10,
+    minOrderYards: 1,
+    orderIncrementYards: 0.25,
+    bagSizeLabel: '80lb' as const,
+    pricePerBag: null,
+    pricePerCubicYard: null,
+    deliveryFee: null,
+    shortLoadFee: null,
+    shortLoadThresholdYards: 4,
+    excavationCostPerSqFt: null,
+    gravelBaseCostPerSqFt: null,
+    formworkCostPerLinFt: null,
+    rebarCostPerSqFt: null,
+    vaporBarrierCostPerSqFt: null,
+    laborCostPerSqFt: null,
+    finishCostPerSqFt: null,
+    pumpFee: null,
+    taxPercent: null,
+    contingencyPercent: null,
+    otherCost: null,
+  };
+
+  it('1. 12×20 slab, 4" thick, 10% waste, no cost data — geometry & volumes', () => {
+    const r = calculateConcreteSlabCost(baseInput);
+    expect(r.totalAreaSqFt).toBe(240);
+    expect(r.netCubicFeet).toBeCloseTo(80, 5);
+    expect(r.netCubicYards).toBeCloseTo(80 / 27, 5);
+    expect(r.wasteAdjustedCubicYards).toBeCloseTo((80 / 27) * 1.10, 5);
+    expect(r.hasCostData).toBe(false);
+  });
+
+  it('2. billedCubicYards with 0.25 increment rounds up correctly', () => {
+    const r = calculateConcreteSlabCost(baseInput);
+    // wasteAdjusted ≈ 3.2593: ceil(3.2593/0.25)*0.25 = ceil(13.037)*0.25 = 14*0.25 = 3.5
+    expect(r.billedCubicYards).toBeCloseTo(3.5, 5);
+  });
+
+  it('3. short-load: small slab triggers shortLoadApplied when fee is set', () => {
+    const r = calculateConcreteSlabCost({
+      ...baseInput,
+      areas: [{ length: 0.5, lengthUnit: 'feet', width: 0.5, widthUnit: 'feet' }],
+      shortLoadFee: 200,
+    });
+    // billedCubicYards will be < 4, so short-load applies
+    expect(r.shortLoadApplied).toBe(true);
+    expect(r.shortLoadSubtotal).toBe(200);
+  });
+
+  it('4. cost: 12×20, $150/yd³, $75 delivery — grandTotal correct', () => {
+    const r = calculateConcreteSlabCost({
+      ...baseInput,
+      pricePerCubicYard: 150,
+      deliveryFee: 75,
+    });
+    // billedCubicYards = 3.5, concrete = 3.5 * 150 = 525, delivery = 75
+    expect(r.concreteSubtotal).toBeCloseTo(3.5 * 150, 2);
+    expect(r.deliverySubtotal).toBe(75);
+    expect(r.grandTotal).toBeCloseTo(3.5 * 150 + 75, 2);
+  });
+
+  it('5. tax and contingency applied to subtotal correctly', () => {
+    const r = calculateConcreteSlabCost({
+      ...baseInput,
+      pricePerCubicYard: 150,
+      taxPercent: 10,
+      contingencyPercent: 5,
+    });
+    const expectedSubtotal = r.concreteSubtotal;
+    expect(r.subtotalBeforeTax).toBeCloseTo(expectedSubtotal, 2);
+    expect(r.taxSubtotal).toBeCloseTo(expectedSubtotal * 0.10, 2);
+    expect(r.contingencySubtotal).toBeCloseTo(expectedSubtotal * 0.05, 2);
+    expect(r.grandTotal).toBeCloseTo(expectedSubtotal * 1.15, 2);
+  });
+
+  it('6. multiple slabs: two 10×10 = one 20×10 in total area', () => {
+    const twoSlabs = calculateConcreteSlabCost({
+      ...baseInput,
+      areas: [
+        { length: 10, lengthUnit: 'feet', width: 10, widthUnit: 'feet' },
+        { length: 10, lengthUnit: 'feet', width: 10, widthUnit: 'feet' },
+      ],
+    });
+    const oneRect = calculateConcreteSlabCost({
+      ...baseInput,
+      areas: [{ length: 20, lengthUnit: 'feet', width: 10, widthUnit: 'feet' }],
+    });
+    expect(twoSlabs.totalAreaSqFt).toBe(200);
+    expect(twoSlabs.totalAreaSqFt).toBe(oneRect.totalAreaSqFt);
+    expect(twoSlabs.netCubicYards).toBeCloseTo(oneRect.netCubicYards, 8);
+  });
+
+  it('7. wastePercent = 0 → wasteAdjustedCubicYards === netCubicYards', () => {
+    const r = calculateConcreteSlabCost({ ...baseInput, wastePercent: 0 });
+    expect(r.wasteAdjustedCubicYards).toBeCloseTo(r.netCubicYards, 10);
+  });
+
+  it('8. bags80lb = ceil(wasteAdjusted × 27 / 0.60)', () => {
+    const r = calculateConcreteSlabCost(baseInput);
+    // wasteAdjusted ≈ 3.2593
+    const expectedBags = Math.ceil((r.wasteAdjustedCubicYards * 27) / 0.60);
+    expect(r.bags80lb).toBe(expectedBags);
+    // Per spec: ceil(3.259 × 27 / 0.60) = ceil(146.65) = 147
+    expect(r.bags80lb).toBe(147);
+  });
+
+  it('9. missingPriceKeys includes "labor" when laborCostPerSqFt is null', () => {
+    const r = calculateConcreteSlabCost({ ...baseInput, laborCostPerSqFt: null });
+    expect(r.missingPriceKeys).toContain('labor');
+  });
+
+  it('10. hasCostData = true when any single price is provided', () => {
+    const r = calculateConcreteSlabCost({ ...baseInput, pricePerCubicYard: 150 });
+    expect(r.hasCostData).toBe(true);
+    expect(r.grandTotal).toBeGreaterThan(0);
+  });
+});
+
+import { calculateConcreteDriveway } from '../../src/lib/calc/concrete-driveway-cost';
+
+describe('Concrete Driveway Cost Calculator', () => {
+  const baseDrivewayInput = {
+    scope: 'new' as const,
+    sections: [
+      {
+        id: 'sec-1',
+        label: 'Main Driveway',
+        length: 20,
+        lengthUnit: 'feet' as const,
+        width: 10,
+        widthUnit: 'feet' as const,
+      },
+    ],
+    thicknessInches: 5,
+    wastePercent: 10,
+    minOrderYards: 1,
+    orderIncrementYards: 0.25,
+    shortLoadThresholdYards: 4,
+    gravelBaseDepthInches: null,
+    pricePerCubicYard: null,
+    deliveryFee: null,
+    shortLoadFee: null,
+    excavationCostPerSqFt: null,
+    demolitionCostPerSqFt: null,
+    disposalCostPerSqFt: null,
+    gravelBaseCostPerSqFt: null,
+    formworkCostPerLinFt: null,
+    rebarCostPerSqFt: null,
+    vaporBarrierCostPerSqFt: null,
+    laborCostPerSqFt: null,
+    finishCostPerSqFt: null,
+    controlJointCostPerLinFt: null,
+    sealingCostPerSqFt: null,
+    pumpFee: null,
+    taxPercent: null,
+    contingencyPercent: null,
+    otherCost: null,
+  };
+
+  it('1. Single-car: 10×20, 5" thick, 10% waste, no cost — geometry & volumes', () => {
+    const r = calculateConcreteDriveway(baseDrivewayInput);
+    expect(r.totalAreaSqFt).toBe(200);
+    expect(r.netCubicFeet).toBeCloseTo((200 * 5) / 12, 5);
+    expect(r.netCubicYards).toBeCloseTo((200 * 5) / 324, 5);
+    expect(r.wasteAdjustedCubicYards).toBeCloseTo(((200 * 5) / 324) * 1.10, 5);
+    expect(r.billedCubicYards).toBeCloseTo(3.50, 5);
+    expect(r.hasCostData).toBe(false);
+    expect(r.costPerSqFt).toBeNull();
+  });
+
+  it('2. Two-car: 20×20, 5" thick, 10% waste — billed 7.00 yd³', () => {
+    const r = calculateConcreteDriveway({
+      ...baseDrivewayInput,
+      sections: [
+        {
+          id: 'sec-1',
+          label: 'Double Driveway',
+          length: 20,
+          lengthUnit: 'feet',
+          width: 20,
+          widthUnit: 'feet',
+        },
+      ],
+    });
+    expect(r.totalAreaSqFt).toBe(400);
+    expect(r.netCubicYards).toBeCloseTo((400 * 5) / 324, 5);
+    expect(r.wasteAdjustedCubicYards).toBeCloseTo(((400 * 5) / 324) * 1.10, 5);
+    expect(r.billedCubicYards).toBeCloseTo(7.00, 5);
+  });
+
+  it('3. Multi-section: 10×20 + 10×10 parking apron sums areas & returns per-section breakdown', () => {
+    const r = calculateConcreteDriveway({
+      ...baseDrivewayInput,
+      sections: [
+        {
+          id: 'sec-1',
+          label: 'Main Driveway',
+          length: 20,
+          lengthUnit: 'feet',
+          width: 10,
+          widthUnit: 'feet',
+        },
+        {
+          id: 'sec-2',
+          label: 'Parking Apron',
+          length: 10,
+          lengthUnit: 'feet',
+          width: 10,
+          widthUnit: 'feet',
+        },
+      ],
+    });
+    expect(r.totalAreaSqFt).toBe(300);
+    expect(r.sections.length).toBe(2);
+    expect(r.sections[0].areaSquareFeet).toBe(200);
+    expect(r.sections[1].areaSquareFeet).toBe(100);
+  });
+
+  it('4. Short-load surcharge applies when billedYards < 4 and shortLoadFee is provided', () => {
+    const r = calculateConcreteDriveway({
+      ...baseDrivewayInput,
+      shortLoadFee: 175,
+    });
+    // billedCubicYards = 3.50 < 4
+    expect(r.shortLoadApplied).toBe(true);
+    expect(r.shortLoadSubtotal).toBe(175);
+  });
+
+  it('5. Replacement scope: demolitionSubtotal and disposalSubtotal are included in budget', () => {
+    const r = calculateConcreteDriveway({
+      ...baseDrivewayInput,
+      scope: 'replacement',
+      demolitionCostPerSqFt: 2.0,
+      disposalCostPerSqFt: 1.5,
+    });
+    expect(r.scopeIncludesDemo).toBe(true);
+    expect(r.demolitionSubtotal).toBe(200 * 2.0); // 400
+    expect(r.disposalSubtotal).toBe(200 * 1.5);   // 300
+    expect(r.subtotalBeforeTax).toBe(700);
+  });
+
+  it('6. New scope: demolitionSubtotal and disposalSubtotal are 0 even if rates are passed', () => {
+    const r = calculateConcreteDriveway({
+      ...baseDrivewayInput,
+      scope: 'new',
+      demolitionCostPerSqFt: 2.0,
+      disposalCostPerSqFt: 1.5,
+    });
+    expect(r.scopeIncludesDemo).toBe(false);
+    expect(r.demolitionSubtotal).toBe(0);
+    expect(r.disposalSubtotal).toBe(0);
+    expect(r.subtotalBeforeTax).toBe(0);
+  });
+
+  it('7. Cost calculation: $150/yd³, $75 delivery — correctly computes grandTotal', () => {
+    const r = calculateConcreteDriveway({
+      ...baseDrivewayInput,
+      pricePerCubicYard: 150,
+      deliveryFee: 75,
+    });
+    // 3.50 billed yards * 150 = 525 + 75 = 600
+    expect(r.concreteSubtotal).toBeCloseTo(3.50 * 150, 2);
+    expect(r.deliverySubtotal).toBe(75);
+    expect(r.grandTotal).toBeCloseTo(600, 2);
+  });
+
+  it('8. Tax and contingency applied to subtotalBeforeTax correctly', () => {
+    const r = calculateConcreteDriveway({
+      ...baseDrivewayInput,
+      pricePerCubicYard: 150,
+      taxPercent: 8,
+      contingencyPercent: 10,
+    });
+    const subtotal = 3.50 * 150;
+    expect(r.subtotalBeforeTax).toBeCloseTo(subtotal, 2);
+    expect(r.taxSubtotal).toBeCloseTo(subtotal * 0.08, 2);
+    expect(r.contingencySubtotal).toBeCloseTo(subtotal * 0.10, 2);
+    expect(r.grandTotal).toBeCloseTo(subtotal * (1 + 0.08 + 0.10), 2);
+  });
+
+  it('9. costPerSqFt = grandTotal / totalAreaSqFt when hasCostData', () => {
+    const r = calculateConcreteDriveway({
+      ...baseDrivewayInput,
+      pricePerCubicYard: 150,
+      deliveryFee: 75,
+    });
+    expect(r.costPerSqFt).toBeCloseTo(600 / 200, 2); // 3.00/sq ft
+  });
+
+  it('10. wastePercent = 0 -> wasteAdjustedCubicYards equals netCubicYards exactly', () => {
+    const r = calculateConcreteDriveway({
+      ...baseDrivewayInput,
+      wastePercent: 0,
+    });
+    expect(r.wasteAdjustedCubicYards).toBeCloseTo(r.netCubicYards, 8);
+  });
+
+  it('11. gravelBaseCubicYards computed when depth provided', () => {
+    const r = calculateConcreteDriveway({
+      ...baseDrivewayInput,
+      gravelBaseDepthInches: 4,
+    });
+    // 200 sq ft * (4/12) ft = 66.6667 cu ft / 27 = 2.4691 cu yd
+    expect(r.gravelBaseCubicYards).toBeCloseTo((200 * (4 / 12)) / 27, 4);
+  });
+
+  it('12. truckloadsNeeded = ceil(billedCubicYards / 10)', () => {
+    const r1 = calculateConcreteDriveway(baseDrivewayInput); // 3.5 yd -> 1 truck
+    expect(r1.truckloadsNeeded).toBe(1);
+
+    const r2 = calculateConcreteDriveway({
+      ...baseDrivewayInput,
+      sections: [{ id: 's1', label: 'Huge', length: 100, lengthUnit: 'feet', width: 20, widthUnit: 'feet' }],
+    }); // 2000 sq ft * 5/12 / 27 = 30.86 yd -> ~34 yd -> 4 trucks
+    expect(r2.truckloadsNeeded).toBe(4);
+  });
+});

@@ -191,6 +191,50 @@ export const KEYWORD_MAP: Record<string, PageSEOConfig> = {
     launchPriority: 7,
     status: 'active',
   },
+  concreteSlabCost: {
+    path: '/concrete-slab-cost-calculator/',
+    canonicalUrl: `${SITE_ORIGIN}/concrete-slab-cost-calculator/`,
+    title: 'Concrete Slab Cost Calculator | Volume, Bags & Full Project Budget | CubicYardKit',
+    metaDescription:
+      'Calculate concrete slab cost per square foot, cubic yards, bag counts, and full project budget including labor, delivery, and finishing for any slab size.',
+    h1: 'Concrete Slab Cost Calculator',
+    primaryKeyword: { keyword: 'concrete slab cost calculator', volume: 8100, kd: 12, cpc: 2.36 },
+    secondaryKeywords: [
+      { keyword: 'calculating concrete slab cost', volume: 880, kd: 22, cpc: 2.36 },
+      { keyword: 'concrete slab calculator cost', volume: 260, kd: 23, cpc: 2.04 },
+      { keyword: 'concrete slab installation cost calculator', volume: 260, kd: 33, cpc: 4.00 },
+      { keyword: '12x20 concrete slab cost calculator', volume: 40, kd: 4, cpc: 2.82 },
+    ],
+    searchIntent: 'Full project cost estimation for concrete slabs including materials, labor, and delivery.',
+    launchPriority: 9,
+    status: 'active' as const,
+  },
+  concreteDriveway: {
+    path: '/concrete-driveway-cost-calculator/',
+    canonicalUrl: `${SITE_ORIGIN}/concrete-driveway-cost-calculator/`,
+    title: 'Concrete Driveway Cost Calculator | Installed Cost, Volume & Full Budget | CubicYardKit',
+    metaDescription:
+      'Estimate concrete driveway cost per square foot, cubic yards, and full project budget for new installation, replacement, and extension. Free driveway cost calculator.',
+    h1: 'Concrete Driveway Cost Calculator',
+    primaryKeyword: {
+      keyword: 'concrete driveway cost calculator',
+      volume: 1300,
+      kd: 30,
+      cpc: 2.69,
+    },
+    secondaryKeywords: [
+      { keyword: 'concrete driveway cost', volume: 4400, kd: 24, cpc: 3.92 },
+      { keyword: 'cost of concrete driveway', volume: 1900, kd: 18, cpc: 3.92 },
+      { keyword: 'cost to pour concrete driveway', volume: 1600, kd: 26, cpc: 2.46 },
+      { keyword: 'cost to replace concrete driveway', volume: 1300, kd: 27, cpc: 3.41 },
+      { keyword: 'concrete driveway cost estimator', volume: 1000, kd: 23, cpc: 2.69 },
+      { keyword: 'how much does a concrete driveway cost', volume: 1000, kd: 29, cpc: 2.55 },
+    ],
+    searchIntent:
+      'Full project cost estimation for concrete driveways including new installation, replacement, and extension scopes.',
+    launchPriority: 10,
+    status: 'active' as const,
+  },
   quoteComparison: {
     path: '/quote-comparison/',
     canonicalUrl: `${SITE_ORIGIN}/quote-comparison/`,

@@ -1,0 +1,290 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ConcreteSlabCostCalculator from '../components/calc/ConcreteSlabCostCalculator';
+import Breadcrumbs from '../components/seo/Breadcrumbs.astro';
+import RelatedCalculators from '../components/layout/RelatedCalculators.astro';
+
+const seo = {
+  title: 'Concrete Slab Cost Calculator | Volume, Bags & Full Project Budget | CubicYardKit',
+  description:
+    'Calculate concrete slab cost per square foot, cubic yards, bag counts, and full project budget including labor, delivery, and finishing for any slab size.',
+  canonicalUrl: 'https://cubicyardkit.com/concrete-slab-cost-calculator/',
+};
+
+const faqs = [
+  {
+    question: 'How much does a concrete slab cost per square foot?',
+    answer:
+      'A residential concrete slab typically costs $4 to $8 per square foot for basic concrete material and placement (ready-mix only). With labor, formwork, gravel base, rebar, and finishing, full project costs range from $6 to $12 per square foot. Decorative or stamped finishes can reach $15 to $25 per square foot. Use this calculator to build a line-item budget for your specific project.',
+  },
+  {
+    question: 'How many cubic yards for a 12x20 concrete slab?',
+    answer:
+      'A 12 ft × 20 ft slab (240 sq ft) at 4 inches thick requires: (240 × 4) ÷ 324 = 2.96 cubic yards net. Adding the standard 10% over-pour margin gives 3.26 cubic yards. The ready-mix supplier will bill 3.50 cubic yards (rounded up to the nearest 0.25-yard increment).',
+  },
+  {
+    question: 'What is included in a concrete slab cost estimate?',
+    answer:
+      'A complete concrete slab cost estimate includes: (1) Excavation and subgrade prep, (2) Compacted gravel base, (3) Vapor barrier / poly sheeting, (4) Formwork lumber and stakes, (5) Rebar or wire mesh reinforcement, (6) Ready-mix concrete material, (7) Concrete pump fee if access is limited, (8) Concrete delivery fee, (9) Labor for placing, screeding, and floating, (10) Surface finishing (broom, trowel, or stamped), and (11) Tax and contingency. This calculator provides a line-by-line estimate for all categories.',
+  },
+  {
+    question: 'Do I need a permit for a concrete slab?',
+    answer:
+      'Permit requirements vary by municipality. Most jurisdictions require a building permit for concrete slabs larger than 200–400 sq ft, any slab attached to a structure, or slabs with footings. Patio slabs under a certain threshold (commonly 200 sq ft) are often exempt. Always check with your local building department before pouring — permits typically cost $50 to $300 and require a site inspection.',
+  },
+  {
+    question: 'How thick should a concrete slab be for a garage?',
+    answer:
+      'Residential garage slabs should be a minimum of 4 inches thick (ACI 360 recommendation for light vehicle traffic). For heavier vehicles, workshops, or areas subject to point loads from car lifts or storage racking, 5 to 6 inches is recommended. Use 4,000 PSI concrete with 5–7% air entrainment in freeze-thaw climates, and include a rebar grid (#4 rebar at 24" on center) or fiber reinforcement to control cracking.',
+  },
+  {
+    question: 'What is a short-load fee for ready-mix concrete?',
+    answer:
+      'Ready-mix suppliers charge a short-load (or under-load) fee when you order less than their minimum full-load threshold, typically 4 to 5 cubic yards. The fee compensates for the fixed operating cost of dispatching a truck — typically $120 to $250 depending on the plant and distance. For projects under 2 cubic yards, bagged concrete often beats ready-mix even after accounting for the short-load surcharge.',
+  },
+  {
+    question: 'How much does concrete cost per cubic yard?',
+    answer:
+      'Ready-mix concrete prices vary by region, mix design, and market conditions. The national average for standard 3,000–4,000 PSI residential concrete ranges from $130 to $175 per cubic yard, plus $75–$150 delivery fee. High-strength (5,000+ PSI), fiber-reinforced, or color-added mixes cost $155–$220 per cubic yard. Always get at least 3 local quotes — regional variation can exceed $40–$60 per yard.',
+  },
+  {
+    question: 'Should I hire a contractor or pour concrete myself?',
+    answer:
+      'DIY concrete is feasible for small slabs under 1.5 cubic yards (patio squares, steps, pads). For larger slabs, the professional quality difference in screeding, finishing, and cure control is significant. Professionals also carry liability insurance if the slab fails. As a rough guide: if the project exceeds 20 bags of bagged concrete or 1.5 cubic yards of ready-mix, the labor savings from professional contractors typically outweigh the DIY cost savings, especially when factoring in tool rental and risk.',
+  },
+];
+---
+
+<BaseLayout
+  title={seo.title}
+  description={seo.description}
+  canonicalUrl={seo.canonicalUrl}
+  faqs={faqs}
+  breadcrumbs={[{ name: 'Concrete Slab Cost Calculator', item: seo.canonicalUrl }]}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-5 sm:pt-7 pb-14 sm:pb-20">
+    <Breadcrumbs items={[{ name: 'Concrete Slab Cost Calculator' }]} />
+
+    <!-- Hero Banner — dark slate with green aura -->
+    <div class="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-slate-900 border border-slate-800 px-6 sm:px-8 lg:px-10 py-7 sm:py-9 lg:py-10 mb-8 sm:mb-10 text-white shadow-md">
+      <div class="absolute -top-12 -right-12 w-96 h-96 bg-green-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="relative flex flex-wrap items-end justify-between gap-6 lg:gap-8">
+        <div class="max-w-2xl">
+          <div class="inline-flex items-center gap-2 bg-green-950/80 border border-green-500/40 rounded-full px-3.5 py-1 text-xs font-bold text-green-300 mb-3.5 sm:mb-4 shadow-xs">
+            <span class="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse shadow-[0_0_8px_#4ade80]"></span>
+            Concrete Slab Cost Calculator
+          </div>
+
+          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-[1.08] mb-2.5 sm:mb-3">
+            Concrete Slab Cost Calculator
+          </h1>
+          <p class="text-sm sm:text-base text-slate-200 max-w-xl leading-relaxed">
+            Calculate concrete volume, bags, ready-mix yardage, and full project cost for slabs, garage floors, and patios.
+          </p>
+        </div>
+
+        <!-- Trust stat chips -->
+        <div class="flex flex-wrap sm:flex-nowrap gap-2.5 sm:gap-3 shrink-0 w-full sm:w-auto">
+          {[
+            { val: '240', unit: 'sq ft', label: '12×20 Slab Area' },
+            { val: '2.96', unit: 'yd³', label: 'Net Volume (4")' },
+            { val: '+10%', unit: 'waste', label: 'ACI Margin' },
+            { val: '$6–$12', unit: '/sq ft', label: 'Full Budget Range' },
+          ].map(stat => (
+            <div class="flex-1 sm:flex-initial bg-slate-800/90 border border-slate-700/80 rounded-xl px-3.5 sm:px-4 py-2.5 sm:py-3 text-center min-w-[75px] sm:min-w-[90px] shadow-xs">
+              <div class="text-base sm:text-lg font-black text-white font-mono">{stat.val}</div>
+              <div class="text-[10px] text-green-400 font-bold uppercase tracking-wider">{stat.unit}</div>
+              <div class="text-[10px] text-slate-300 font-medium mt-0.5">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive Island -->
+    <div class="mb-12 sm:mb-16">
+      <ConcreteSlabCostCalculator client:load />
+    </div>
+
+    <!-- Educational Sections -->
+    <div class="space-y-12 mb-16">
+
+      <!-- SECTION 1: How to Calculate Concrete Slab Cost -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-5">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-[11px] font-bold text-green-700 bg-green-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Cost Estimation</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-2">How to Calculate Concrete Slab Cost</h2>
+        </div>
+
+        <p class="text-sm text-slate-700 leading-relaxed">
+          Concrete slab cost estimation starts with accurate volume calculation, then layers on material, labor, and site preparation costs:
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4 font-mono text-xs">
+          <div class="bg-slate-900 text-white p-4 rounded-xl space-y-2">
+            <span class="text-green-400 font-bold block uppercase tracking-wider">Volume (Cubic Yards)</span>
+            <div class="text-sm font-bold bg-slate-800/80 p-2.5 rounded border border-slate-700">
+              yd³ = (L ft × W ft × Thickness in) ÷ 324
+            </div>
+            <p class="text-slate-300 font-sans text-xs pt-1">
+              324 = 27 cu ft/yd × 12 in/ft. Always add 8–10% waste.
+            </p>
+          </div>
+
+          <div class="bg-slate-900 text-white p-4 rounded-xl space-y-2">
+            <span class="text-green-400 font-bold block uppercase tracking-wider">Waste-Adjusted Volume</span>
+            <div class="text-sm font-bold bg-slate-800/80 p-2.5 rounded border border-slate-700">
+              Adjusted = Net yd³ × (1 + waste%)
+            </div>
+            <p class="text-slate-300 font-sans text-xs pt-1">
+              ACI recommends 10% over-pour for form deflection and subgrade variation.
+            </p>
+          </div>
+
+          <div class="bg-slate-900 text-white p-4 rounded-xl space-y-2">
+            <span class="text-green-400 font-bold block uppercase tracking-wider">Supplier Billed Volume</span>
+            <div class="text-sm font-bold bg-slate-800/80 p-2.5 rounded border border-slate-700">
+              Billed = max(min order, ⌈adjusted ÷ 0.25⌉ × 0.25)
+            </div>
+            <p class="text-slate-300 font-sans text-xs pt-1">
+              Plants batch in 0.25-yd increments; minimum order is typically 1 yard.
+            </p>
+          </div>
+
+          <div class="bg-slate-900 text-white p-4 rounded-xl space-y-2">
+            <span class="text-green-400 font-bold block uppercase tracking-wider">Grand Total Cost</span>
+            <div class="text-sm font-bold bg-slate-800/80 p-2.5 rounded border border-slate-700">
+              Total = Subtotal × (1 + tax%) × (1 + contingency%)
+            </div>
+            <p class="text-slate-300 font-sans text-xs pt-1">
+              Include all line items: concrete, labor, delivery, and finishing.
+            </p>
+          </div>
+        </div>
+
+        <h3 class="text-lg font-bold text-slate-900 pt-2">Worked Example: 12×20 Slab at 4" Thickness</h3>
+        <ol class="list-decimal list-inside text-sm text-slate-700 space-y-1.5 pl-2 font-medium">
+          <li>Surface area: <span class="font-mono text-slate-900">12 ft × 20 ft = 240 sq ft</span></li>
+          <li>Net volume: <span class="font-mono text-slate-900">(240 × 4) ÷ 324 = 2.963 cu yds</span></li>
+          <li>+10% waste: <span class="font-mono text-slate-900">2.963 × 1.10 = 3.259 cu yds</span></li>
+          <li>Supplier bills: <span class="font-mono text-slate-900">⌈3.259 ÷ 0.25⌉ × 0.25 = 3.50 cu yds</span></li>
+          <li>At $150/yd³ + $75 delivery: <span class="font-mono text-slate-900">3.50 × $150 + $75 = $600</span></li>
+        </ol>
+      </section>
+
+      <!-- SECTION 2: Ready-Mix vs Bagged -->
+      <section id="bags" class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-5 scroll-mt-20">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-[11px] font-bold text-green-700 bg-green-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Financial Thresholds</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-2">Ready-Mix vs. Bagged Concrete Comparison</h2>
+        </div>
+
+        <p class="text-sm text-slate-700 leading-relaxed">
+          The break-even point between bagged and ready-mix concrete is typically around 1.5 cubic yards (68 eighty-pound bags):
+        </p>
+
+        <div class="overflow-x-auto rounded-xl border border-slate-200">
+          <table class="w-full text-xs text-left">
+            <thead class="bg-slate-900 text-white font-bold">
+              <tr>
+                <th class="px-3.5 py-2.5">Volume Required</th>
+                <th class="px-3 py-2.5 text-right">80-lb Bags</th>
+                <th class="px-3 py-2.5 text-right">Bag Weight</th>
+                <th class="px-3 py-2.5 text-right">Bagged Cost (~$6/bag)</th>
+                <th class="px-3 py-2.5 text-right">Ready-Mix Cost (~$150/yd)</th>
+                <th class="px-3.5 py-2.5 text-center font-bold text-green-400">Recommended</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 text-slate-700">
+              <tr>
+                <td class="px-3.5 py-2 font-bold text-slate-900">0.5 yd³</td>
+                <td class="px-3 py-2 text-right font-mono">23 bags</td>
+                <td class="px-3 py-2 text-right font-mono">1,840 lbs</td>
+                <td class="px-3 py-2 text-right font-mono font-medium">$138</td>
+                <td class="px-3 py-2 text-right font-mono text-slate-500">$275 (min fee)</td>
+                <td class="px-3.5 py-2 text-center font-bold text-slate-700">Bagged</td>
+              </tr>
+              <tr class="bg-slate-50/50">
+                <td class="px-3.5 py-2 font-bold text-slate-900">1.0 yd³</td>
+                <td class="px-3 py-2 text-right font-mono">45 bags</td>
+                <td class="px-3 py-2 text-right font-mono">3,600 lbs</td>
+                <td class="px-3 py-2 text-right font-mono font-medium">$270</td>
+                <td class="px-3 py-2 text-right font-mono text-slate-500">$300 (short-load)</td>
+                <td class="px-3.5 py-2 text-center font-bold text-slate-700">Either</td>
+              </tr>
+              <tr>
+                <td class="px-3.5 py-2 font-bold text-slate-900">2.0 yd³</td>
+                <td class="px-3 py-2 text-right font-mono">90 bags</td>
+                <td class="px-3 py-2 text-right font-mono">7,200 lbs</td>
+                <td class="px-3 py-2 text-right font-mono font-medium text-rose-700">$540</td>
+                <td class="px-3 py-2 text-right font-mono font-bold text-green-700">$375</td>
+                <td class="px-3.5 py-2 text-center font-bold text-green-700">Ready-Mix</td>
+              </tr>
+              <tr class="bg-slate-50/50">
+                <td class="px-3.5 py-2 font-bold text-slate-900">6.0 yd³ (garage)</td>
+                <td class="px-3 py-2 text-right font-mono">270 bags</td>
+                <td class="px-3 py-2 text-right font-mono">21,600 lbs</td>
+                <td class="px-3 py-2 text-right font-mono font-medium text-rose-700">$1,620</td>
+                <td class="px-3 py-2 text-right font-mono font-bold text-green-700">$975</td>
+                <td class="px-3.5 py-2 text-center font-bold text-green-700">Ready-Mix</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SECTION 3: What's Included in Concrete Slab Cost -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-5">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-[11px] font-bold text-green-700 bg-green-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Cost Breakdown</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-2">What's Included in Concrete Slab Cost?</h2>
+        </div>
+
+        <p class="text-sm text-slate-700 leading-relaxed">
+          A thorough concrete slab budget covers every phase from site prep to surface finishing:
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+          <ul class="space-y-2 text-slate-700">
+            <li class="flex items-start gap-2"><span class="text-green-600 font-bold mt-0.5">✓</span><span><strong>Excavation:</strong> Removing soil to the required depth, typically $1–$3/sq ft.</span></li>
+            <li class="flex items-start gap-2"><span class="text-green-600 font-bold mt-0.5">✓</span><span><strong>Gravel Base:</strong> 4"–6" compacted sub-base for drainage, $0.50–$1.50/sq ft.</span></li>
+            <li class="flex items-start gap-2"><span class="text-green-600 font-bold mt-0.5">✓</span><span><strong>Vapor Barrier:</strong> 6-mil poly sheeting to prevent moisture migration, $0.10–$0.25/sq ft.</span></li>
+            <li class="flex items-start gap-2"><span class="text-green-600 font-bold mt-0.5">✓</span><span><strong>Formwork:</strong> 2×4 or 2×6 lumber frames at $1–$3/lin ft of perimeter.</span></li>
+            <li class="flex items-start gap-2"><span class="text-green-600 font-bold mt-0.5">✓</span><span><strong>Rebar / Wire Mesh:</strong> Structural reinforcement, $0.30–$1.00/sq ft installed.</span></li>
+            <li class="flex items-start gap-2"><span class="text-green-600 font-bold mt-0.5">✓</span><span><strong>Concrete Material:</strong> Ready-mix at $130–$175/yd³ plus delivery fee.</span></li>
+          </ul>
+          <ul class="space-y-2 text-slate-700">
+            <li class="flex items-start gap-2"><span class="text-green-600 font-bold mt-0.5">✓</span><span><strong>Pump Fee:</strong> Concrete pump truck when truck can't reach the pour, $500–$1,500 flat.</span></li>
+            <li class="flex items-start gap-2"><span class="text-green-600 font-bold mt-0.5">✓</span><span><strong>Labor — Pour:</strong> Placing, screeding, and floating, $1–$3/sq ft.</span></li>
+            <li class="flex items-start gap-2"><span class="text-green-600 font-bold mt-0.5">✓</span><span><strong>Surface Finish:</strong> Broom finish ($0.50–$1), trowel ($1–$2), or stamped ($6–$15/sq ft).</span></li>
+            <li class="flex items-start gap-2"><span class="text-green-600 font-bold mt-0.5">✓</span><span><strong>Short-Load Fee:</strong> Surcharge for orders under 4–5 yards, typically $120–$250.</span></li>
+            <li class="flex items-start gap-2"><span class="text-green-600 font-bold mt-0.5">✓</span><span><strong>Tax &amp; Contingency:</strong> Sales tax on materials plus 10–15% contingency reserve.</span></li>
+            <li class="flex items-start gap-2"><span class="text-green-600 font-bold mt-0.5">✓</span><span><strong>Permit:</strong> Building permit for slabs &gt;200 sq ft, $50–$300 depending on jurisdiction.</span></li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- SECTION 4: FAQs -->
+      <section class="space-y-6">
+        <div>
+          <span class="text-[11px] font-bold text-green-700 bg-green-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Concrete Slab FAQs</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-1">Concrete Slab Cost Calculator FAQs</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {faqs.map((faq) => (
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-2xs">
+              <h3 class="font-bold text-slate-900 text-sm mb-2">{faq.question}</h3>
+              <p class="text-xs text-slate-600 leading-relaxed">{faq.answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Related Calculators -->
+      <RelatedCalculators currentPath={seo.canonicalUrl} />
+
+    </div>
+  </div>
+</BaseLayout>

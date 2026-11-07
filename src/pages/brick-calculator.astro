@@ -1,0 +1,311 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BrickCalculator from '../components/calc/BrickCalculator';
+import Breadcrumbs from '../components/seo/Breadcrumbs.astro';
+import RelatedCalculators from '../components/layout/RelatedCalculators.astro';
+
+const seo = {
+  title: 'Brick Calculator | Brick Quantity, Mortar & Cost Estimator | CubicYardKit',
+  description:
+    'Calculate how many bricks, mortar volume, cement bags, and sand you need for walls, facades, and pillars. US, UK, AU, and Indian standards with opening deductions.',
+  canonicalUrl: 'https://cubicyardkit.com/brick-calculator/',
+};
+
+const faqs = [
+  {
+    question: 'How many bricks do I need per square foot of wall?',
+    answer:
+      'For standard US Modular bricks (7⅝" × 3⅝" × 2¼") laid with standard ⅜" mortar joints, you need approximately 6.75 to 7.0 bricks per square foot for a single-wythe (half-brick / veneer) wall. For a double-wythe (solid 8-inch) brick wall, double that number to 13.5 to 14.0 bricks per square foot. Always add a 5% to 10% wastage allowance for cutting half-bats, corners, and jobsite breakage.',
+  },
+  {
+    question: 'How much mortar do I need for 1,000 bricks?',
+    answer:
+      'For 1,000 standard US modular bricks laid with ⅜-inch bed and head joints, you need approximately 5.5 to 6.5 cubic feet of wet mortar void. Because dry cement and sand shrink by approximately 33% when mixed with water (the dry volume factor of 1.33), this requires roughly 7.5 to 8.5 cubic feet of dry ingredients. In pre-mixed bags, 1,000 bricks requires approximately 28 to 32 eighty-pound bags of Type N or Type S mortar mix (each bag lays 30 to 35 bricks).',
+  },
+  {
+    question: 'What is the difference between actual and nominal brick dimensions?',
+    answer:
+      'Actual dimensions describe the physical size of the manufactured brick unit itself (e.g. 7⅝" length × 3⅝" depth × 2¼" height for US modular). Nominal dimensions describe the modular unit size including one bed joint and one head joint (e.g. 8" × 4" × 2⅔"). Architects and masons plan building grids around nominal dimensions so brick courses align evenly with 8-inch concrete block foundations and standard door frames.',
+  },
+  {
+    question: 'What mortar mix ratio should I use for brickwork?',
+    answer:
+      'Mortar types are categorized by ASTM C270 into Types M, S, N, and O: Type N (1 part Portland cement, 1 part hydrated lime, 6 parts sand, or 1:5 cement:sand) is standard for residential above-grade exterior veneers and non-bearing walls. Type S (1:4 cement:sand) provides 1,800 PSI compressive strength for loadbearing exterior walls, chimneys, and severe wind regions. Type M (1:3 cement:sand) delivers high compressive strength (2,500 PSI) for foundations, retaining walls, and earth-contact masonry.',
+  },
+  {
+    question: 'What is the difference between a single wythe and double wythe wall?',
+    answer:
+      'A wythe is a continuous vertical section of masonry one unit in thickness. A single-wythe wall (such as residential brick veneer) is 3⅝ to 4 inches thick and relies on metal wall ties attached to a timber or steel stud backing for structural stability. A double-wythe wall is two brick layers thick (nominal 8 inches), bonded together with metal ties or masonry header bricks, forming a self-supporting structural or retaining wall.',
+  },
+  {
+    question: 'How do you calculate opening deductions for windows and doors?',
+    answer:
+      'Calculate the gross surface area of the wall (Length × Height). Next, measure the opening dimensions of each window and door (Width × Height) and subtract their total area from the gross wall area to obtain the net brickwork area. For small openings under 2 to 3 square feet (such as small ventilation bricks or hose bib penetrations), masons typically do not deduct, as cutting wastage around the corners offsets the omitted brick volume.',
+  },
+  {
+    question: 'How many bricks are in a cube, strap, or pallet?',
+    answer:
+      'In the United States, commercial brick manufacturers package bricks in cubes or bands (straps) containing approximately 500 standard modular bricks (weighing roughly 2,000 to 2,300 lbs per cube). In the United Kingdom, standard pallets contain 400 to 500 bricks. Always verify your brick supplier\'s specific banding increment to round up your order to the nearest full pallet.',
+  },
+  {
+    question: 'How much does a brick wall cost per square foot installed?',
+    answer:
+      'A residential brick wall typically costs $12 to $25 per square foot installed (materials and labor). Face bricks cost $0.50 to $1.20 per brick ($3.50 to $8.50/sq ft for materials). Mortar and ties add $0.75 to $1.50 per square foot. Skilled union or licensed masonry labor typically ranges from $8 to $16 per square foot depending on wall height, scaffolding, and regional labor markets.',
+  },
+];
+---
+
+<BaseLayout
+  title={seo.title}
+  description={seo.description}
+  canonicalUrl={seo.canonicalUrl}
+  faqs={faqs}
+  breadcrumbs={[{ name: 'Brick Calculator', item: seo.canonicalUrl }]}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-5 sm:pt-7 pb-14 sm:pb-20">
+    <Breadcrumbs items={[{ name: 'Brick Calculator' }]} />
+
+    <!-- Hero Banner — Warm Terracotta / Dark Slate -->
+    <div class="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-slate-900 border border-slate-800 px-6 sm:px-8 lg:px-10 py-7 sm:py-9 lg:py-10 mb-8 sm:mb-10 text-white shadow-md">
+      <div class="absolute -top-12 -right-12 w-96 h-96 bg-rose-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="relative flex flex-wrap items-end justify-between gap-6 lg:gap-8">
+        <div class="max-w-2xl">
+          <div class="inline-flex items-center gap-2 bg-rose-950/80 border border-rose-500/40 rounded-full px-3.5 py-1 text-xs font-bold text-rose-300 mb-3.5 sm:mb-4 shadow-xs">
+            <span class="w-1.5 h-1.5 bg-rose-400 rounded-full animate-pulse shadow-[0_0_8px_#f43f5e]"></span>
+            US Modular · UK · AU · Indian Standards · ASTM C216 / C270
+          </div>
+
+          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-[1.08] mb-2.5 sm:mb-3">
+            Brick Calculator
+          </h1>
+          <p class="text-sm sm:text-base text-slate-200 max-w-xl leading-relaxed">
+            Calculate brick counts, mortar volume, cement bags, sand tonnage, and total installed project budget. Supports single and double wythe walls with window and door deductions.
+          </p>
+        </div>
+
+        <!-- Trust indicators -->
+        <div class="flex flex-wrap sm:flex-nowrap gap-2.5 sm:gap-3 shrink-0 w-full sm:w-auto">
+          {[
+            { val: '6.75', unit: 'per sq ft', label: 'US Modular Yield' },
+            { val: '30–35', unit: 'bricks/bag', label: '80-lb Mortar Yield' },
+            { val: '1.33', unit: 'dry factor', label: 'Mortar Shrinkage' },
+            { val: '500', unit: 'per cube', label: 'Standard Pack' },
+          ].map((stat) => (
+            <div class="flex-1 sm:flex-initial bg-slate-800/90 border border-slate-700/80 rounded-xl px-3.5 sm:px-4 py-2.5 sm:py-3 text-center min-w-[75px] sm:min-w-[90px] shadow-xs">
+              <div class="text-base sm:text-lg font-black text-white font-mono">{stat.val}</div>
+              <div class="text-[10px] text-rose-400 font-bold uppercase tracking-wider">{stat.unit}</div>
+              <div class="text-[10px] text-slate-300 font-medium mt-0.5">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive Calculator Island -->
+    <div class="mb-12 sm:mb-16">
+      <BrickCalculator client:load />
+    </div>
+
+    <!-- Educational & Engineering Masonry Breakdown -->
+    <div class="space-y-12 mb-16">
+
+      <!-- SECTION 1: How to Calculate Bricks & Mortar -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-5">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-[11px] font-bold text-rose-700 bg-rose-50 px-2.5 py-1 rounded-md uppercase tracking-wider">
+            Masonry Geometry
+          </span>
+          <h2 class="text-2xl font-black text-slate-900 mt-2">
+            How to Calculate Brick Quantities: Modular Formulas & Opening Deductions
+          </h2>
+        </div>
+
+        <p class="text-sm text-slate-700 leading-relaxed">
+          Calculating brickwork accurately requires distinguishing between a brick's <strong>actual physical dimensions</strong> and its <strong>nominal modular dimensions</strong> (which include the mortar bed and head joints).
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4 font-mono text-xs">
+          <div class="bg-slate-900 text-white p-4 rounded-xl space-y-2">
+            <span class="text-rose-400 font-bold block uppercase tracking-wider">Face Area Modular Formula</span>
+            <div class="text-sm font-bold bg-slate-800/80 p-2.5 rounded border border-slate-700">
+              Bricks / Sq Ft = 144 ÷ [ (Length in + Joint in) × (Height in + Joint in) ]
+            </div>
+            <p class="text-slate-300 font-sans text-xs pt-1">
+              For US Modular (7⅝" × 2¼" face with ⅜" joint): 144 ÷ (8.0 × 2.625) = <strong>6.86 bricks / sq ft</strong>.
+            </p>
+          </div>
+
+          <div class="bg-slate-900 text-white p-4 rounded-xl space-y-2">
+            <span class="text-rose-400 font-bold block uppercase tracking-wider">Net Brick Order Target</span>
+            <div class="text-sm font-bold bg-slate-800/80 p-2.5 rounded border border-slate-700">
+              Total Bricks = ( Gross Area − Openings ) × ( Bricks / Sq Ft ) × Wythes × ( 1 + Waste% )
+            </div>
+            <p class="text-slate-300 font-sans text-xs pt-1">
+              Deduct measured doors and windows. Add 5% to 10% for cutting half-bats and corner miters.
+            </p>
+          </div>
+        </div>
+
+        <h3 class="text-lg font-bold text-slate-900 pt-2">Worked Contractor Example: 20' × 8' Single-Wythe Brick Veneer Wall</h3>
+        <p class="text-sm text-slate-700 leading-relaxed">
+          Suppose you are constructing a standard residential brick veneer facade measuring <strong>20 feet long by 8 feet high</strong> with one <strong>3' × 4' window</strong>, using US Modular bricks:
+        </p>
+        <ol class="list-decimal list-inside text-sm text-slate-700 space-y-1.5 pl-2 font-medium">
+          <li>Calculate gross wall area: <span class="font-mono text-slate-900">20 ft × 8 ft = 160 sq ft</span></li>
+          <li>Deduct window opening: <span class="font-mono text-slate-900">3 ft × 4 ft = 12 sq ft → Net Area = 148 sq ft</span></li>
+          <li>Calculate theoretical bricks: <span class="font-mono text-slate-900">148 sq ft × 6.86 bricks/sq ft = 1,015 bricks</span></li>
+          <li>Add 10% allowance for cuts and transit breakage: <span class="font-mono text-slate-900">1,015 × 1.10 = 1,117 bricks</span></li>
+          <li>Supplier Order: Round up to <strong class="text-slate-900 font-mono">1,500 bricks</strong> (3 cubes of 500 bricks) or 1,200 bricks if banded in 400-packs.</li>
+          <li>Pre-mixed mortar required: <span class="font-mono text-slate-900">1,117 ÷ 33 bricks/bag ≈ 34 eighty-pound bags</span></li>
+        </ol>
+      </section>
+
+      <!-- SECTION 2: Standard Brick Size Reference Table -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-5">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-[11px] font-bold text-rose-700 bg-rose-50 px-2.5 py-1 rounded-md uppercase tracking-wider">
+            Specification Standards
+          </span>
+          <h2 class="text-2xl font-black text-slate-900 mt-2">
+            Standard Brick Dimensions & Coverage Yields (US, UK, Australia & India)
+          </h2>
+        </div>
+
+        <p class="text-sm text-slate-700 leading-relaxed">
+          Brick sizing standards vary internationally. The reference table below details physical dimensions, standard mortar joints, and coverage yields across major global masonry codes:
+        </p>
+
+        <div class="overflow-x-auto rounded-xl border border-slate-200">
+          <table class="w-full text-xs text-left">
+            <thead class="bg-slate-900 text-white font-bold">
+              <tr>
+                <th class="px-3.5 py-2.5">Brick Standard / Designation</th>
+                <th class="px-3 py-2.5">Actual Dimensions (L × W × H)</th>
+                <th class="px-3 py-2.5 text-center">Mortar Joint</th>
+                <th class="px-3 py-2.5 text-right font-mono text-rose-400">Bricks / Sq Ft</th>
+                <th class="px-3 py-2.5 text-right font-mono text-rose-400">Bricks / m²</th>
+                <th class="px-3.5 py-2.5">Primary Application</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 text-slate-700">
+              <tr>
+                <td class="px-3.5 py-2 font-bold text-slate-900">US Modular (ASTM C216)</td>
+                <td class="px-3 py-2 font-mono">7⅝" × 3⅝" × 2¼" (194×92×57 mm)</td>
+                <td class="px-3 py-2 text-center font-mono">⅜" (9.5 mm)</td>
+                <td class="px-3 py-2 text-right font-mono font-bold text-slate-900">6.86</td>
+                <td class="px-3 py-2 text-right font-mono text-slate-500">73.8</td>
+                <td class="px-3.5 py-2">Most common US residential & commercial veneer</td>
+              </tr>
+              <tr class="bg-slate-50/50">
+                <td class="px-3.5 py-2 font-bold text-slate-900">US Standard / Common</td>
+                <td class="px-3 py-2 font-mono">8" × 3¾" × 2¼" (203×95×57 mm)</td>
+                <td class="px-3 py-2 text-center font-mono">⅜" (9.5 mm)</td>
+                <td class="px-3 py-2 text-right font-mono font-bold text-slate-900">6.55</td>
+                <td class="px-3 py-2 text-right font-mono text-slate-500">70.5</td>
+                <td class="px-3.5 py-2">Traditional architectural brickwork & fireplaces</td>
+              </tr>
+              <tr>
+                <td class="px-3.5 py-2 font-bold text-slate-900">US King Size</td>
+                <td class="px-3 py-2 font-mono">9⅝" × 2⅝" × 2⅝" (244×67×67 mm)</td>
+                <td class="px-3 py-2 text-center font-mono">⅜" (9.5 mm)</td>
+                <td class="px-3 py-2 text-right font-mono font-bold text-slate-900">4.80</td>
+                <td class="px-3 py-2 text-right font-mono text-slate-500">51.7</td>
+                <td class="px-3.5 py-2">Economical large-format residential cladding</td>
+              </tr>
+              <tr class="bg-slate-50/50">
+                <td class="px-3.5 py-2 font-bold text-slate-900">UK Standard (BS EN 771-1)</td>
+                <td class="px-3 py-2 font-mono">215 × 102.5 × 65 mm (8.46×4.04×2.56")</td>
+                <td class="px-3 py-2 text-center font-mono">10 mm</td>
+                <td class="px-3 py-2 text-right font-mono text-slate-500">5.51</td>
+                <td class="px-3 py-2 text-right font-mono font-bold text-slate-900">59.3</td>
+                <td class="px-3.5 py-2">Standard UK facing brick & cavity walls</td>
+              </tr>
+              <tr>
+                <td class="px-3.5 py-2 font-bold text-slate-900">Australian Standard (AS 4455)</td>
+                <td class="px-3 py-2 font-mono">230 × 110 × 76 mm (9.06×4.33×2.99")</td>
+                <td class="px-3 py-2 text-center font-mono">10 mm</td>
+                <td class="px-3 py-2 text-right font-mono text-slate-500">4.50</td>
+                <td class="px-3 py-2 text-right font-mono font-bold text-slate-900">48.5</td>
+                <td class="px-3.5 py-2">Standard Australian residential brick veneer</td>
+              </tr>
+              <tr class="bg-slate-50/50">
+                <td class="px-3.5 py-2 font-bold text-slate-900">Indian Modular (IS 1077)</td>
+                <td class="px-3 py-2 font-mono">190 × 90 × 90 mm (7.48×3.54×3.54")</td>
+                <td class="px-3 py-2 text-center font-mono">10 mm</td>
+                <td class="px-3 py-2 text-right font-mono text-slate-500">4.65</td>
+                <td class="px-3 py-2 text-right font-mono font-bold text-slate-900">50.0</td>
+                <td class="px-3.5 py-2">Bureau of Indian Standards modular masonry (500/m³)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SECTION 3: Mortar Proportions & Dry Volume Physics -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-5">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-[11px] font-bold text-rose-700 bg-rose-50 px-2.5 py-1 rounded-md uppercase tracking-wider">
+            Material Science & ASTM C270
+          </span>
+          <h2 class="text-2xl font-black text-slate-900 mt-2">
+            Mortar Mix Engineering: Cement, Sand Proportions & Dry Volume Shrinkage
+          </h2>
+        </div>
+
+        <p class="text-sm text-slate-700 leading-relaxed">
+          Mortar fills the voids between bricks, bonds the assembly together, and cushions point loads. Understanding mortar calculation requires accounting for dry-volume shrinkage:
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-700">
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <span class="font-bold text-slate-900 block text-sm">The 1.33 Dry-Volume Factor</span>
+            <span class="text-[10px] font-mono text-rose-700 font-bold block">+33% Dry Ingredient Bulk</span>
+            <p class="text-slate-600 leading-relaxed">
+              When water is mixed with dry cement and sand, the fine cement particles fill the interstitial voids between sand grains. As a result, dry mortar ingredients shrink by roughly 25% to 33%. To produce 1.0 cu ft of wet mortar, you must batch <strong>1.33 cu ft of dry materials</strong>.
+            </p>
+          </div>
+
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <span class="font-bold text-slate-900 block text-sm">Portland Cement Bag Density</span>
+            <span class="text-[10px] font-mono text-rose-700 font-bold block">94 lbs = Exactly 1.0 Cu Ft</span>
+            <p class="text-slate-600 leading-relaxed">
+              In US practice, a standard bag of Portland cement weighs exactly 94 pounds because 94 lbs of loose Portland cement occupies precisely <strong>one cubic foot</strong> of volume. This makes batch box proportioning by volume (1 part cement to 4 or 5 parts sand) exact.
+            </p>
+          </div>
+
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <span class="font-bold text-slate-900 block text-sm">Pre-Mixed Mortar Bag Yields</span>
+            <span class="text-[10px] font-mono text-rose-700 font-bold block">0.67 Cu Ft per 80-lb Bag</span>
+            <p class="text-slate-600 leading-relaxed">
+              Commercial 80-lb pre-mixed bags (Quikrete / Sakrete Type N or S) contain pre-blended masonry cement and graded sand. One 80-lb bag yields approximately 0.67 cu ft of wet mortar, enough to lay <strong>30 to 35 standard modular bricks</strong> or 12 to 14 standard 8-inch concrete blocks.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 4: FAQs -->
+      <section class="space-y-6">
+        <div>
+          <span class="text-[11px] font-bold text-rose-700 bg-rose-50 px-2.5 py-1 rounded-md uppercase tracking-wider">
+            Masonry Trade FAQs
+          </span>
+          <h2 class="text-2xl font-black text-slate-900 mt-1">Frequently Asked Questions</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {faqs.map((faq) => (
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-2xs">
+              <h3 class="font-bold text-slate-900 text-sm mb-2">{faq.question}</h3>
+              <p class="text-xs text-slate-600 leading-relaxed">{faq.answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Cross-Calculator Link Matrix -->
+      <RelatedCalculators currentPath={seo.canonicalUrl} />
+
+    </div>
+  </div>
+</BaseLayout>

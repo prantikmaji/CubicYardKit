@@ -235,6 +235,31 @@ export const KEYWORD_MAP: Record<string, PageSEOConfig> = {
     launchPriority: 10,
     status: 'active' as const,
   },
+  brick: {
+    path: '/brick-calculator/',
+    canonicalUrl: `${SITE_ORIGIN}/brick-calculator/`,
+    title: 'Brick Calculator | Brick Quantity, Mortar & Cost Estimator | CubicYardKit',
+    metaDescription:
+      'Calculate how many bricks, mortar volume, cement bags, and sand you need for walls, facades, and pillars. US, UK, AU, and Indian standards with opening deductions.',
+    h1: 'Brick Calculator',
+    primaryKeyword: {
+      keyword: 'brick calculator',
+      volume: 5400,
+      kd: 25,
+      cpc: 1.65,
+    },
+    secondaryKeywords: [
+      { keyword: 'brick quantity calculator', volume: 1600, kd: 22, cpc: 1.45 },
+      { keyword: 'brick wall calculator', volume: 1300, kd: 20, cpc: 1.3 },
+      { keyword: 'how many bricks do I need', volume: 1000, kd: 18, cpc: 1.2 },
+      { keyword: 'brick mortar calculator', volume: 880, kd: 15, cpc: 1.5 },
+      { keyword: 'brick cost calculator', volume: 720, kd: 24, cpc: 1.8 },
+    ],
+    searchIntent:
+      'Material quantity takeoff for brick masonry, including theoretical unit counts, mortar voids, cement/sand ratios, and project cost.',
+    launchPriority: 11,
+    status: 'active' as const,
+  },
   quoteComparison: {
     path: '/quote-comparison/',
     canonicalUrl: `${SITE_ORIGIN}/quote-comparison/`,

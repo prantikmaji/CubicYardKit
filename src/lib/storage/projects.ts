@@ -1,7 +1,7 @@
 export interface SavedProject {
   id: string;
   name: string;
-  projectType: 'cubic-yard' | 'gravel' | 'dirt' | 'topsoil' | 'concrete' | 'concrete-block' | 'patio-plan';
+  projectType: 'cubic-yard' | 'gravel' | 'dirt' | 'topsoil' | 'concrete' | 'concrete-block' | 'patio-plan' | 'brick';
   createdAt: string;
   updatedAt: string;
   inputs: Record<string, any>;

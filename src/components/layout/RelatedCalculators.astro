@@ -73,6 +73,12 @@ const ALL_TOOLS: Record<string, ToolItem> = {
     badge: 'New & Replacement',
     desc: 'Estimate complete driveway cost: volume, demolition, base, rebar, delivery, and finishing.',
   },
+  brick: {
+    href: '/brick-calculator/',
+    title: 'Brick & Mortar',
+    badge: 'Bricks & Cement',
+    desc: 'Calculate bricks, mortar volume, cement bags, sand, and labor for single & double wythe walls.',
+  },
 };
 
 // Map each path to 3 related tools
@@ -81,7 +87,8 @@ const RELATED_MAP: Record<string, string[]> = {
   '/dirt-calculator/': ['topsoil', 'gravel', 'home'],
   '/topsoil-calculator/': ['dirt', 'planner', 'home'],
   '/concrete-calculator/': ['concreteSlabCost', 'concreteDriveway', 'home'],
-  '/concrete-block-calculator/': ['concrete', 'quoteComparison', 'home'],
+  '/concrete-block-calculator/': ['brick', 'concrete', 'home'],
+  '/brick-calculator/': ['concreteBlock', 'concrete', 'planner'],
   '/concrete-slab-cost-calculator/': ['concreteDriveway', 'concrete', 'planner'],
   '/concrete-driveway-cost-calculator/': ['concreteSlabCost', 'concrete', 'gravel'],
   '/planner/': ['gravel', 'quoteComparison', 'concrete'],

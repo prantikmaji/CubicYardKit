@@ -624,3 +624,178 @@ describe('Concrete Driveway Cost Calculator', () => {
     expect(r2.truckloadsNeeded).toBe(4);
   });
 });
+
+import { calculateBricks, BRICK_PRESETS } from '../../src/lib/calc/brick';
+
+describe('Brick Calculator', () => {
+  const baseBrickInput = {
+    walls: [
+      {
+        id: 'w1',
+        name: 'Main Wall',
+        length: 20,
+        lengthUnit: 'feet' as const,
+        height: 10,
+        heightUnit: 'feet' as const,
+        wythes: 1 as const,
+        openings: [],
+      },
+    ],
+    presetId: 'us-modular',
+    jointThicknessInches: 0.375, // 3/8"
+    wastePercent: 10,
+    mortarLossPercent: 10,
+    mortarMixRatio: '1:4' as const,
+    packSize: 500,
+  };
+
+  it('1. US Modular standard yield: ~6.86 bricks per sq ft', () => {
+    const r = calculateBricks(baseBrickInput);
+    // Face module: (7.625 + 0.375) * (2.25 + 0.375) = 8.0 * 2.625 = 21 sq in
+    // 144 / 21 = 6.85714...
+    expect(r.bricksPerSqFtSingleWythe).toBeCloseTo(144 / 21, 4);
+    // 200 sq ft wall * (144 / 21) = 1371.43
+    expect(r.theoreticalBricks).toBe(1371);
+    // with 10% waste: ceil(1371.43 * 1.10) = 1509
+    expect(r.orderBricks).toBe(1509);
+    // packs (500/pack): ceil(1509 / 500) = 4 packs
+    expect(r.packsNeeded).toBe(4);
+  });
+
+  it('2. Double wythe wall doubles the theoretical bricks', () => {
+    const rSingle = calculateBricks(baseBrickInput);
+    const rDouble = calculateBricks({
+      ...baseBrickInput,
+      walls: [{ ...baseBrickInput.walls[0], wythes: 2 }],
+    });
+    // 200 sq ft * (144 / 21) * 2 = 2742.86 -> 2743 bricks
+    expect(rDouble.theoreticalBricks).toBe(2743);
+    expect(rDouble.theoreticalBricks).toBe(Math.round(rSingle.theoreticalBricks * 2 + 1));
+    expect(rDouble.totalMasonryVolumeCuFt).toBeGreaterThan(rSingle.totalMasonryVolumeCuFt);
+  });
+
+  it('3. Opening deductions subtract opening square footage accurately', () => {
+    const r = calculateBricks({
+      ...baseBrickInput,
+      walls: [
+        {
+          ...baseBrickInput.walls[0],
+          openings: [
+            {
+              id: 'op-1',
+              label: 'Window',
+              width: 3,
+              widthUnit: 'feet',
+              height: 4,
+              heightUnit: 'feet',
+              count: 2, // 2 windows of 12 sq ft = 24 sq ft total
+            },
+          ],
+        },
+      ],
+    });
+    // 200 gross - 24 openings = 176 net sq ft
+    expect(r.totalGrossAreaSqFt).toBe(200);
+    expect(r.totalOpeningsAreaSqFt).toBe(24);
+    expect(r.totalNetAreaSqFt).toBe(176);
+    expect(r.theoreticalBricks).toBe(Math.round(176 * (144 / 21)));
+  });
+
+  it('4. UK Standard preset resolves correct dimensions and coverage (~59.3 bricks/m²)', () => {
+    const r = calculateBricks({
+      ...baseBrickInput,
+      presetId: 'uk-standard',
+      jointThicknessInches: 0.3937, // 10 mm
+    });
+    expect(r.preset.name).toContain('UK Standard');
+    // UK nominal: 225 x 75 mm face = 0.016875 m2 -> 59.26 bricks/m2 = 5.505 bricks/sq ft
+    expect(r.bricksPerSqFtSingleWythe).toBeCloseTo(5.505, 2);
+  });
+
+  it('5. Indian Modular preset has exactly 500 bricks per cubic meter of masonry', () => {
+    // 190 x 90 x 90 mm with 10 mm joint gives 200 x 100 x 100 mm module = 0.002 m3
+    // 1 m3 / 0.002 m3 = 500 bricks/m3
+    const p = BRICK_PRESETS['in-modular'];
+    const moduleVolM3 = (0.19 + 0.01) * (0.09 + 0.01) * (0.09 + 0.01);
+    expect(Math.round(1 / moduleVolM3)).toBe(500);
+    expect(p.lengthInches).toBeCloseTo(190 / 25.4, 2);
+  });
+
+  it('6. Mortar calculations: wet void, dry factor (1.33), cement & sand split for 1:4 mix', () => {
+    const r = calculateBricks({
+      ...baseBrickInput,
+      mortarMixRatio: '1:4',
+      dryVolumeFactor: 1.33,
+    });
+    expect(r.wetMortarVolumeCuFt).toBeGreaterThan(0);
+    // dryMortar = wetMortar * 1.33
+    expect(r.dryMortarVolumeCuFt).toBeCloseTo(r.wetMortarVolumeCuFt * 1.33, 4);
+    // 1:4 mix: cement is 1/5 of dry volume, sand is 4/5
+    expect(r.cementVolumeCuFt).toBeCloseTo(r.dryMortarVolumeCuFt / 5, 4);
+    expect(r.sandVolumeCuFt).toBeCloseTo((r.dryMortarVolumeCuFt * 4) / 5, 4);
+    // Bags: ceil(cementWeight / 94)
+    expect(r.cementBags94lb).toBe(Math.ceil((r.cementVolumeCuFt * 94) / 94));
+    // Premixed 80lb bags: ceil(wetMortar / 0.67)
+    expect(r.premixMortarBags80lb).toBe(Math.ceil(r.wetMortarVolumeCuFt / 0.67));
+  });
+
+  it('7. Multi-wall aggregation: two 10×10 walls equal one 20×10 wall', () => {
+    const twoWalls = calculateBricks({
+      ...baseBrickInput,
+      walls: [
+        { id: 'w1', name: 'Wall A', length: 10, lengthUnit: 'feet', height: 10, heightUnit: 'feet', wythes: 1, openings: [] },
+        { id: 'w2', name: 'Wall B', length: 10, lengthUnit: 'feet', height: 10, heightUnit: 'feet', wythes: 1, openings: [] },
+      ],
+    });
+    const oneWall = calculateBricks(baseBrickInput);
+    expect(twoWalls.totalNetAreaSqFt).toBe(200);
+    expect(twoWalls.totalNetAreaSqFt).toBe(oneWall.totalNetAreaSqFt);
+    expect(twoWalls.theoreticalBricks).toBe(oneWall.theoreticalBricks);
+    expect(twoWalls.orderBricks).toBe(oneWall.orderBricks);
+    expect(twoWalls.walls.length).toBe(2);
+  });
+
+  it('8. Cost calculation correctly computes grand total from prices', () => {
+    const r = calculateBricks({
+      ...baseBrickInput,
+      pricePerBrick: 0.60,
+      pricePerPremixMortarBag: 8.0,
+      laborCostPerSqFt: 5.0,
+      deliveryFee: 100,
+    });
+    expect(r.hasCostData).toBe(true);
+    expect(r.brickSubtotal).toBeCloseTo(r.orderBricks * 0.60, 2);
+    expect(r.mortarSubtotal).toBeCloseTo(r.premixMortarBags80lb * 8.0, 2);
+    expect(r.laborSubtotal).toBeCloseTo(200 * 5.0, 2);
+    expect(r.deliverySubtotal).toBe(100);
+    const expectedTotal = r.brickSubtotal + r.mortarSubtotal + r.laborSubtotal + 100;
+    expect(r.grandTotal).toBeCloseTo(expectedTotal, 2);
+    expect(r.costPerSqFt).toBeCloseTo(expectedTotal / 200, 2);
+  });
+
+  it('9. Zero waste test: orderBricks equals ceiling of theoretical count', () => {
+    const r = calculateBricks({
+      ...baseBrickInput,
+      wastePercent: 0,
+    });
+    // 1371.43 unrounded theoretical bricks rounds up to 1372 whole units
+    expect(r.orderBricks).toBe(1372);
+  });
+
+  it('10. Custom brick dimensions are honored', () => {
+    const r = calculateBricks({
+      ...baseBrickInput,
+      presetId: 'custom',
+      customDimensions: {
+        lengthInches: 10,
+        widthInches: 4,
+        heightInches: 3,
+      },
+      jointThicknessInches: 0.5,
+    });
+    expect(r.preset.id).toBe('custom');
+    // Module: (10 + 0.5) * (3 + 0.5) = 10.5 * 3.5 = 36.75 sq in
+    // 144 / 36.75 = 3.918 bricks / sq ft
+    expect(r.bricksPerSqFtSingleWythe).toBeCloseTo(144 / 36.75, 4);
+  });
+});

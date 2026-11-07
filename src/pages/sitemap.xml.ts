@@ -15,6 +15,7 @@ export const GET: APIRoute = async () => {
     '/concrete-slab-cost-calculator/': '2026-11-05',
     '/concrete-driveway-cost-calculator/': '2026-11-05',
     '/brick-calculator/':             '2026-11-07',
+    '/sand-calculator/':              '2026-11-07',
   };
   const companyLastMod = '2026-10-01';
 

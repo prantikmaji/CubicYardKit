@@ -799,3 +799,202 @@ describe('Brick Calculator', () => {
     expect(r.bricksPerSqFtSingleWythe).toBeCloseTo(144 / 36.75, 4);
   });
 });
+
+import { calculateSand, convertSandVolumeWeight } from '../../src/lib/calc/sand';
+
+describe('Sand Calculator', () => {
+  const baseSandInput = {
+    inputMode: 'dimensions' as const,
+    sections: [
+      {
+        id: 'sec-1',
+        name: 'Patio Bedding Base',
+        shape: 'rectangle' as const,
+        length: 20,
+        lengthUnit: 'feet' as const,
+        width: 10,
+        widthUnit: 'feet' as const,
+        depth: 2,
+        depthUnit: 'inches' as const,
+      },
+    ],
+    materialId: 'concrete-sand' as const,
+    compactionPercent: 0,
+    wastePercent: 0,
+  };
+
+  it('1. Quick rectangular volume: 20x10 at 2" depth, 0% waste/compaction', () => {
+    const r = calculateSand(baseSandInput);
+    expect(r.totalAreaSqFt).toBe(200);
+    // 200 * (2 / 12) = 33.333 cu ft
+    expect(r.netCubicFeet).toBeCloseTo(200 / 6, 4);
+    // 33.333 / 27 = 1.234567 cu yd
+    expect(r.netCubicYards).toBeCloseTo(200 / (6 * 27), 4);
+    expect(r.orderVolumeCubicYards).toBeCloseTo(r.netCubicYards, 4);
+    // ASTM C33 concrete sand = 2700 lbs/cu yd
+    expect(r.densityLbsPerCuYd).toBe(2700);
+    // totalPounds = 1.234567 * 2700 = 3333.33 lbs
+    expect(r.totalPounds).toBeCloseTo((200 / 162) * 2700, 2);
+    // totalTons = 3333.33 / 2000 = 1.6667 tons
+    expect(r.totalTons).toBeCloseTo(r.totalPounds / 2000, 4);
+  });
+
+  it('2. Compaction and waste separation: net -> placed -> ordered', () => {
+    const r = calculateSand({
+      ...baseSandInput,
+      compactionPercent: 10,
+      wastePercent: 10,
+    });
+    // netCuYds = 1.234567
+    const net = 200 / 162;
+    // compactedPlaced = net * 1.10
+    expect(r.compactedPlacedCubicYards).toBeCloseTo(net * 1.10, 4);
+    // orderVolume = compactedPlaced * 1.10 = net * 1.21
+    expect(r.orderVolumeCubicYards).toBeCloseTo(net * 1.10 * 1.10, 4);
+    expect(r.orderVolumeCubicFeet).toBeCloseTo(r.orderVolumeCubicYards * 27, 4);
+  });
+
+  it('3. Bag counts use verified yield (50 lb bag = 0.50 cu ft yield)', () => {
+    const r = calculateSand(baseSandInput);
+    // netCubicFeet = 33.333 cu ft
+    // bags needed = ceil(33.333 / 0.50) = ceil(66.666) = 67 bags
+    expect(r.bags50lbNeeded).toBe(67);
+    expect(r.leftoverBagCuFt).toBeCloseTo(67 * 0.50 - 33.3333, 3);
+  });
+
+  it('4. Circular geometry: 10 ft diameter circle at 3" depth', () => {
+    const r = calculateSand({
+      inputMode: 'dimensions',
+      sections: [
+        {
+          id: 'circle-pool',
+          name: 'Round Pool Base',
+          shape: 'circle',
+          diameter: 10,
+          diameterUnit: 'feet',
+          depth: 3,
+          depthUnit: 'inches',
+        },
+      ],
+      materialId: 'masonry-sand',
+      compactionPercent: 0,
+      wastePercent: 0,
+    });
+    const expectedArea = Math.PI * 25; // 78.5398 sq ft
+    expect(r.totalAreaSqFt).toBeCloseTo(expectedArea, 4);
+    const expectedCuFt = expectedArea * 0.25; // 19.635 cu ft
+    expect(r.netCubicFeet).toBeCloseTo(expectedCuFt, 4);
+    expect(r.densityLbsPerCuYd).toBe(2600); // Masonry sand
+  });
+
+  it('5. Multi-section take-off aggregates area and volumes cleanly', () => {
+    const r = calculateSand({
+      inputMode: 'dimensions',
+      sections: [
+        {
+          id: 's1',
+          name: 'Zone A',
+          shape: 'rectangle',
+          length: 10,
+          lengthUnit: 'feet',
+          width: 10,
+          widthUnit: 'feet',
+          depth: 2,
+          depthUnit: 'inches',
+        },
+        {
+          id: 's2',
+          name: 'Zone B',
+          shape: 'rectangle',
+          length: 10,
+          lengthUnit: 'feet',
+          width: 10,
+          widthUnit: 'feet',
+          depth: 2,
+          depthUnit: 'inches',
+        },
+      ],
+      materialId: 'concrete-sand',
+      compactionPercent: 0,
+      wastePercent: 0,
+    });
+    expect(r.totalAreaSqFt).toBe(200);
+    expect(r.sectionBreakdown.length).toBe(2);
+    expect(r.netCubicFeet).toBeCloseTo(200 / 6, 4);
+  });
+
+  it('6. Known area mode calculates volume from direct surface area', () => {
+    const r = calculateSand({
+      inputMode: 'area',
+      sections: [],
+      knownArea: 500,
+      knownAreaUnit: 'sqFt',
+      knownAreaDepth: 1,
+      knownAreaDepthUnit: 'inches',
+      materialId: 'paver-bedding-sand',
+      compactionPercent: 5,
+      wastePercent: 5,
+    });
+    expect(r.totalAreaSqFt).toBe(500);
+    // 500 * (1 / 12) = 41.6667 cu ft
+    expect(r.netCubicFeet).toBeCloseTo(500 / 12, 4);
+  });
+
+  it('7. Direct volume mode converts direct cubic yards accurately', () => {
+    const r = calculateSand({
+      inputMode: 'direct-volume',
+      sections: [],
+      directVolume: 5,
+      directVolumeUnit: 'cubicYards',
+      materialId: 'dry-sand',
+      compactionPercent: 0,
+      wastePercent: 0,
+    });
+    expect(r.netCubicYards).toBe(5);
+    expect(r.netCubicFeet).toBe(135);
+    // 5 cu yd * 2600 lbs = 13000 lbs = 6.5 tons
+    expect(r.totalPounds).toBe(13000);
+    expect(r.totalTons).toBe(6.5);
+  });
+
+  it('8. Custom density override is applied accurately', () => {
+    const r = calculateSand({
+      ...baseSandInput,
+      materialId: 'custom',
+      customDensityLbsPerCuYd: 3000,
+    });
+    expect(r.densityLbsPerCuYd).toBe(3000);
+    expect(r.densityTonsPerCuYd).toBe(1.5);
+    expect(r.totalPounds).toBeCloseTo(r.orderVolumeCubicYards * 3000, 2);
+  });
+
+  it('9. Bag vs Bulk comparison calculates costs and cheaper option', () => {
+    const r = calculateSand({
+      ...baseSandInput,
+      pricingUnit: 'cubic_yard',
+      unitPrice: 50, // $50/yd bulk
+      deliveryFee: 75, // $75 delivery
+      bagPrice: 5.0, // $5.00 per 50lb bag
+    });
+    expect(r.bagVsBulkComparison.canCompare).toBe(true);
+    // 67 bags * $5 = $335
+    expect(r.bagVsBulkComparison.bagTotalCost).toBe(67 * 5.0);
+    // Bulk: 1.234567 yds * $50 + $75 = $61.73 + $75 = $136.73
+    const expectedBulk = r.orderVolumeCubicYards * 50 + 75;
+    expect(r.bagVsBulkComparison.bulkTotalCost).toBeCloseTo(expectedBulk, 2);
+    expect(r.bagVsBulkComparison.cheaperOption).toBe('bulk');
+  });
+
+  it('10. Reverse volume/weight converter works bidirectionally', () => {
+    // 2 cu yds at 2700 lbs/cu yd = 5400 lbs = 2.7 tons
+    const res1 = convertSandVolumeWeight({ volumeCuYds: 2, densityLbsPerCuYd: 2700 });
+    expect(res1.weightTons).toBe(2.7);
+    expect(res1.weightLbs).toBe(5400);
+    expect(res1.volumeCuFt).toBe(54);
+
+    // 5.4 tons at 2700 lbs/cu yd = 10800 lbs / 2700 = 4.0 cu yds
+    const res2 = convertSandVolumeWeight({ weightTons: 5.4, densityLbsPerCuYd: 2700 });
+    expect(res2.volumeCuYds).toBe(4.0);
+    expect(res2.volumeCuFt).toBe(108);
+  });
+});

@@ -260,6 +260,32 @@ export const KEYWORD_MAP: Record<string, PageSEOConfig> = {
     launchPriority: 11,
     status: 'active' as const,
   },
+  sand: {
+    path: '/sand-calculator/',
+    canonicalUrl: `${SITE_ORIGIN}/sand-calculator/`,
+    title: 'Sand Calculator | Volume, Weight, Bags & Cost Estimator | CubicYardKit',
+    metaDescription:
+      'Calculate sand quantity in cubic yards, tons, metric tonnes, and 50-lb bags. Covers paver bedding, play sand, masonry mortar, pool bases, and lawn leveling with ASTM densities.',
+    h1: 'Sand Calculator',
+    primaryKeyword: {
+      keyword: 'sand calculator',
+      volume: 14800,
+      kd: 22,
+      cpc: 0.65,
+    },
+    secondaryKeywords: [
+      { keyword: 'sand volume calculator', volume: 2900, kd: 18, cpc: 0.45 },
+      { keyword: 'sand weight calculator', volume: 2400, kd: 19, cpc: 0.35 },
+      { keyword: 'sand cost calculator', volume: 1600, kd: 20, cpc: 0.75 },
+      { keyword: 'how much does a yard of sand weigh', volume: 1300, kd: 14, cpc: 0.2 },
+      { keyword: 'paver sand calculator', volume: 1000, kd: 15, cpc: 0.55 },
+      { keyword: 'sandbox sand calculator', volume: 880, kd: 12, cpc: 0.4 },
+    ],
+    searchIntent:
+      'Material quantity takeoff for sand applications including paver bedding, sandboxes, pool cushions, mortar, bulk-vs-bag analysis, and tonnage.',
+    launchPriority: 12,
+    status: 'active' as const,
+  },
   quoteComparison: {
     path: '/quote-comparison/',
     canonicalUrl: `${SITE_ORIGIN}/quote-comparison/`,

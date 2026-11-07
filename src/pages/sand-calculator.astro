@@ -1,0 +1,323 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SandCalculator from '../components/calc/SandCalculator';
+import Breadcrumbs from '../components/seo/Breadcrumbs.astro';
+import RelatedCalculators from '../components/layout/RelatedCalculators.astro';
+
+const seo = {
+  title: 'Sand Calculator | Volume, Weight, Bags & Cost Estimator | CubicYardKit',
+  description:
+    'Calculate sand quantity in cubic yards, tons, metric tonnes, and 50-lb bags. Covers paver bedding, play sand, masonry mortar, pool bases, and lawn leveling with ASTM densities.',
+  canonicalUrl: 'https://cubicyardkit.com/sand-calculator/',
+};
+
+const faqs = [
+  {
+    question: 'How do I calculate how much sand I need for a project?',
+    answer:
+      'Measure the length and width of your project area in feet, and your desired layer depth in inches. Multiply length by width to obtain surface area in square feet, then multiply by depth in inches and divide by 324 to get cubic yards: (Length ft × Width ft × Depth in) ÷ 324 = Cubic Yards. For circular areas, calculate (π × Radius ft² × Depth in) ÷ 324. Always add a 5% to 10% allowance for subgrade undulations and compaction.',
+  },
+  {
+    question: 'How much does a cubic yard of sand weigh in tons?',
+    answer:
+      'A cubic yard of dry concrete sand (ASTM C33) weighs approximately 2,700 pounds, which equals 1.35 US short tons (2,700 ÷ 2,000). Fine masonry sand or dry play sand weighs approximately 2,600 pounds (1.30 tons) per cubic yard. If the sand is wet or saturated after rain, it can weigh between 3,100 and 3,400 pounds (1.55 to 1.70 tons) per cubic yard because water fills the interstitial pore spaces between grains.',
+  },
+  {
+    question: 'How many 50 lb bags of sand are in a cubic yard or ton?',
+    answer:
+      'One cubic yard contains 27 cubic feet. A standard 50-lb bag of dry all-purpose or play sand yields approximately 0.50 cubic feet of volume. Therefore, you need exactly 54 bags (27 ÷ 0.50) to equal one cubic yard. To equal one US short ton (2,000 lbs), you need exactly 40 bags of 50 lbs each. For polymeric joint sand, bags typically yield ~0.45 cubic feet, requiring approximately 60 bags per cubic yard.',
+  },
+  {
+    question: 'Is it cheaper to buy bagged sand or bulk sand by the dump truck?',
+    answer:
+      'For small DIY repairs under 0.5 cubic yards (under 25 to 30 bags), bagged sand from a home improvement center is usually cheaper and far more convenient to transport and store in a garage. For projects requiring 1.0 cubic yard or more (such as paver patios, swimming pool cushions, or playground sandboxes), bulk sand delivered by a local aggregate supplier is dramatically cheaper—typically saving 50% to 70% even after factoring in a $60 to $100 flat dump truck delivery fee.',
+  },
+  {
+    question: 'What is the difference between concrete sand and masonry sand?',
+    answer:
+      'Concrete sand (ASTM C33, also known as sharp sand, coarse sand, or torpedo sand) contains larger, angular, fractured particles screened to retain structural interlocking strength. It is the mandatory standard for concrete mixes and the 1-inch bedding layer under interlocking concrete pavers. Masonry sand (ASTM C144) is washed and fine-screened to remove all coarse grains and pebbles, creating a smooth, workable mortar paste for bricklaying and a gentle, puncture-free cushion under vinyl swimming pool liners.',
+  },
+  {
+    question: 'How deep should sand be under concrete pavers?',
+    answer:
+      'According to Interlocking Concrete Pavement Institute (ICPI) Tech Spec 2, paver bedding sand should be spread at a uniform uncompacted thickness of exactly 1 inch (25 mm) over a compacted crushed gravel base. Never install bedding sand thicker than 1.5 inches, as excess sand will shift, rut, and pump upward unevenly under vehicular or pedestrian loads. The bedding sand compacts roughly 1/8 to 3/16 inch upward into the joints during final plate compaction.',
+  },
+  {
+    question: 'What is sand "bulking" and why does damp sand take up more volume?',
+    answer:
+      'Bulking is a physical phenomenon where moisture contents between 4% and 8% create surface tension film around individual sand grains, pushing them apart and preventing them from packing tightly. This can expand loose sand volume by 15% to 30% compared to completely dry or fully inundated sand. When buying damp sand by the cubic yard, it will settle and shrink in volume once compacted or dried.',
+  },
+  {
+    question: 'How much sand do I need for a children’s sandbox?',
+    answer:
+      'For a standard backyard children’s sandbox, a sand depth of 6 inches (0.5 feet) provides ideal digging depth and safety. For a 4-foot by 4-foot box at 6 inches deep, you need 8 cubic feet of sand (0.30 cubic yards), which requires 16 standard 50-lb bags of sterilized play sand (about 800 lbs total). For an 8-foot by 8-foot sandbox, you need 32 cubic feet (1.19 cubic yards or ~3,100 lbs), requiring 64 fifty-pound bags or 1.5 tons of bulk play sand.',
+  },
+];
+---
+
+<BaseLayout
+  title={seo.title}
+  description={seo.description}
+  canonicalUrl={seo.canonicalUrl}
+  faqs={faqs}
+  breadcrumbs={[{ name: 'Sand Calculator', item: seo.canonicalUrl }]}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-5 sm:pt-7 pb-14 sm:pb-20">
+    <Breadcrumbs items={[{ name: 'Sand Calculator' }]} />
+
+    <!-- Hero Banner — Warm Amber / Sandstone & Dark Slate -->
+    <div class="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-slate-900 border border-slate-800 px-6 sm:px-8 lg:px-10 py-7 sm:py-9 lg:py-10 mb-8 sm:mb-10 text-white shadow-md">
+      <div class="absolute -top-12 -right-12 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="relative flex flex-wrap items-end justify-between gap-6 lg:gap-8">
+        <div class="max-w-2xl">
+          <div class="inline-flex items-center gap-2 bg-amber-950/80 border border-amber-500/40 rounded-full px-3.5 py-1 text-xs font-bold text-amber-300 mb-3.5 sm:mb-4 shadow-xs">
+            <span class="w-1.5 h-1.5 bg-amber-400 rounded-full animate-pulse shadow-[0_0_8px_#f59e0b]"></span>
+            ASTM C33 & C144 Aggregate Standards · ICPI Paver Specs · Certified Scale Densities
+          </div>
+
+          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-[1.08] mb-2.5 sm:mb-3">
+            Sand Calculator
+          </h1>
+          <p class="text-sm sm:text-base text-slate-200 max-w-xl leading-relaxed">
+            Calculate sand volume, weight in US short tons and metric tonnes, 50-lb bag counts, and project cost. Engineered for paver bedding, children's sandboxes, pool bases, and lawn leveling with separated compaction and wastage models.
+          </p>
+        </div>
+
+        <!-- Trust indicators -->
+        <div class="flex flex-wrap sm:flex-nowrap gap-2.5 sm:gap-3 shrink-0 w-full sm:w-auto">
+          {[
+            { val: '2,700', unit: 'lb/yd³', label: 'Concrete Sand (ASTM C33)' },
+            { val: '2,600', unit: 'lb/yd³', label: 'Masonry / Play Sand' },
+            { val: '54', unit: 'bags/yd³', label: '50-lb Bags (0.5 cu ft)' },
+            { val: '1.35', unit: 'tons/yd³', label: 'US Short Tons' },
+          ].map(stat => (
+            <div class="flex-1 sm:flex-initial bg-slate-800/90 border border-slate-700/80 rounded-xl px-3.5 sm:px-4 py-2.5 sm:py-3 text-center min-w-[75px] sm:min-w-[90px] shadow-xs">
+              <div class="text-base sm:text-lg font-black text-white font-mono">{stat.val}</div>
+              <div class="text-[10px] text-amber-400 font-bold uppercase tracking-wider">{stat.unit}</div>
+              <div class="text-[10px] text-slate-300 font-medium mt-0.5">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive Sand Calculator Island -->
+    <div class="mb-12 sm:mb-16">
+      <SandCalculator client:load />
+    </div>
+
+    <!-- Trade Editorial & Volumetric Engineering Deep Dive -->
+    <div class="space-y-12 mb-16">
+
+      <!-- SECTION 1: Volumetric & Weight Formulas -->
+      <section id="formula" class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-5 scroll-mt-20">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-[11px] font-bold text-amber-800 bg-amber-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Engineering Math</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-2">How to Calculate Sand: Formulas for Yards, Tons & Bags</h2>
+        </div>
+
+        <p class="text-sm text-slate-700 leading-relaxed">
+          In construction and site development, sand is surveyed geometrically in <strong>cubic yards</strong> (or cubic meters) but commercially invoiced at quarry scales in <strong>US short tons</strong> (or metric tonnes). Accurately estimating sand requires three distinct steps: determining net void volume, adjusting for mechanical compaction and order waste, and applying material bulk density:
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-4 font-mono text-xs">
+          <div class="bg-slate-900 text-white p-4 rounded-xl space-y-2">
+            <span class="text-amber-400 font-bold block uppercase tracking-wider">1. Net Volume (Yards)</span>
+            <div class="text-sm font-bold bg-slate-800/80 p-2.5 rounded border border-slate-700">
+              Cubic Yards = ( Length ft × Width ft × Depth in ) ÷ 324
+            </div>
+            <p class="text-slate-300 font-sans text-xs pt-1">
+              Derived from (L × W × D/12) ÷ 27. Circular: (π × R² × D/12) ÷ 27.
+            </p>
+          </div>
+
+          <div class="bg-slate-900 text-white p-4 rounded-xl space-y-2">
+            <span class="text-amber-400 font-bold block uppercase tracking-wider">2. Placed & Order Volume</span>
+            <div class="text-sm font-bold bg-slate-800/80 p-2.5 rounded border border-slate-700">
+              V_order = V_net × (1 + C%) × (1 + W%)
+            </div>
+            <p class="text-slate-300 font-sans text-xs pt-1">
+              Keeps compaction settlement (C%) separate from jobsite waste (W%).
+            </p>
+          </div>
+
+          <div class="bg-slate-900 text-white p-4 rounded-xl space-y-2">
+            <span class="text-amber-400 font-bold block uppercase tracking-wider">3. Scale Weight (Tons)</span>
+            <div class="text-sm font-bold bg-slate-800/80 p-2.5 rounded border border-slate-700">
+              Tons = V_order × ( Density lb/yd³ ÷ 2,000 )
+            </div>
+            <p class="text-slate-300 font-sans text-xs pt-1">
+              Concrete sand = 1.35 tons/yd³. Wet saturated sand = 1.60 tons/yd³.
+            </p>
+          </div>
+        </div>
+
+        <h3 class="text-lg font-bold text-slate-900 pt-2">Worked Contractor Example: 20' × 15' Paver Bedding Layer</h3>
+        <p class="text-sm text-slate-700 leading-relaxed">
+          Suppose you are preparing a setting bed for an interlocking concrete paver patio measuring <strong>20 feet long by 15 feet wide</strong> with a <strong>1-inch (25 mm) uniform screeded layer</strong> of ASTM C33 concrete sand:
+        </p>
+        <ol class="list-decimal list-inside text-sm text-slate-700 space-y-1.5 pl-2 font-medium">
+          <li>Calculate surface area: <span class="font-mono text-slate-900">20 ft × 15 ft = 300 sq ft</span></li>
+          <li>Calculate net geometric volume: <span class="font-mono text-slate-900">(300 sq ft × 1 in) ÷ 324 = 0.926 cu yds (25.0 cu ft)</span></li>
+          <li>Add 8% compaction allowance (bedding sand compacts slightly under plate compactor): <span class="font-mono text-slate-900">0.926 × 1.08 = 1.00 cu yd (27.0 cu ft)</span></li>
+          <li>Add 10% order contingency for screed spill and edge border: <span class="font-mono text-slate-900">1.00 × 1.10 = 1.10 cu yds (29.7 cu ft)</span></li>
+          <li>Convert to certified quarry scale weight (2,700 lb/yd³): <span class="font-mono text-slate-900">1.10 cu yds × 1.35 tons/yd = 1.49 US Short Tons (2,970 lbs)</span></li>
+          <li>Bagged alternative: <span class="font-mono text-slate-900">29.7 cu ft ÷ 0.50 cu ft/bag = 60 bags (50-lb each)</span></li>
+        </ol>
+      </section>
+
+      <!-- SECTION 2: Material Specifications & Bulk Density Table -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-5">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-[11px] font-bold text-amber-800 bg-amber-50 px-2.5 py-1 rounded-md uppercase tracking-wider">ASTM & ICPI Standards</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-2">Sand Types, Bulk Densities & Applications Reference Table</h2>
+        </div>
+
+        <p class="text-sm text-slate-700 leading-relaxed">
+          Never assume all sand has a universal density of 100 lbs per cubic foot. Mineral composition, grain gradation, moisture saturation, and manufacturing process dramatically alter weight:
+        </p>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="bg-slate-100/80 text-slate-900 font-bold border-b border-slate-200">
+                <th class="py-3 px-3.5">Sand Classification</th>
+                <th class="py-3 px-3.5">Standard Specification</th>
+                <th class="py-3 px-3.5">Loose Bulk Density</th>
+                <th class="py-3 px-3.5">Tons / Cu Yd</th>
+                <th class="py-3 px-3.5">Bags / Cu Yd (50 lb)</th>
+                <th class="py-3 px-3.5">Primary Application</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 text-slate-700">
+              <tr class="hover:bg-slate-50/50">
+                <td class="py-3 px-3.5 font-bold text-slate-900">Concrete Sand (Sharp / Torpedo)</td>
+                <td class="py-3 px-3.5 font-mono">ASTM C33 / CSA A23.1</td>
+                <td class="py-3 px-3.5 font-mono">2,700 lb/yd³ (100 lb/ft³)</td>
+                <td class="py-3 px-3.5 font-mono font-semibold text-slate-900">1.35 tons</td>
+                <td class="py-3 px-3.5 font-mono">54 bags</td>
+                <td class="py-3 px-3.5">Paver bedding layers, structural concrete mixes</td>
+              </tr>
+              <tr class="hover:bg-slate-50/50">
+                <td class="py-3 px-3.5 font-bold text-slate-900">Masonry / Mortar Sand</td>
+                <td class="py-3 px-3.5 font-mono">ASTM C144</td>
+                <td class="py-3 px-3.5 font-mono">2,600 lb/yd³ (96.3 lb/ft³)</td>
+                <td class="py-3 px-3.5 font-mono font-semibold text-slate-900">1.30 tons</td>
+                <td class="py-3 px-3.5 font-mono">54 bags</td>
+                <td class="py-3 px-3.5">Brick/block mortar, pool liners, fine lawn topdressing</td>
+              </tr>
+              <tr class="hover:bg-slate-50/50">
+                <td class="py-3 px-3.5 font-bold text-slate-900">Clean Washed Play Sand</td>
+                <td class="py-3 px-3.5 font-mono">ASTM F1292 / CPSC 325</td>
+                <td class="py-3 px-3.5 font-mono">2,600 lb/yd³ (96.3 lb/ft³)</td>
+                <td class="py-3 px-3.5 font-mono font-semibold text-slate-900">1.30 tons</td>
+                <td class="py-3 px-3.5 font-mono">54 bags</td>
+                <td class="py-3 px-3.5">Children's sandboxes, preschool play pits</td>
+              </tr>
+              <tr class="hover:bg-slate-50/50">
+                <td class="py-3 px-3.5 font-bold text-slate-900">Utility / Fill Sand</td>
+                <td class="py-3 px-3.5 font-mono">AASHTO M-145 A-1-b</td>
+                <td class="py-3 px-3.5 font-mono">2,500 lb/yd³ (92.6 lb/ft³)</td>
+                <td class="py-3 px-3.5 font-mono font-semibold text-slate-900">1.25 tons</td>
+                <td class="py-3 px-3.5 font-mono">52 bags</td>
+                <td class="py-3 px-3.5">Pipe bedding, trench backfilling, foundation leveling</td>
+              </tr>
+              <tr class="hover:bg-slate-50/50">
+                <td class="py-3 px-3.5 font-bold text-slate-900">Damp Sand (Bulked)</td>
+                <td class="py-3 px-3.5 font-mono">ACI 211.1 / ASTM C128</td>
+                <td class="py-3 px-3.5 font-mono">2,800 lb/yd³ (103.7 lb/ft³)</td>
+                <td class="py-3 px-3.5 font-mono font-semibold text-slate-900">1.40 tons</td>
+                <td class="py-3 px-3.5 font-mono">56 bags</td>
+                <td class="py-3 px-3.5">Yard stockpile sand with 4–8% moisture</td>
+              </tr>
+              <tr class="hover:bg-slate-50/50">
+                <td class="py-3 px-3.5 font-bold text-slate-900">Wet / Saturated Sand</td>
+                <td class="py-3 px-3.5 font-mono">USACE EM 1110-2-1906</td>
+                <td class="py-3 px-3.5 font-mono">3,200 lb/yd³ (118.5 lb/ft³)</td>
+                <td class="py-3 px-3.5 font-mono font-semibold text-slate-900">1.60 tons</td>
+                <td class="py-3 px-3.5 font-mono">64 bags</td>
+                <td class="py-3 px-3.5">Water-saturated sand after heavy rainfall</td>
+              </tr>
+              <tr class="hover:bg-slate-50/50">
+                <td class="py-3 px-3.5 font-bold text-slate-900">Polymeric Joint Sand</td>
+                <td class="py-3 px-3.5 font-mono">ASTM C144 + Polymers</td>
+                <td class="py-3 px-3.5 font-mono">2,970 lb/yd³ (110 lb/ft³)</td>
+                <td class="py-3 px-3.5 font-mono font-semibold text-slate-900">1.485 tons</td>
+                <td class="py-3 px-3.5 font-mono">60 bags</td>
+                <td class="py-3 px-3.5">Locking interlocking paver joints; resists weeds & ants</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SECTION 3: The Physics of Bulking & Moisture -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-4">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-[11px] font-bold text-amber-800 bg-amber-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Soil Mechanics</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-2">The Bulking Phenomenon: Why Damp Sand Expands in Volume</h2>
+        </div>
+
+        <p class="text-sm text-slate-700 leading-relaxed">
+          One of the most counter-intuitive physical properties of fine sand is <strong>bulking</strong>. When completely dry sand is moistened with 4% to 8% water by weight, thin films of water form around each individual particle. The resulting <strong>surface tension</strong> forces the sand grains apart, preventing them from sliding into a tight, dense packing matrix.
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs bg-slate-50 p-4 rounded-xl border border-slate-200">
+          <div>
+            <div class="font-bold text-slate-900 mb-1">Volumetric Expansion (15% to 30%)</div>
+            <p class="text-slate-600 leading-relaxed">
+              Damp sand can occupy up to 30% more volume than the same mass of oven-dry sand. If a quarry sells bulk sand by volume when damp, you receive fewer solid mineral grains per cubic yard than expected.
+            </p>
+          </div>
+          <div>
+            <div class="font-bold text-slate-900 mb-1">Collapse Under Full Saturation</div>
+            <p class="text-slate-600 leading-relaxed">
+              When sand becomes completely flooded (saturated past 15% moisture), the surface tension meniscus breaks down completely. The sand collapses back into a dense state with water filling the pores, resulting in heavy scale weights (up to 3,400 lb/yd³).
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 4: Bags vs Bulk Procurement Economics -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-4">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-[11px] font-bold text-amber-800 bg-amber-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Procurement Economics</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-2">Bags vs. Bulk Dump Truck Delivery: Financial Decision Guide</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+          <div class="border border-slate-200 rounded-xl p-4 bg-slate-50/50 space-y-2">
+            <h3 class="font-bold text-slate-900 flex items-center gap-1.5 text-base">
+              <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+              When to Buy 50-lb Bags
+            </h3>
+            <ul class="list-disc list-inside text-xs text-slate-600 space-y-1.5 leading-relaxed">
+              <li>Project requires under <strong>0.5 to 0.75 cubic yards</strong> (under 30 to 40 bags).</li>
+              <li>No driveway access or clear dumping zone for a large 10-wheeler dump truck.</li>
+              <li>Specialized sand required (e.g. non-toxic sterilized play sand or moisture-sealed polymeric sand).</li>
+              <li>Multi-weekend DIY project where open bulk stockpiles would wash away or blow in wind.</li>
+            </ul>
+          </div>
+
+          <div class="border border-slate-200 rounded-xl p-4 bg-slate-50/50 space-y-2">
+            <h3 class="font-bold text-slate-900 flex items-center gap-1.5 text-base">
+              <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+              When to Order Bulk Quarry Delivery
+            </h3>
+            <ul class="list-disc list-inside text-xs text-slate-600 space-y-1.5 leading-relaxed">
+              <li>Project requires <strong>1.0 cubic yard or more</strong> (54+ bags).</li>
+              <li>Bulk sand costs ~$40 to $65 per cubic yard versus ~$250 to $350 for the equivalent in retail bags.</li>
+              <li>Even with a $75 to $100 flat trucking delivery fee, bulk orders save 50% to 70% overall.</li>
+              <li>Saves massive manual labor: unloading 50 heavy bags from an SUV or truck bed by hand.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Interlinked Material & Construction Calculators -->
+    <RelatedCalculators currentPath="/sand-calculator/" />
+  </div>
+</BaseLayout>

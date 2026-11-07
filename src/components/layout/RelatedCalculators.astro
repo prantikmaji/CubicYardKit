@@ -79,19 +79,26 @@ const ALL_TOOLS: Record<string, ToolItem> = {
     badge: 'Bricks & Cement',
     desc: 'Calculate bricks, mortar volume, cement bags, sand, and labor for single & double wythe walls.',
   },
+  sand: {
+    href: '/sand-calculator/',
+    title: 'Sand & Bedding',
+    badge: 'Tons & Bags',
+    desc: 'Calculate sand volume, weight in tons, 50-lb bags, paver bedding, play sand, and bulk pricing.',
+  },
 };
 
 // Map each path to 3 related tools
 const RELATED_MAP: Record<string, string[]> = {
-  '/gravel-calculator/': ['planner', 'dirt', 'concrete'],
+  '/gravel-calculator/': ['sand', 'planner', 'concrete'],
   '/dirt-calculator/': ['topsoil', 'gravel', 'home'],
   '/topsoil-calculator/': ['dirt', 'planner', 'home'],
   '/concrete-calculator/': ['concreteSlabCost', 'concreteDriveway', 'home'],
   '/concrete-block-calculator/': ['brick', 'concrete', 'home'],
-  '/brick-calculator/': ['concreteBlock', 'concrete', 'planner'],
+  '/brick-calculator/': ['concreteBlock', 'sand', 'planner'],
+  '/sand-calculator/': ['gravel', 'planner', 'concrete'],
   '/concrete-slab-cost-calculator/': ['concreteDriveway', 'concrete', 'planner'],
   '/concrete-driveway-cost-calculator/': ['concreteSlabCost', 'concrete', 'gravel'],
-  '/planner/': ['gravel', 'quoteComparison', 'concrete'],
+  '/planner/': ['gravel', 'sand', 'concrete'],
   '/quote-comparison/': ['planner', 'gravel', 'concrete'],
 };
 

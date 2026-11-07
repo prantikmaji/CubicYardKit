@@ -453,3 +453,4 @@ export function calculateBricks(input: BrickCalculationInput): BrickCalculationR
     missingPriceKeys,
   };
 }
+

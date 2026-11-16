@@ -431,7 +431,7 @@ export function calculateAsphalt(input: AsphaltCalculationInput): AsphaltCalcula
         name: sec.name || 'Paving Section',
         areaSqFt,
         areaSqYards: areaSqFt / 9,
-        netCuFt,
+        netCuFt: secCuFt,
         netCuYds: secCuYd,
         netTons: secTons,
         orderTons: secOrderTons,
@@ -526,7 +526,8 @@ export function calculateAsphalt(input: AsphaltCalculationInput): AsphaltCalcula
   // 6. Truckload Planning
   const truckCapacityTons = input.truckCapacityTons && input.truckCapacityTons > 0 ? input.truckCapacityTons : 14.0;
   const truckloadsNeeded = billedTons > 0 ? Math.ceil(billedTons / truckCapacityTons) : 0;
-  const remainderTons = billedTons > 0 ? billedTons % truckCapacityTons : 0;
+  const rawRemainder = billedTons > 0 ? billedTons % truckCapacityTons : 0;
+  const remainderTons = Math.abs(rawRemainder) < 0.001 || Math.abs(rawRemainder - truckCapacityTons) < 0.001 ? 0 : rawRemainder;
   const lastTruckloadTons = truckloadsNeeded > 0 ? (remainderTons === 0 ? truckCapacityTons : remainderTons) : 0;
   const unusedTruckCapacityTons = truckloadsNeeded > 0 ? truckCapacityTons - lastTruckloadTons : 0;
 

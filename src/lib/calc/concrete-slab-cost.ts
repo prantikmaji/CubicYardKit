@@ -108,9 +108,10 @@ export function calculateConcreteSlabCost(
   // Supplier ordering
   const increment = input.orderIncrementYards > 0 ? input.orderIncrementYards : 0.25;
   const roundedUp = Math.ceil(wasteAdjustedCubicYards / increment) * increment;
-  const billedCubicYards = Math.max(input.minOrderYards, roundedUp);
+  const billedCubicYards = totalAreaSqFt > 0 ? Math.max(input.minOrderYards, roundedUp) : 0;
 
   const shortLoadApplied =
+    billedCubicYards > 0 &&
     billedCubicYards < input.shortLoadThresholdYards &&
     input.shortLoadFee !== null &&
     input.shortLoadFee > 0;

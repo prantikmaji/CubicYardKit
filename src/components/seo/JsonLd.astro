@@ -76,12 +76,18 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
       name: 'Home',
       item: 'https://cubicyardkit.com/',
     },
-    ...breadcrumbs.map((b, idx) => ({
-      '@type': 'ListItem',
-      position: idx + 2,
-      name: b.name,
-      item: b.item,
-    })),
+    ...breadcrumbs.map((b, idx) => {
+      const rawUrl = b.item || (b as any).href || canonicalUrl;
+      const absoluteUrl = rawUrl.startsWith('http')
+        ? rawUrl
+        : `https://cubicyardkit.com${rawUrl.startsWith('/') ? rawUrl : `/${rawUrl}`}`;
+      return {
+        '@type': 'ListItem',
+        position: idx + 2,
+        name: b.name,
+        item: absoluteUrl,
+      };
+    }),
   ],
 } : null;
 ---

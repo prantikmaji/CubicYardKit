@@ -76,8 +76,8 @@ export function calculatePatioPlan(input: PatioPlannerInput): PatioPlannerResult
 
   // Base aggregate (crushed stone 4"-6", compacted)
   // ICPI standard: extend base 6 inches past patio perimeter for edge stability
-  const baseExtendedLength = l + 1; // 6 in on each side = +1 ft
-  const baseExtendedWidth = w + 1;
+  const baseExtendedLength = l > 0 ? l + 1 : 0; // 6 in on each side = +1 ft
+  const baseExtendedWidth = w > 0 ? w + 1 : 0;
   const baseExtendedArea = baseExtendedLength * baseExtendedWidth;
 
   const baseDepthFt = Math.max(0, input.baseDepthInches / 12);
@@ -94,13 +94,13 @@ export function calculatePatioPlan(input: PatioPlannerInput): PatioPlannerResult
   const beddingTons = (beddingCubicYards * 2700) / LBS_PER_US_TON;
 
   // Polymeric joint sand: ~1 bag per 70 sq ft for standard 2-3/8" pavers with 1/8" joints
-  const polymericSandBags50lb = Math.ceil(patioAreaSqFt / 70);
+  const polymericSandBags50lb = patioAreaSqFt > 0 ? Math.ceil(patioAreaSqFt / 70) : 0;
 
   // Geotextile fabric: base footprint + 10% overlap
-  const geotextileSqFt = input.includeGeotextileFabric ? Math.ceil(baseExtendedArea * 1.1) : 0;
+  const geotextileSqFt = input.includeGeotextileFabric && patioAreaSqFt > 0 ? Math.ceil(baseExtendedArea * 1.1) : 0;
 
   // Edge restraint: perimeter
-  const edgeRestraintLinearFt = input.includeEdgeRestraints ? patioPerimeterLinearFt : 0;
+  const edgeRestraintLinearFt = input.includeEdgeRestraints && patioAreaSqFt > 0 ? patioPerimeterLinearFt : 0;
 
   // Costs
   const paversCost = (input.pricePerPaver ?? 0) * totalPaverCountWithWaste;

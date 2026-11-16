@@ -1,9 +1,10 @@
 ---
 export interface Props {
-  items: Array<{ name: string; href?: string }>;
+  items: Array<{ name: string; href?: string; item?: string }>;
 }
 
 const { items } = Astro.props;
+const siteOrigin = 'https://cubicyardkit.com';
 ---
 
 <nav aria-label="Breadcrumb" class="mb-4">
@@ -17,6 +18,11 @@ const { items } = Astro.props;
     {items.map((item, index) => {
       const isLast = index === items.length - 1;
       const position = index + 2;
+      const rawTarget = item.href || item.item || Astro.url.pathname;
+      const absoluteTarget = rawTarget.startsWith('http')
+        ? rawTarget
+        : `${siteOrigin}${rawTarget.startsWith('/') ? rawTarget : `/${rawTarget}`}`;
+
       return (
         <li class="flex items-center space-x-2" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
           <svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -24,6 +30,7 @@ const { items } = Astro.props;
           </svg>
           {isLast || !item.href ? (
             <span class="text-slate-900 font-medium" aria-current="page" itemprop="name">{item.name}</span>
+            <meta itemprop="item" content={absoluteTarget} />
           ) : (
             <a href={item.href} itemprop="item" class="hover:text-slate-900 transition-colors">
               <span itemprop="name">{item.name}</span>

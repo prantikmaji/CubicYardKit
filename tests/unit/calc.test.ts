@@ -1213,3 +1213,78 @@ describe('Asphalt Calculator', () => {
     expect(res2.tons).toBeCloseTo(1.0, 3);
   });
 });
+
+describe('Pre-Live Audit Edge Case & Regression Tests', () => {
+  it('1. Patio planner handles 0 length/width safely without phantom base or geotextile', () => {
+    const r = calculatePatioPlan({
+      patioLengthFeet: 0,
+      patioWidthFeet: 0,
+      paverLengthInches: 8,
+      paverWidthInches: 4,
+      paverWastePercent: 10,
+      baseDepthInches: 4,
+      baseWastePercent: 10,
+      beddingDepthInches: 1,
+      beddingWastePercent: 5,
+      includeEdgeRestraints: true,
+      includeGeotextileFabric: true,
+    });
+    expect(r.patioAreaSqFt).toBe(0);
+    expect(r.baseCubicFeet).toBe(0);
+    expect(r.baseTons).toBe(0);
+    expect(r.beddingCubicFeet).toBe(0);
+    expect(r.polymericSandBags50lb).toBe(0);
+    expect(r.geotextileSqFt).toBe(0);
+    expect(r.edgeRestraintLinearFt).toBe(0);
+  });
+
+  it('2. Concrete slab cost calculator with zero area returns 0 billed yards and no short load fee', () => {
+    const r = calculateConcreteSlabCost({
+      areas: [{ length: 0, lengthUnit: 'feet', width: 0, widthUnit: 'feet' }],
+      thicknessInches: 4,
+      wastePercent: 10,
+      minOrderYards: 1,
+      orderIncrementYards: 0.25,
+      bagSizeLabel: '80lb',
+      pricePerBag: null,
+      pricePerCubicYard: 150,
+      deliveryFee: null,
+      shortLoadFee: 120,
+      shortLoadThresholdYards: 4,
+      excavationCostPerSqFt: null,
+      gravelBaseCostPerSqFt: null,
+      formworkCostPerLinFt: null,
+      rebarCostPerSqFt: null,
+      vaporBarrierCostPerSqFt: null,
+      laborCostPerSqFt: null,
+      finishCostPerSqFt: null,
+      pumpFee: null,
+      taxPercent: null,
+      contingencyPercent: null,
+      otherCost: null,
+    });
+    expect(r.totalAreaSqFt).toBe(0);
+    expect(r.netCubicYards).toBe(0);
+    expect(r.billedCubicYards).toBe(0);
+    expect(r.shortLoadApplied).toBe(false);
+    expect(r.concreteSubtotal).toBe(0);
+  });
+
+  it('3. Asphalt calculator multi-section breakdown stores individual section cubic feet', () => {
+    const r = calculateAsphalt({
+      inputMode: 'dimensions',
+      sections: [
+        { id: 'sec-1', name: 'Main Driveway', shape: 'rectangle', length: 20, lengthUnit: 'feet', width: 10, widthUnit: 'feet', compactedThicknessInches: 2.5 },
+        { id: 'sec-2', name: 'Turnaround Pad', shape: 'rectangle', length: 10, lengthUnit: 'feet', width: 10, widthUnit: 'feet', compactedThicknessInches: 2.5 },
+      ],
+      materialId: 'hma-dense',
+      wastePercent: 0,
+    });
+    expect(r.sectionBreakdown).toHaveLength(2);
+    // sec-1: 200 sq ft * (2.5/12) = 41.6667 cu ft
+    expect(r.sectionBreakdown[0].netCuFt).toBeCloseTo(41.6667, 3);
+    // sec-2: 100 sq ft * (2.5/12) = 20.8333 cu ft (must NOT be cumulative 62.5!)
+    expect(r.sectionBreakdown[1].netCuFt).toBeCloseTo(20.8333, 3);
+  });
+});
+

@@ -78,6 +78,14 @@ const materialCalculators = [
     iconColor: 'bg-amber-100 text-amber-800 border-amber-200',
     type: 'sand',
   },
+  {
+    href: '/asphalt-calculator/',
+    label: 'Asphalt & Millings',
+    badge: 'Tonnage & Loads',
+    desc: 'Hot mix asphalt, driveway paving, recycled millings & dump trucks',
+    iconColor: 'bg-slate-200 text-slate-800 border-slate-300',
+    type: 'asphalt',
+  },
 ];
 
 const isMaterialActive = materialCalculators.some((m) => m.href === currentPath);
@@ -210,6 +218,11 @@ const isMaterialActive = materialCalculators.some((m) => m.href === currentPath)
                         {item.type === 'sand' && (
                           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 4h14M5 20h14M7 4c0 4 5 7 5 7s5-3 5-7M7 20c0-4 5-7 5-7s5 3 5 7"/>
+                          </svg>
+                        )}
+                        {item.type === 'asphalt' && (
+                          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 19L8 5m8 14l4-14M12 5v3m0 6v3"/>
                           </svg>
                         )}
                       </div>
@@ -436,6 +449,11 @@ const isMaterialActive = materialCalculators.some((m) => m.href === currentPath)
                   {item.type === 'sand' && (
                     <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 4h14M5 20h14M7 4c0 4 5 7 5 7s5-3 5-7M7 20c0-4 5-7 5-7s5 3 5 7"/>
+                    </svg>
+                  )}
+                  {item.type === 'asphalt' && (
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 19L8 5m8 14l4-14M12 5v3m0 6v3"/>
                     </svg>
                   )}
                 </div>

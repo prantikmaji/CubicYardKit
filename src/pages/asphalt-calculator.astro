@@ -1,0 +1,315 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import AsphaltCalculator from '../components/calc/AsphaltCalculator';
+import Breadcrumbs from '../components/seo/Breadcrumbs.astro';
+import RelatedCalculators from '../components/layout/RelatedCalculators.astro';
+
+const seo = {
+  title: 'Asphalt Calculator | Tonnage, Millings & Driveway Cost Estimator | CubicYardKit',
+  description:
+    'Calculate asphalt tonnage, cubic yards, and truckloads for driveways, parking lots, and roads. Includes hot mix asphalt (HMA), recycled millings (RAP), and cost estimation.',
+  canonicalUrl: 'https://cubicyardkit.com/asphalt-calculator/',
+};
+
+const faqs = [
+  {
+    question: 'How do I calculate how much asphalt I need for a driveway?',
+    answer:
+      'Measure the length and width of your driveway in feet, and determine your planned compacted thickness in inches. Multiply length by width to obtain surface area in square feet, divide by 9 to get square yards, then multiply square yards by thickness in inches and the standard paving factor of 110 lbs/sq yd/inch, and divide by 2,000 to find US short tons: Tonnage = (Length ft × Width ft ÷ 9 × Thickness in × 110) ÷ 2,000. Add an 8% to 10% allowance for subgrade irregularities and roller compaction.',
+  },
+  {
+    question: 'How many square feet does 1 ton of asphalt cover?',
+    answer:
+      'One US short ton (2,000 lbs) of standard dense-graded hot mix asphalt (145 lb/cu ft) covers approximately 80 to 83 square feet at 2.5 inches compacted thickness. At 2 inches compacted thickness, 1 ton covers approximately 100 to 103 square feet. At 1.5 inches (typical surface overlay), 1 ton covers approximately 135 to 140 square feet. At 3 inches (heavy-duty pavement), 1 ton covers approximately 68 to 70 square feet.',
+  },
+  {
+    question: 'How much does a cubic yard of asphalt weigh in tons?',
+    answer:
+      'One cubic yard of dense-graded Hot Mix Asphalt (HMA) weighs approximately 3,915 pounds, which equals 1.96 US short tons (roughly 2 tons per cubic yard). In contrast, crushed recycled asphalt millings (RAP) are significantly lighter due to aggregate voids, weighing approximately 2,835 pounds (1.42 tons) per cubic yard. Never apply hot-mix density when calculating recycled millings.',
+  },
+  {
+    question: 'What is the difference between Hot Mix Asphalt and asphalt millings?',
+    answer:
+      'Hot Mix Asphalt (HMA) is a virgin commercial mix of heated aggregates and petroleum asphalt cement binder blended at 300°F to 350°F at an asphalt plant, laid with a mechanical paver and vibratory roller to create a smooth, waterproof, jet-black driving surface. Asphalt millings (RAP) are ground reclaimed pavement screened into aggregate; when laid 3 to 4 inches thick and rolled, the residual bitumen softens in summer sun and semi-binds into a durable, economical, gravel-like driveway at a fraction of the cost.',
+  },
+  {
+    question: 'How thick should a residential asphalt driveway be paved?',
+    answer:
+      'For typical passenger vehicles and SUVs, a residential asphalt driveway should have a minimum finished compacted thickness of 2.5 to 3.0 inches placed over a compacted crushed stone aggregate base of 4 to 6 inches. For driveways supporting heavy motorhomes, delivery box trucks, or horse trailers, civil engineers recommend a 3.5 to 4.0 inch two-lift pavement: a 2.0-inch coarse binder course topped by a 1.5-inch fine-aggregate surface wearing course over 6 to 8 inches of stone base.',
+  },
+  {
+    question: 'What is the difference between loose screed depth and compacted asphalt thickness?',
+    answer:
+      'When hot mix asphalt passes through the floating screed of an asphalt paving machine, it is in a loose, uncompacted state with roughly 20% to 25% air voids. Heavy steel-drum and pneumatic-tire rollers compact the mat down to target density. As a reliable rule of thumb, asphalt compacts by 25%: to achieve a 2.0-inch finished compacted driveway, the paving crew must lay 2.5 inches of loose mix. Our calculator calculates finished roller-compacted thickness and displays the corresponding loose screed depth.',
+  },
+  {
+    question: 'How many tons of asphalt can a standard dump truck haul?',
+    answer:
+      'A standard commercial tandem-axle dump truck (10-wheeler) legally hauls approximately 14 to 15 tons of hot mix asphalt under state Department of Transportation (DOT) gross vehicle weight restrictions. A tri-axle dump truck hauls 18 to 20 tons, a quad-axle super dump hauls 22 to 24 tons, and a tractor-trailer end-dump hauls 24 to 26 tons. Hot mix must be tarped during transit to prevent temperature loss below 275°F.',
+  },
+  {
+    question: 'How much does an asphalt driveway cost per square foot installed?',
+    answer:
+      'Nationwide in the United States, an installed asphalt driveway typically costs between $4.50 and $9.00 per square foot for a complete installation (materials, trucking, grading, base prep, and compaction labor). For a standard 2-car driveway (approx. 600 to 800 sq ft), total costs range from $3,000 to $6,500. A simple 1.5-inch mill-and-overlay over solid base costs $2.50 to $4.50 per square foot, while recycled asphalt millings cost $1.50 to $3.00 per square foot.',
+  },
+];
+---
+
+<BaseLayout
+  title={seo.title}
+  description={seo.description}
+  canonicalUrl={seo.canonicalUrl}
+  faqs={faqs}
+  breadcrumbs={[{ name: 'Asphalt Calculator', item: seo.canonicalUrl }]}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-5 sm:pt-7 pb-14 sm:pb-20">
+    <Breadcrumbs items={[{ name: 'Asphalt Calculator' }]} />
+
+    <!-- Hero Banner — Warm Charcoal Slate / Amber Flame -->
+    <div class="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-slate-900 border border-slate-800 px-6 sm:px-8 lg:px-10 py-7 sm:py-9 lg:py-10 mb-8 sm:mb-10 text-white shadow-md">
+      <div class="absolute -top-12 -right-12 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="relative flex flex-wrap items-end justify-between gap-6 lg:gap-8">
+        <div class="max-w-2xl">
+          <div class="inline-flex items-center gap-2 bg-amber-950/80 border border-amber-500/40 rounded-full px-3.5 py-1 text-xs font-bold text-amber-300 mb-3.5 sm:mb-4 shadow-xs">
+            <span class="w-1.5 h-1.5 bg-amber-400 rounded-full animate-pulse shadow-[0_0_8px_#f59e0b]"></span>
+            FHWA Western Federal Lands Standards · Asphalt Institute Specifications · Scale Tonnage
+          </div>
+
+          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-[1.08] mb-2.5 sm:mb-3">
+            Asphalt Calculator
+          </h1>
+          <p class="text-sm sm:text-base text-slate-200 max-w-xl leading-relaxed">
+            Calculate asphalt tonnage, compacted cubic yards, and dump truckloads for driveways, parking lots, and roadways. Supports hot mix asphalt (HMA), recycled millings (RAP), multi-section takeoffs, and full installed project budgets.
+          </p>
+        </div>
+
+        <!-- Trust indicators -->
+        <div class="flex flex-wrap sm:flex-nowrap gap-2.5 sm:gap-3 shrink-0 w-full sm:w-auto">
+          {[
+            { val: '145', unit: 'lb/ft³', label: 'Dense HMA (FHWA)' },
+            { val: '1.96', unit: 'tons/yd³', label: 'Compacted Hot Mix' },
+            { val: '105', unit: 'lb/ft³', label: 'Recycled Millings' },
+            { val: '14', unit: 'tons/load', label: 'Standard Tandem Truck' },
+          ].map(stat => (
+            <div class="flex-1 sm:flex-initial bg-slate-800/90 border border-slate-700/80 rounded-xl px-3.5 sm:px-4 py-2.5 sm:py-3 text-center min-w-[75px] sm:min-w-[90px] shadow-xs">
+              <div class="text-base sm:text-lg font-black text-white font-mono">{stat.val}</div>
+              <div class="text-[10px] text-amber-400 font-bold uppercase tracking-wider">{stat.unit}</div>
+              <div class="text-[10px] text-slate-300 font-medium mt-0.5">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive Asphalt Calculator Island -->
+    <div class="mb-12 sm:mb-16">
+      <AsphaltCalculator client:load />
+    </div>
+
+    <!-- Engineering & Trade Editorial Deep Dive -->
+    <div class="space-y-12 mb-16">
+
+      <!-- SECTION 1: Volumetric & Tonnage Formulas -->
+      <section id="formula" class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-5 scroll-mt-20">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-[11px] font-bold text-amber-800 bg-amber-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Civil Engineering Math</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-2">How to Calculate Asphalt Tonnage: Formulas & Dimensional Analysis</h2>
+        </div>
+
+        <p class="text-sm text-slate-700 leading-relaxed">
+          In civil paving and site construction across North America, project dimensions are measured in <strong>feet and square yards</strong>, but hot mix asphalt is commercially batched, trucked, and invoiced in <strong>certified US short tons (2,000 lbs)</strong> recorded across certified quarry scale houses. Two equivalent mathematical formulas are used by professional estimators:
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4 font-mono text-xs">
+          <div class="bg-slate-900 text-white p-4 rounded-xl space-y-2">
+            <span class="text-amber-400 font-bold block uppercase tracking-wider">Method 1: Volumetric Density Formula</span>
+            <div class="text-sm font-bold bg-slate-800/80 p-2.5 rounded border border-slate-700">
+              Tons = ( Area sq ft × Thickness in ÷ 12 × Density lb/ft³ ) ÷ 2,000
+            </div>
+            <p class="text-slate-300 font-sans text-xs pt-1">
+              For standard 145 lb/ft³ mix: <span class="text-amber-300 font-semibold">(Area × Thickness) ÷ 165.52</span>.
+            </p>
+          </div>
+
+          <div class="bg-slate-900 text-white p-4 rounded-xl space-y-2">
+            <span class="text-amber-400 font-bold block uppercase tracking-wider">Method 2: Square Yard Paving Rule (110 lbs)</span>
+            <div class="text-sm font-bold bg-slate-800/80 p-2.5 rounded border border-slate-700">
+              Tons = ( Area sq yds × Thickness in × 110 lbs ) ÷ 2,000
+            </div>
+            <p class="text-slate-300 font-sans text-xs pt-1">
+              Based on the contractor rule: 1 square yard of asphalt 1 inch thick weighs approximately 110 lbs.
+            </p>
+          </div>
+        </div>
+
+        <h3 class="text-lg font-bold text-slate-900 pt-2">Worked Contractor Example: 50' × 12' Driveway at 2.5" Compacted Depth</h3>
+        <p class="text-sm text-slate-700 leading-relaxed">
+          Suppose you are paving a standard residential suburban driveway measuring <strong>50 feet long by 12 feet wide</strong> with a <strong>2.5-inch finished compacted thickness</strong> of dense-graded Hot Mix Asphalt (145 lb/ft³):
+        </p>
+        <ol class="list-decimal list-inside text-sm text-slate-700 space-y-1.5 pl-2 font-medium">
+          <li>Calculate surface area: <span class="font-mono text-slate-900">50 ft × 12 ft = 600 sq ft (66.67 sq yds)</span></li>
+          <li>Calculate compacted volume: <span class="font-mono text-slate-900">600 sq ft × (2.5 ÷ 12) = 125.0 cu ft (4.63 cu yds)</span></li>
+          <li>Convert volume to net scale weight (145 lb/ft³): <span class="font-mono text-slate-900">125.0 cu ft × 145 lb/ft³ = 18,125 lbs (9.06 Tons)</span></li>
+          <li>Add 8% order allowance for subgrade dips and edge roll-down: <span class="font-mono text-slate-900">9.06 × 1.08 = 9.79 Tons (Order 10.0 Tons)</span></li>
+          <li>Estimate loose screed laydown depth: <span class="font-mono text-slate-900">2.5 in × 1.25 = 3.125 inches loose</span></li>
+          <li>Truckload hauling: <span class="font-mono text-slate-900">10.0 Tons requires 1 standard Tandem dump truck (14-ton capacity)</span></li>
+        </ol>
+      </section>
+
+      <!-- SECTION 2: Material Density & Specification Table -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-5">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-[11px] font-bold text-amber-800 bg-amber-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Mix Engineering</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-2">Asphalt Mix Types, Densities & Application Specifications</h2>
+        </div>
+
+        <p class="text-sm text-slate-700 leading-relaxed">
+          Asphalt bulk density is determined by aggregate gradation, rock specific gravity (limestone vs granite vs basalt), and asphalt cement percentage. Always verify mix density with your batch plant supplier ticket:
+        </p>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="bg-slate-100/80 text-slate-900 font-bold border-b border-slate-200">
+                <th class="py-3 px-3.5">Asphalt Mix Type</th>
+                <th class="py-3 px-3.5">Specification Standard</th>
+                <th class="py-3 px-3.5">Compacted Density</th>
+                <th class="py-3 px-3.5">Tons / Cu Yd</th>
+                <th class="py-3 px-3.5">Lbs / Sq Yd / In</th>
+                <th class="py-3 px-3.5">Primary Paving Application</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 text-slate-700">
+              <tr class="hover:bg-slate-50/50">
+                <td class="py-3 px-3.5 font-bold text-slate-900">Dense-Graded Hot Mix (HMA)</td>
+                <td class="py-3 px-3.5 font-mono">AASHTO M 323 / Superpave</td>
+                <td class="py-3 px-3.5 font-mono">145.0 lb/ft³ (2,323 kg/m³)</td>
+                <td class="py-3 px-3.5 font-mono font-semibold text-slate-900">1.96 tons</td>
+                <td class="py-3 px-3.5 font-mono">108.75 lbs</td>
+                <td class="py-3 px-3.5">Residential driveways, commercial paving, road surfaces</td>
+              </tr>
+              <tr class="hover:bg-slate-50/50">
+                <td class="py-3 px-3.5 font-bold text-slate-900">Fine Surface Mix (Wearing Course)</td>
+                <td class="py-3 px-3.5 font-mono">Superpave 9.5 mm NMAS</td>
+                <td class="py-3 px-3.5 font-mono">143.0 lb/ft³ (2,291 kg/m³)</td>
+                <td class="py-3 px-3.5 font-mono font-semibold text-slate-900">1.93 tons</td>
+                <td class="py-3 px-3.5 font-mono">107.25 lbs</td>
+                <td class="py-3 px-3.5">Top wearing course, resurfacing overlays, smooth driveways</td>
+              </tr>
+              <tr class="hover:bg-slate-50/50">
+                <td class="py-3 px-3.5 font-bold text-slate-900">Coarse Binder / Base Course</td>
+                <td class="py-3 px-3.5 font-mono">Superpave 19.0 mm NMAS</td>
+                <td class="py-3 px-3.5 font-mono">148.0 lb/ft³ (2,371 kg/m³)</td>
+                <td class="py-3 px-3.5 font-mono font-semibold text-slate-900">2.00 tons</td>
+                <td class="py-3 px-3.5 font-mono">111.00 lbs</td>
+                <td class="py-3 px-3.5">Lower structural lift under heavy truck traffic and highways</td>
+              </tr>
+              <tr class="hover:bg-slate-50/50">
+                <td class="py-3 px-3.5 font-bold text-slate-900">Asphalt Millings / RAP</td>
+                <td class="py-3 px-3.5 font-mono">AASHTO MP 23 / FHWA RAP</td>
+                <td class="py-3 px-3.5 font-mono">105.0 lb/ft³ (1,682 kg/m³)</td>
+                <td class="py-3 px-3.5 font-mono font-semibold text-slate-900">1.42 tons</td>
+                <td class="py-3 px-3.5 font-mono">78.75 lbs</td>
+                <td class="py-3 px-3.5">Budget rural driveways, farm lanes, RV parking pads</td>
+              </tr>
+              <tr class="hover:bg-slate-50/50">
+                <td class="py-3 px-3.5 font-bold text-slate-900">Cold Patch / Pothole Mix</td>
+                <td class="py-3 px-3.5 font-mono">ASTM D4215</td>
+                <td class="py-3 px-3.5 font-mono">120.0 lb/ft³ (1,922 kg/m³)</td>
+                <td class="py-3 px-3.5 font-mono font-semibold text-slate-900">1.62 tons</td>
+                <td class="py-3 px-3.5 font-mono">90.00 lbs</td>
+                <td class="py-3 px-3.5">Emergency DIY pothole repair (50 lb bags = 0.42 cu ft)</td>
+              </tr>
+              <tr class="hover:bg-slate-50/50">
+                <td class="py-3 px-3.5 font-bold text-slate-900">Porous Asphalt (Permeable)</td>
+                <td class="py-3 px-3.5 font-mono">ASTM D7064 / OGFC</td>
+                <td class="py-3 px-3.5 font-mono">132.0 lb/ft³ (2,114 kg/m³)</td>
+                <td class="py-3 px-3.5 font-mono font-semibold text-slate-900">1.78 tons</td>
+                <td class="py-3 px-3.5 font-mono">99.00 lbs</td>
+                <td class="py-3 px-3.5">Stormwater infiltration parking lots, permeable driveways</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SECTION 3: Roller Compaction & Loose Laydown -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-4">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-[11px] font-bold text-amber-800 bg-amber-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Paving Physics</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-2">The 25% Compaction Rule: Screed Thickness vs. Roller Compaction</h2>
+        </div>
+
+        <p class="text-sm text-slate-700 leading-relaxed">
+          A common mistake made by homeowners and novice estimators is ordering asphalt based on <em>loose depth</em> rather than <em>finished roller-compacted thickness</em>. When freshly mixed asphalt (300°F) is screeded out behind an asphalt paver machine, it is fluffy with roughly 20% to 25% air voids.
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs bg-slate-50 p-4 rounded-xl border border-slate-200">
+          <div>
+            <div class="font-bold text-slate-900 mb-1">1. Screed Laydown (Loose)</div>
+            <p class="text-slate-600 leading-relaxed">
+              The asphalt paver's heated screed lays down the hot mix at approximately <strong>1.25× the final thickness</strong> (e.g. 2.5″ loose for a 2.0″ target mat).
+            </p>
+          </div>
+          <div>
+            <div class="font-bold text-slate-900 mb-1">2. Breakdown & Finish Rolling</div>
+            <p class="text-slate-600 leading-relaxed">
+              A 3- to 5-ton steel vibratory roller compacts the hot mat, closing air voids to 4% to 7% and interlocking the aggregate stones.
+            </p>
+          </div>
+          <div>
+            <div class="font-bold text-slate-900 mb-1">3. Density In-Place</div>
+            <p class="text-slate-600 leading-relaxed">
+              Once fully cooled below 150°F, the mat achieves its design density (145 lb/cu ft). Never apply a second compaction factor if your density is already in-place.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 4: Subgrade & Base Engineering -->
+      <section class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-4">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-[11px] font-bold text-amber-800 bg-amber-50 px-2.5 py-1 rounded-md uppercase tracking-wider">Subgrade Preparation</span>
+          <h2 class="text-2xl font-black text-slate-900 mt-2">Why 90% of Asphalt Driveway Failures Start in the Sub-Base</h2>
+        </div>
+
+        <p class="text-sm text-slate-700 leading-relaxed">
+          Asphalt is a <strong>flexible pavement</strong>, meaning it flexes slightly under vehicle weight. If the crushed stone aggregate base beneath the asphalt yields or holds trapped water, the asphalt will crack, rut, and produce potholes regardless of how thick it was paved.
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+          <div class="border border-slate-200 rounded-xl p-4 bg-slate-50/50 space-y-2">
+            <h3 class="font-bold text-slate-900 flex items-center gap-1.5 text-base">
+              <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+              Correct Base Construction
+            </h3>
+            <ul class="list-disc list-inside text-xs text-slate-600 space-y-1.5 leading-relaxed">
+              <li>Excavate all organic topsoil down to solid, undisturbed clay/subsoil.</li>
+              <li>Install heavy-duty woven geotextile fabric to prevent subgrade stone sinking.</li>
+              <li>Install <strong>4 to 6 inches of dense-grade aggregate</strong> (crusher run / #21A / road gravel).</li>
+              <li>Roll and plate-compact base to 98% Proctor density prior to asphalt delivery.</li>
+            </ul>
+          </div>
+
+          <div class="border border-slate-200 rounded-xl p-4 bg-slate-50/50 space-y-2">
+            <h3 class="font-bold text-slate-900 flex items-center gap-1.5 text-base">
+              <span class="w-2 h-2 rounded-full bg-rose-600"></span>
+              Critical Drainage Pitfalls
+            </h3>
+            <ul class="list-disc list-inside text-xs text-slate-600 space-y-1.5 leading-relaxed">
+              <li>Paving over spongy, wet, or uncompacted subsoil causes alligator cracking.</li>
+              <li>Inadequate slope (under 1% to 2% grade) leads to standing puddles that strip asphalt binder.</li>
+              <li>Paving directly over old cracked concrete slabs without geotextile reflection barriers.</li>
+              <li>Paving in freezing temperatures (under 50°F) where hot mix cools before achieving compaction.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Interlinked Material & Construction Calculators -->
+    <RelatedCalculators currentPath="/asphalt-calculator/" />
+  </div>
+</BaseLayout>

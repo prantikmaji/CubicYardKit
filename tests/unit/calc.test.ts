@@ -998,3 +998,218 @@ describe('Sand Calculator', () => {
     expect(res2.volumeCuFt).toBe(108);
   });
 });
+
+import { calculateAsphalt, convertAsphaltTonnageCoverage } from '../../src/lib/calc/asphalt';
+
+describe('Asphalt Calculator', () => {
+  const baseAsphaltInput = {
+    inputMode: 'dimensions' as const,
+    sections: [
+      {
+        id: 'sec-1',
+        name: 'Main Driveway',
+        shape: 'rectangle' as const,
+        length: 20,
+        lengthUnit: 'feet' as const,
+        width: 10,
+        widthUnit: 'feet' as const,
+        compactedThicknessInches: 2.5,
+      },
+    ],
+    materialId: 'hma-dense' as const,
+    wastePercent: 0,
+  };
+
+  it('1. Standard rectangular driveway: 20×10 at 2.5" thick, 145 lb/cu ft, 0% waste', () => {
+    const r = calculateAsphalt(baseAsphaltInput);
+    expect(r.totalAreaSqFt).toBe(200);
+    expect(r.totalAreaSqYards).toBeCloseTo(200 / 9, 4);
+    // 200 * (2.5 / 12) = 41.6667 cu ft
+    expect(r.compactedVolumeCuFt).toBeCloseTo(200 * (2.5 / 12), 4);
+    // 41.6667 / 27 = 1.5432 cu yds
+    expect(r.compactedVolumeCuYds).toBeCloseTo(200 * (2.5 / 324), 4);
+    // 41.6667 * 145 = 6041.67 lbs
+    expect(r.totalPounds).toBeCloseTo((200 * (2.5 / 12)) * 145, 2);
+    // 6041.67 / 2000 = 3.0208 tons
+    expect(r.netTons).toBeCloseTo(r.totalPounds / 2000, 4);
+    expect(r.orderTons).toBeCloseTo(r.netTons, 4);
+    // Loose thickness: 2.5 * 1.25 = 3.125"
+    expect(r.estimatedLooseThicknessInches).toBeCloseTo(3.125, 3);
+  });
+
+  it('2. Waste allowance correctly increases order tonnage', () => {
+    const r = calculateAsphalt({
+      ...baseAsphaltInput,
+      wastePercent: 10,
+    });
+    expect(r.orderTons).toBeCloseTo(r.netTons * 1.10, 4);
+  });
+
+  it('3. Supplier order increment rounding works (e.g. 0.5 ton increments)', () => {
+    const r = calculateAsphalt({
+      ...baseAsphaltInput,
+      wastePercent: 0,
+      supplierIncrementTons: 0.5,
+    });
+    // netTons = 3.0208 -> rounds up to 3.50 tons
+    expect(r.billedTons).toBe(3.5);
+  });
+
+  it('4. Recycled Asphalt Millings (RAP) uses correct lower density (105 lb/cu ft)', () => {
+    const r = calculateAsphalt({
+      ...baseAsphaltInput,
+      materialId: 'millings',
+    });
+    expect(r.densityLbPerCuFt).toBe(105.0);
+    // 41.6667 * 105 = 4375 lbs = 2.1875 tons
+    expect(r.netTons).toBeCloseTo((200 * (2.5 / 12) * 105) / 2000, 4);
+    expect(r.netTons).toBeLessThan(3.0); // Definitely lighter than hot mix!
+  });
+
+  it('5. Trapezoidal flared driveway apron calculates accurate area and tonnage', () => {
+    const r = calculateAsphalt({
+      inputMode: 'dimensions',
+      sections: [
+        {
+          id: 'apron',
+          name: 'Flared Apron',
+          shape: 'trapezoid',
+          length: 10,
+          lengthUnit: 'feet',
+          width: 12, // top width
+          width2: 18, // road flared width
+          widthUnit: 'feet',
+          compactedThicknessInches: 2.5,
+        },
+      ],
+      materialId: 'hma-dense',
+      wastePercent: 0,
+    });
+    // Trapezoid area: 10 * ((12 + 18) / 2) = 10 * 15 = 150 sq ft
+    expect(r.totalAreaSqFt).toBe(150);
+    expect(r.compactedVolumeCuFt).toBeCloseTo(150 * (2.5 / 12), 4);
+  });
+
+  it('6. Multi-section paving takeoff aggregates areas and volumes cleanly', () => {
+    const r = calculateAsphalt({
+      inputMode: 'dimensions',
+      sections: [
+        {
+          id: 's1',
+          name: 'Main Driveway',
+          shape: 'rectangle',
+          length: 40,
+          lengthUnit: 'feet',
+          width: 12,
+          widthUnit: 'feet',
+          compactedThicknessInches: 2.5,
+        },
+        {
+          id: 's2',
+          name: 'Parking Turnaround',
+          shape: 'rectangle',
+          length: 20,
+          lengthUnit: 'feet',
+          width: 20,
+          widthUnit: 'feet',
+          compactedThicknessInches: 2.5,
+        },
+      ],
+      materialId: 'hma-dense',
+      wastePercent: 5,
+    });
+    // 40*12 = 480 sq ft; 20*20 = 400 sq ft -> Total = 880 sq ft
+    expect(r.totalAreaSqFt).toBe(880);
+    expect(r.sectionBreakdown.length).toBe(2);
+    expect(r.netTons).toBeCloseTo(((880 * (2.5 / 12) * 145) / 2000), 4);
+  });
+
+  it('7. Known surface area input mode computes tonnage directly', () => {
+    const r = calculateAsphalt({
+      inputMode: 'area',
+      sections: [],
+      knownArea: 1000,
+      knownAreaUnit: 'sqFt',
+      knownThicknessInches: 3.0,
+      materialId: 'hma-dense',
+      wastePercent: 0,
+    });
+    expect(r.totalAreaSqFt).toBe(1000);
+    // 1000 * (3.0 / 12) = 250 cu ft
+    expect(r.compactedVolumeCuFt).toBe(250);
+    // 250 * 145 / 2000 = 18.125 tons
+    expect(r.netTons).toBe(18.125);
+  });
+
+  it('8. Direct tonnage input mode reverse-infers volume', () => {
+    const r = calculateAsphalt({
+      inputMode: 'tonnage',
+      sections: [],
+      directTonnage: 10.0,
+      materialId: 'hma-dense',
+      wastePercent: 0,
+    });
+    expect(r.netTons).toBe(10.0);
+    // 10 tons = 20,000 lbs. Cu ft = 20000 / 145 = 137.931 cu ft
+    expect(r.compactedVolumeCuFt).toBeCloseTo(20000 / 145, 3);
+  });
+
+  it('9. Truckload planning accurately computes loads and remaining capacity', () => {
+    const r = calculateAsphalt({
+      ...baseAsphaltInput,
+      inputMode: 'area',
+      knownArea: 1500,
+      knownAreaUnit: 'sqFt',
+      knownThicknessInches: 2.5,
+      truckCapacityTons: 14.0, // standard tandem
+      wastePercent: 0,
+    });
+    // Net tons = (1500 * (2.5 / 12) * 145) / 2000 = 22.656 tons
+    // 22.656 / 14 = 1.618 -> 2 truckloads
+    expect(r.truckloadsNeeded).toBe(2);
+    expect(r.lastTruckloadTons).toBeCloseTo(22.65625 - 14.0, 3);
+    expect(r.unusedTruckCapacityTons).toBeCloseTo(14.0 - r.lastTruckloadTons, 3);
+  });
+
+  it('10. Optional gravel base layer calculations', () => {
+    const r = calculateAsphalt({
+      ...baseAsphaltInput,
+      includeGravelBase: true,
+      gravelBaseDepthInches: 6.0,
+    });
+    // 200 sq ft at 6" (0.5 ft) = 100 cu ft
+    // 100 / 27 * 1.10 = 4.074 cu yds
+    expect(r.gravelBaseVolumeCuYds).toBeCloseTo((100 / 27) * 1.10, 3);
+    // 4.074 cu yds * 1.35 tons/yd = 5.50 tons
+    expect(r.gravelBaseTons).toBeCloseTo(r.gravelBaseVolumeCuYds * 1.35, 3);
+  });
+
+  it('11. Optional two-lift breakdown computes separate binder and surface tonnage', () => {
+    const r = calculateAsphalt({
+      ...baseAsphaltInput,
+      hasTwoLifts: true,
+      binderThicknessInches: 2.0,
+      surfaceThicknessInches: 1.5,
+      wastePercent: 0,
+    });
+    expect(r.liftBreakdown).toBeDefined();
+    // 200 sq ft, 2" binder at 147 lb/ft³
+    const expectedBinder = (200 * (2 / 12) * 147) / 2000;
+    expect(r.liftBreakdown?.binderTons).toBeCloseTo(expectedBinder, 4);
+    // 200 sq ft, 1.5" surface at 143 lb/ft³
+    const expectedSurface = (200 * (1.5 / 12) * 143) / 2000;
+    expect(r.liftBreakdown?.surfaceTons).toBeCloseTo(expectedSurface, 4);
+  });
+
+  it('12. Reversible conversion helper: tonnage <-> coverage works accurately', () => {
+    // 1 ton of HMA (145 lb/ft³) at 2.5" thick
+    // Cu ft = 2000 / 145 = 13.7931 cu ft. Sq ft = 13.7931 * (12 / 2.5) = 66.2069 sq ft
+    const res1 = convertAsphaltTonnageCoverage({ tons: 1.0, thicknessInches: 2.5, densityLbPerCuFt: 145.0 });
+    expect(res1.sqFt).toBeCloseTo(66.2069, 3);
+    expect(res1.sqYards).toBeCloseTo(66.2069 / 9, 3);
+
+    // 66.2069 sq ft should convert back to 1.0 ton
+    const res2 = convertAsphaltTonnageCoverage({ sqFt: 66.2069, thicknessInches: 2.5, densityLbPerCuFt: 145.0 });
+    expect(res2.tons).toBeCloseTo(1.0, 3);
+  });
+});

@@ -286,6 +286,33 @@ export const KEYWORD_MAP: Record<string, PageSEOConfig> = {
     launchPriority: 12,
     status: 'active' as const,
   },
+  asphalt: {
+    path: '/asphalt-calculator/',
+    canonicalUrl: `${SITE_ORIGIN}/asphalt-calculator/`,
+    title: 'Asphalt Calculator | Tonnage, Millings & Driveway Cost Estimator | CubicYardKit',
+    metaDescription:
+      'Calculate asphalt tonnage, cubic yards, and dump truckloads for driveways, parking lots, and roads. Includes hot mix asphalt (HMA), recycled millings (RAP), and cost estimation.',
+    h1: 'Asphalt Calculator',
+    primaryKeyword: {
+      keyword: 'asphalt calculator',
+      volume: 22200,
+      kd: 25,
+      cpc: 1.14,
+    },
+    secondaryKeywords: [
+      { keyword: 'asphalt driveway cost calculator', volume: 1900, kd: 28, cpc: 2.62 },
+      { keyword: 'asphalt tonnage calculator', volume: 1000, kd: 11, cpc: 1.24 },
+      { keyword: 'asphalt calculator online', volume: 720, kd: 18, cpc: 0.0 },
+      { keyword: 'asphalt millings calculator', volume: 720, kd: 1, cpc: 0.02 },
+      { keyword: 'asphalt driveway calculator', volume: 590, kd: 21, cpc: 2.62 },
+      { keyword: 'how to calculate asphalt tonnage', volume: 390, kd: 5, cpc: 0.68 },
+      { keyword: 'asphalt cost calculator', volume: 320, kd: 15, cpc: 2.41 },
+    ],
+    searchIntent:
+      'Tonnage and volume takeoff for asphalt paving, driveway installation, recycled millings, dump truck hauling, and project budgeting.',
+    launchPriority: 13,
+    status: 'active' as const,
+  },
   quoteComparison: {
     path: '/quote-comparison/',
     canonicalUrl: `${SITE_ORIGIN}/quote-comparison/`,

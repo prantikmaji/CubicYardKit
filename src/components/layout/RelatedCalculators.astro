@@ -85,19 +85,26 @@ const ALL_TOOLS: Record<string, ToolItem> = {
     badge: 'Tons & Bags',
     desc: 'Calculate sand volume, weight in tons, 50-lb bags, paver bedding, play sand, and bulk pricing.',
   },
+  asphalt: {
+    href: '/asphalt-calculator/',
+    title: 'Asphalt & Millings',
+    badge: 'Tonnage & Loads',
+    desc: 'Calculate hot mix asphalt and recycled millings tonnage, truckloads, and driveway paving budgets.',
+  },
 };
 
 // Map each path to 3 related tools
 const RELATED_MAP: Record<string, string[]> = {
-  '/gravel-calculator/': ['sand', 'planner', 'concrete'],
+  '/gravel-calculator/': ['asphalt', 'sand', 'concrete'],
   '/dirt-calculator/': ['topsoil', 'gravel', 'home'],
   '/topsoil-calculator/': ['dirt', 'planner', 'home'],
   '/concrete-calculator/': ['concreteSlabCost', 'concreteDriveway', 'home'],
   '/concrete-block-calculator/': ['brick', 'concrete', 'home'],
   '/brick-calculator/': ['concreteBlock', 'sand', 'planner'],
   '/sand-calculator/': ['gravel', 'planner', 'concrete'],
+  '/asphalt-calculator/': ['concreteDriveway', 'gravel', 'quoteComparison'],
   '/concrete-slab-cost-calculator/': ['concreteDriveway', 'concrete', 'planner'],
-  '/concrete-driveway-cost-calculator/': ['concreteSlabCost', 'concrete', 'gravel'],
+  '/concrete-driveway-cost-calculator/': ['asphalt', 'concreteSlabCost', 'gravel'],
   '/planner/': ['gravel', 'sand', 'concrete'],
   '/quote-comparison/': ['planner', 'gravel', 'concrete'],
 };

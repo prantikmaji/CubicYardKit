@@ -313,6 +313,35 @@ export const KEYWORD_MAP: Record<string, PageSEOConfig> = {
     launchPriority: 13,
     status: 'active' as const,
   },
+  paver: {
+    path: '/paver-calculator/',
+    canonicalUrl: `${SITE_ORIGIN}/paver-calculator/`,
+    title: 'Paver Calculator | Paver Count, Base, Sand & Cost Estimator | CubicYardKit',
+    metaDescription:
+      'Calculate how many pavers you need for a patio, walkway, or driveway. Includes crushed base aggregate, bedding sand, polymeric joint sand, edging, and project costs.',
+    h1: 'Paver Calculator',
+    primaryKeyword: {
+      keyword: 'paver calculator',
+      volume: 8100,
+      kd: 36,
+      cpc: 0.60,
+    },
+    secondaryKeywords: [
+      { keyword: 'paver base calculator', volume: 1900, kd: 15, cpc: 0.54 },
+      { keyword: 'paver sand calculator', volume: 1900, kd: 13, cpc: 0.38 },
+      { keyword: 'calculate paver sand', volume: 590, kd: 18, cpc: 0.55 },
+      { keyword: 'cost calculator for paver patio', volume: 390, kd: 30, cpc: 1.68 },
+      { keyword: 'paver patio cost calculator', volume: 320, kd: 31, cpc: 2.05 },
+      { keyword: 'paver patio installation cost calculator', volume: 320, kd: 29, cpc: 2.29 },
+      { keyword: 'calculate paver base', volume: 260, kd: 12, cpc: 0.35 },
+      { keyword: 'paver patio calculator', volume: 260, kd: 36, cpc: 0.74 },
+      { keyword: 'brick paver calculator', volume: 210, kd: 32, cpc: 0.43 },
+    ],
+    searchIntent:
+      'Turn paved project dimensions into a comprehensive bill of materials: paver count, pallet rounding, base aggregate tons, bedding sand, polymeric joint sand, and installation costs.',
+    launchPriority: 14,
+    status: 'active' as const,
+  },
   quoteComparison: {
     path: '/quote-comparison/',
     canonicalUrl: `${SITE_ORIGIN}/quote-comparison/`,

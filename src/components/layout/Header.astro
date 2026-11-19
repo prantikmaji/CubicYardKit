@@ -86,6 +86,14 @@ const materialCalculators = [
     iconColor: 'bg-slate-200 text-slate-800 border-slate-300',
     type: 'asphalt',
   },
+  {
+    href: '/paver-calculator/',
+    label: 'Paver & Patio Takeoff',
+    badge: 'Pieces & Pallets',
+    desc: 'Holland stone, patterns, base aggregate, bedding sand & polymeric joints',
+    iconColor: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+    type: 'paver',
+  },
 ];
 
 const isMaterialActive = materialCalculators.some((m) => m.href === currentPath);
@@ -223,6 +231,14 @@ const isMaterialActive = materialCalculators.some((m) => m.href === currentPath)
                         {item.type === 'asphalt' && (
                           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 19L8 5m8 14l4-14M12 5v3m0 6v3"/>
+                          </svg>
+                        )}
+                        {item.type === 'paver' && (
+                          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <rect x="3" y="3" width="8" height="11" rx="1" stroke-width="2"/>
+                            <rect x="13" y="3" width="8" height="7" rx="1" stroke-width="2"/>
+                            <rect x="13" y="12" width="8" height="9" rx="1" stroke-width="2"/>
+                            <rect x="3" y="16" width="8" height="5" rx="0.5" stroke-width="2"/>
                           </svg>
                         )}
                       </div>
@@ -454,6 +470,14 @@ const isMaterialActive = materialCalculators.some((m) => m.href === currentPath)
                   {item.type === 'asphalt' && (
                     <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 19L8 5m8 14l4-14M12 5v3m0 6v3"/>
+                    </svg>
+                  )}
+                  {item.type === 'paver' && (
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <rect x="3" y="3" width="8" height="11" rx="1" stroke-width="2"/>
+                      <rect x="13" y="3" width="8" height="7" rx="1" stroke-width="2"/>
+                      <rect x="13" y="12" width="8" height="9" rx="1" stroke-width="2"/>
+                      <rect x="3" y="16" width="8" height="5" rx="0.5" stroke-width="2"/>
                     </svg>
                   )}
                 </div>

@@ -1,0 +1,386 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PaverCalculator from '../components/calc/PaverCalculator';
+import Breadcrumbs from '../components/seo/Breadcrumbs.astro';
+import RelatedCalculators from '../components/layout/RelatedCalculators.astro';
+
+const seo = {
+  title: 'Paver Calculator | Paver Count, Base, Sand & Cost Estimator | CubicYardKit',
+  description:
+    'Calculate how many pavers you need for a patio, walkway, or driveway. Includes piece counts, pallets, crushed stone base tons, bedding sand, polymeric joint sand, edging, and project costs.',
+  canonicalUrl: 'https://cubicyardkit.com/paver-calculator/',
+};
+
+const faqs = [
+  {
+    question: 'How do I calculate how many pavers I need for a patio or walkway?',
+    answer:
+      'To calculate total pavers, measure the length and width of your paved area in feet to get square footage (Area = Length × Width). Next, determine the installed face module of your paver by adding the joint spacer width (typically 1/8 inch or 0.125") to both the paver length and width in inches: Module Area (sq ft) = [(Length + Joint) × (Width + Joint)] ÷ 144. Divide the paved area by this module area to find theoretical piece count, then add 8% to 12% for cutting and breakage waste (12% to 15% for 45° herringbone patterns). Finally, round up to whole supplier bundles or pallets.',
+  },
+  {
+    question: 'How many pavers are on a standard pallet?',
+    answer:
+      'A standard commercial pallet of 4" × 8" Holland stone pavers contains approximately 432 pieces, covering roughly 96 square feet and weighing between 2,600 and 2,800 lbs. For 6" × 6" classic square pavers, pallets typically hold 384 pieces (~96 sq ft). For 6" × 9" rectangular cobblestones, pallets hold ~288 pieces (~105 sq ft). For large 12" × 12" patio slabs, pallets typically hold 120 pieces (~120 sq ft). Always verify the exact piece count and weight with your local hardscape distributor before arranging flatbed delivery.',
+  },
+  {
+    question: 'How deep should the crushed stone base be for a paver patio vs driveway?',
+    answer:
+      'According to Interlocking Concrete Pavement Institute (ICPI / CMHA) specifications: pedestrian walkways and patios over well-draining subsoils require a minimum compacted base depth of 4 inches (100 mm) of dense-graded aggregate (#21A / CR6 / road base). For northern freeze-thaw climates or poorly draining clay soils, increase base depth to 6 inches (150 mm). Residential vehicular driveways require a minimum compacted base of 8 to 10 inches (200 to 250 mm), with commercial truck pavements requiring 12 inches or more over geotextile separation fabric.',
+  },
+  {
+    question: 'Why must the crushed stone base extend 6 inches beyond the paver perimeter?',
+    answer:
+      'ICPI guidelines mandate that the compacted crushed aggregate base extend at least 6 inches (150 mm) past the outer perimeter of the pavers on all unrestrained sides. This 6-inch shoulder provides a dense, solid foundation into which the 10-inch or 12-inch steel spikes can anchor commercial edge restraints. Without this shoulder, edge restraint spikes would be driven into soft uncompacted subgrade, causing the outer soldier course to creep outward under wheel and foot traffic.',
+  },
+  {
+    question: 'What is the difference between bedding sand and polymeric joint sand?',
+    answer:
+      'Bedding sand and joint sand perform completely different engineering functions and cannot be substituted for one another. Bedding sand is a 1.0-inch uncompacted layer of coarse, washed concrete sand conforming to ASTM C33 placed directly on top of the crushed stone base to cradle pavers during plate compaction. Polymeric joint sand is a special blend of calibrated silica sand and moisture-activated polymer binders swept dry into the joints after pavers are set; when misted with water, it hardens into a flexible rubberized seal that stops weed growth, ant tunneling, and joint washout.',
+  },
+  {
+    question: 'Can I use stone dust or limestone screenings instead of bedding sand?',
+    answer:
+      'No. Hardscape engineering standards strictly prohibit stone dust, limestone screenings, or masonry mortar sand for the bedding layer. Stone dust contains fine limestone powders that break down and wash away under subsurface rainwater, creating depressions and loose pavers. Furthermore, stone dust holds moisture against paver undersides, causing severe white mineral efflorescence. Always insist on coarse, washed concrete sand conforming to ASTM C33.',
+  },
+  {
+    question: 'How many square feet does a 50-lb bag of polymeric sand cover?',
+    answer:
+      'A standard 50-lb bag of polymeric sand covers approximately 60 to 85 square feet for standard 4" × 8" or 6" × 6" interlocking pavers with narrow 1/8-inch joints. For large architectural slabs (12" × 12" or 16" × 16"), coverage increases to 100 to 125 square feet per bag due to fewer linear joints. For wide joints (1/4" to 3/8" rustic or tumbled pavers), coverage decreases to 30 to 45 square feet per bag.',
+  },
+  {
+    question: 'Which paver laying pattern is strongest for vehicular driveways?',
+    answer:
+      'The 45° herringbone pattern is the strongest, most structurally stable laying pattern for interlocking concrete pavements subjected to vehicular traffic. Because pavers interlock in alternating 45-degree angles, the pattern distributes horizontal braking and accelerating forces across multiple surrounding units, eliminating rotational creep and tire rutting. Stack bond and running bond patterns lack multidirectional interlock and should never be used on vehicular pavements.',
+  },
+  {
+    question: 'How much does a paver patio cost per square foot installed?',
+    answer:
+      'Across the United States, a professionally installed interlocking paver patio typically costs between $15 and $30 per square foot for materials, excavation, aggregate sub-base, bedding, installation labor, and polymeric joint sand. Premium natural stone or complex multi-piece modular layouts range from $25 to $45 per square foot. DIY homeowners typically spend between $5 and $10 per square foot in materials alone, saving roughly 60% to 70% in installation labor.',
+  },
+];
+---
+
+<BaseLayout
+  title={seo.title}
+  description={seo.description}
+  canonicalUrl={seo.canonicalUrl}
+  faqs={faqs}
+  breadcrumbs={[{ name: 'Paver Calculator', item: seo.canonicalUrl }]}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-5 sm:pt-7 pb-14 sm:pb-20">
+    <Breadcrumbs items={[{ name: 'Paver Calculator' }]} />
+
+    <!-- Hero Banner — Architectural Emerald / Construction Slate -->
+    <div class="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-slate-900 border border-slate-800 px-6 sm:px-8 lg:px-10 py-7 sm:py-9 lg:py-10 mb-8 sm:mb-10 text-white shadow-md">
+      <div class="absolute -top-12 -right-12 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="relative flex flex-wrap items-end justify-between gap-6 lg:gap-8">
+        <div class="max-w-2xl">
+          <div class="inline-flex items-center gap-2 bg-emerald-950/80 border border-emerald-500/40 rounded-full px-3.5 py-1 text-xs font-bold text-emerald-300 mb-3.5 sm:mb-4 shadow-xs">
+            <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_8px_#34d399]"></span>
+            ICPI / CMHA Installation Standards · ASTM C33 Bedding Sand · ASTM C29 Base Densities
+          </div>
+
+          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-[1.08] mb-2.5 sm:mb-3">
+            Paver Calculator
+          </h1>
+          <p class="text-sm sm:text-base text-slate-200 max-w-xl leading-relaxed">
+            Calculate exact paver piece counts, bundles, and pallets for patios, walkways, and driveways. Features joint-aware face module math, laying patterns, crushed stone base aggregate, ASTM C33 bedding sand, polymeric joint sand, edge restraints, and full project budgets.
+          </p>
+        </div>
+
+        <!-- Trust indicators -->
+        <div class="flex flex-wrap sm:flex-nowrap gap-2.5 sm:gap-3 shrink-0 w-full sm:w-auto">
+          {[
+            { val: 'ASTM C33', unit: 'Sand', label: 'Washed Bedding Sand' },
+            { val: '1.35', unit: 'Tons/yd³', label: '#21A Base Density' },
+            { val: 'ICPI', unit: '6" Base', label: 'Extended Shoulder' },
+          ].map((stat) => (
+            <div class="bg-slate-800/80 border border-slate-700/80 rounded-xl px-4 py-3 min-w-28 text-center backdrop-blur-xs flex-1 sm:flex-none">
+              <div class="text-lg font-black text-white font-mono-numbers leading-tight">
+                {stat.val} <span class="text-xs font-normal text-emerald-400">{stat.unit}</span>
+              </div>
+              <div class="text-[10px] text-slate-400 font-medium tracking-wide uppercase mt-0.5">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive Calculator Island -->
+    <PaverCalculator client:load />
+
+    <!-- Engineering Formulas & Worked Example -->
+    <section class="mt-16 sm:mt-20 border-t border-slate-200/80 pt-12 space-y-12">
+      <!-- Section 1: Engineering Methodology -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+        <div class="space-y-4">
+          <span class="text-[11px] font-bold text-emerald-700 uppercase tracking-wider bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200/60">
+            Mathematical Precision
+          </span>
+          <h2 class="text-2xl font-black text-slate-900 tracking-tight">
+            How to Calculate Pavers, Base Aggregate & Bedding Sand
+          </h2>
+          <p class="text-sm text-slate-600 leading-relaxed">
+            Estimating an interlocking concrete or clay paver project requires more than a simple surface area division. Because pavers include perimeter joint spacers, cutting waste, and independent geotechnical strata (sub-base aggregate, screeded bedding sand, and polymeric joint sealers), each layer must be reconciled independently using verified ASTM and ICPI standards.
+          </p>
+
+          <div class="space-y-3 pt-2">
+            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+              <h4 class="text-xs font-bold text-slate-900 mb-1">1. Installed Face Module Formula</h4>
+              <p class="text-xs text-slate-600 font-mono-numbers leading-relaxed">
+                Module Area (sq ft) = [ (Length in + Joint in) × (Width in + Joint in) ] ÷ 144
+              </p>
+              <p class="text-[11px] text-slate-500 mt-1">
+                For a standard 4" × 8" Holland paver (3.94" × 7.87") with 1/8" (0.125") joints:
+                <br />
+                (7.87 + 0.125) × (3.94 + 0.125) = 7.995" × 4.065" = 32.50 sq inches ÷ 144 = <strong>0.2257 sq ft per paver</strong> (yielding ~4.43 pavers per square foot).
+              </p>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+              <h4 class="text-xs font-bold text-slate-900 mb-1">2. Crushed Aggregate Base Formula with Compaction</h4>
+              <p class="text-xs text-slate-600 font-mono-numbers leading-relaxed">
+                Base Tonnage = [ (Paved Area + Shoulder Area) × (Base Depth ÷ 12) ÷ 27 ] × 1.15 × 1.35 tons/yd³
+              </p>
+              <p class="text-[11px] text-slate-500 mt-1">
+                ICPI standards require extending the base 6 inches past the perimeter for spike anchoring. Dense-graded stone (#21A / CR6) experiences ~15% mechanical compaction volume loss.
+              </p>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+              <h4 class="text-xs font-bold text-slate-900 mb-1">3. Bedding Sand Layer (ASTM C33)</h4>
+              <p class="text-xs text-slate-600 font-mono-numbers leading-relaxed">
+                Bedding Tonnage = [ Paved Area × (1.0 inch ÷ 12) ÷ 27 ] × 1.05 × 1.35 tons/yd³
+              </p>
+              <p class="text-[11px] text-slate-500 mt-1">
+                Screed coarse concrete sand at a uniform 1.0" thickness. Bedding sand must <em>never</em> be pre-compacted prior to paver placement.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Worked Example Box -->
+        <div class="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <span class="text-xs font-bold uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded">
+              Worked Example Take-off
+            </span>
+            <span class="text-xs text-slate-400 font-mono-numbers">12' × 16' Patio</span>
+          </div>
+
+          <h3 class="text-base font-bold text-slate-900">
+            Standard 192 Sq Ft Backyard Patio (Holland 4" × 8")
+          </h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Assume a residential patio measuring 16 ft long by 12 ft wide (192 sq ft) built against a house foundation (3 exposed sides = 40 linear feet of edge restraint). 4" compacted base, 1" sand bedding, running bond pattern with 10% cutting allowance:
+          </p>
+
+          <div class="space-y-2 text-xs divide-y divide-slate-100">
+            <div class="pt-2 flex justify-between">
+              <span class="text-slate-600">Net Surface Area:</span>
+              <span class="font-bold text-slate-900 font-mono-numbers">192.0 sq ft</span>
+            </div>
+            <div class="pt-2 flex justify-between">
+              <span class="text-slate-600">Theoretical Pavers (4.43 pcs/sq ft):</span>
+              <span class="font-bold text-slate-900 font-mono-numbers">851 pieces</span>
+            </div>
+            <div class="pt-2 flex justify-between">
+              <span class="text-slate-600">Order Quantity (+10% cutting waste):</span>
+              <span class="font-bold text-emerald-700 font-mono-numbers">937 pieces</span>
+            </div>
+            <div class="pt-2 flex justify-between">
+              <span class="text-slate-600">Pallets Needed (432 pcs/pallet):</span>
+              <span class="font-bold text-slate-900 font-mono-numbers">3 pallets (1,296 pcs) or 9 bundles</span>
+            </div>
+            <div class="pt-2 flex justify-between">
+              <span class="text-slate-600">Crushed Stone Base (#21A @ 4" + 6" shoulder):</span>
+              <span class="font-bold text-slate-900 font-mono-numbers">4.06 tons (3.01 loose cu yds)</span>
+            </div>
+            <div class="pt-2 flex justify-between">
+              <span class="text-slate-600">Coarse Bedding Sand (ASTM C33 @ 1.0"):</span>
+              <span class="font-bold text-slate-900 font-mono-numbers">1.01 tons (or 34 × 50-lb bags)</span>
+            </div>
+            <div class="pt-2 flex justify-between">
+              <span class="text-slate-600">Polymeric Joint Sand:</span>
+              <span class="font-bold text-slate-900 font-mono-numbers">3 bags (50-lb moisture-lock)</span>
+            </div>
+            <div class="pt-2 flex justify-between">
+              <span class="text-slate-600">Commercial Edging & Spikes:</span>
+              <span class="font-bold text-slate-900 font-mono-numbers">6 sticks (45 ft) + 27 spiral spikes</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Technical Paver Size & Laying Pattern Tables -->
+      <div class="space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <span class="text-[11px] font-bold text-emerald-700 uppercase tracking-wider bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200/60">
+              Dimensional Benchmarks
+            </span>
+            <h3 class="text-xl font-bold text-slate-900 mt-1">Common US Paver Dimensions & Coverage Yields</h3>
+          </div>
+          <span class="text-xs text-slate-500">Based on standard 1/8" (0.125") joint spacing</span>
+        </div>
+
+        <div class="overflow-x-auto rounded-xl border border-slate-200 shadow-xs">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead class="bg-slate-100 text-slate-700 font-semibold border-b border-slate-200 uppercase text-[10px] tracking-wider">
+              <tr>
+                <th class="py-3 px-4">Paver Style & Size</th>
+                <th class="py-3 px-4">Nominal Dimensions</th>
+                <th class="py-3 px-4">Module Coverage (sq ft)</th>
+                <th class="py-3 px-4">Pieces per Sq Ft</th>
+                <th class="py-3 px-4">Typical Pallet Size</th>
+                <th class="py-3 px-4">Best Applications</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 bg-white">
+              <tr class="hover:bg-slate-50">
+                <td class="py-3 px-4 font-bold text-slate-900">Holland Stone</td>
+                <td class="py-3 px-4 text-slate-600 font-mono-numbers">3.94" × 7.87" × 2-3/8" (60mm)</td>
+                <td class="py-3 px-4 text-slate-600 font-mono-numbers">0.226 sq ft</td>
+                <td class="py-3 px-4 text-emerald-700 font-bold font-mono-numbers">4.43 pcs / sq ft</td>
+                <td class="py-3 px-4 text-slate-600 font-mono-numbers">432 pcs (~96 sq ft)</td>
+                <td class="py-3 px-4 text-slate-500">Patios, walkways, driveways (Herringbone)</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="py-3 px-4 font-bold text-slate-900">Classic Square</td>
+                <td class="py-3 px-4 text-slate-600 font-mono-numbers">5.91" × 5.91" × 2-3/8" (60mm)</td>
+                <td class="py-3 px-4 text-slate-600 font-mono-numbers">0.253 sq ft</td>
+                <td class="py-3 px-4 text-emerald-700 font-bold font-mono-numbers">3.95 pcs / sq ft</td>
+                <td class="py-3 px-4 text-slate-600 font-mono-numbers">384 pcs (~96 sq ft)</td>
+                <td class="py-3 px-4 text-slate-500">Courtyards, pool surrounds, running bond</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="py-3 px-4 font-bold text-slate-900">Cobblestone / Rector</td>
+                <td class="py-3 px-4 text-slate-600 font-mono-numbers">5.91" × 8.86" × 2-3/8" (60mm)</td>
+                <td class="py-3 px-4 text-slate-600 font-mono-numbers">0.375 sq ft</td>
+                <td class="py-3 px-4 text-emerald-700 font-bold font-mono-numbers">2.67 pcs / sq ft</td>
+                <td class="py-3 px-4 text-slate-600 font-mono-numbers">288 pcs (~105 sq ft)</td>
+                <td class="py-3 px-4 text-slate-500">Driveways, parking pads, soldier borders</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="py-3 px-4 font-bold text-slate-900">Clay Brick Paver</td>
+                <td class="py-3 px-4 text-slate-600 font-mono-numbers">3.625" × 7.625" × 2-1/4"</td>
+                <td class="py-3 px-4 text-slate-600 font-mono-numbers">0.202 sq ft</td>
+                <td class="py-3 px-4 text-emerald-700 font-bold font-mono-numbers">4.95 pcs / sq ft</td>
+                <td class="py-3 px-4 text-slate-600 font-mono-numbers">500 pcs (~100 sq ft)</td>
+                <td class="py-3 px-4 text-slate-500">Historic walkways, classic garden paths</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="py-3 px-4 font-bold text-slate-900">Architectural Slab</td>
+                <td class="py-3 px-4 text-slate-600 font-mono-numbers">11.81" × 11.81" × 2" (50mm)</td>
+                <td class="py-3 px-4 text-slate-600 font-mono-numbers">1.000 sq ft</td>
+                <td class="py-3 px-4 text-emerald-700 font-bold font-mono-numbers">1.00 pcs / sq ft</td>
+                <td class="py-3 px-4 text-slate-600 font-mono-numbers">120 pcs (~120 sq ft)</td>
+                <td class="py-3 px-4 text-slate-500">Modern minimalist patios, steppers</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="py-3 px-4 font-bold text-slate-900">Large Patio Tile</td>
+                <td class="py-3 px-4 text-slate-600 font-mono-numbers">15.75" × 15.75" × 2" (50mm)</td>
+                <td class="py-3 px-4 text-slate-600 font-mono-numbers">1.764 sq ft</td>
+                <td class="py-3 px-4 text-emerald-700 font-bold font-mono-numbers">0.57 pcs / sq ft</td>
+                <td class="py-3 px-4 text-slate-600 font-mono-numbers">60 pcs (~106 sq ft)</td>
+                <td class="py-3 px-4 text-slate-500">Spacious outdoor terraces, dining pads</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Section 3: ICPI Cross-Section Installation Architecture -->
+      <div class="p-6 sm:p-8 rounded-2xl bg-slate-900 text-white border border-slate-800 space-y-6">
+        <div>
+          <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-400 bg-emerald-950/80 px-2.5 py-0.5 rounded border border-emerald-500/30">
+            Geotechnical Strata
+          </span>
+          <h3 class="text-xl font-bold text-white mt-2">
+            The 5 Layers of a Long-Lasting Interlocking Paver Assembly
+          </h3>
+          <p class="text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl leading-relaxed">
+            A durable paver installation is a multi-layer geotechnical pavement designed to drain surface water, flex during seasonal freeze-thaw cycles, and prevent settling.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          <div class="p-4 rounded-xl bg-slate-800/80 border border-slate-700/80 space-y-2">
+            <div class="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 font-bold flex items-center justify-center text-xs">
+              1
+            </div>
+            <h4 class="text-xs font-bold text-white">Subgrade Soil</h4>
+            <p class="text-[11px] text-slate-400 leading-relaxed">
+              Excavated and compacted native soil pitched at 1/4" per linear foot (2%) slope away from home foundations.
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-800/80 border border-slate-700/80 space-y-2">
+            <div class="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 font-bold flex items-center justify-center text-xs">
+              2
+            </div>
+            <h4 class="text-xs font-bold text-white">Geotextile Fabric</h4>
+            <p class="text-[11px] text-slate-400 leading-relaxed">
+              Non-woven permeable fabric that prevents sub-base stone from sinking into clay subsoils while allowing groundwater drainage.
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-800/80 border border-slate-700/80 space-y-2">
+            <div class="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 font-bold flex items-center justify-center text-xs">
+              3
+            </div>
+            <h4 class="text-xs font-bold text-white">Crushed Base Stone</h4>
+            <p class="text-[11px] text-slate-400 leading-relaxed">
+              4" to 8" of compacted dense-graded road base (#21A / CR6) extended 6" beyond the border for restraint spikes.
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-800/80 border border-slate-700/80 space-y-2">
+            <div class="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 font-bold flex items-center justify-center text-xs">
+              4
+            </div>
+            <h4 class="text-xs font-bold text-white">Bedding Sand (1")</h4>
+            <p class="text-[11px] text-slate-400 leading-relaxed">
+              Exactly 1.0" uncompacted coarse concrete sand (ASTM C33) screeded smooth with steel conduit screed rails.
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-800/80 border border-slate-700/80 space-y-2">
+            <div class="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 font-bold flex items-center justify-center text-xs">
+              5
+            </div>
+            <h4 class="text-xs font-bold text-white">Pavers & Poly Sand</h4>
+            <p class="text-[11px] text-slate-400 leading-relaxed">
+              Concrete pavers vibrated into bedding sand, secured by edge restraints and locked with polymeric joint sand.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 4: Comprehensive Frequently Asked Questions -->
+      <div class="space-y-6 pt-4">
+        <div>
+          <span class="text-[11px] font-bold text-emerald-700 uppercase tracking-wider bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200/60">
+            Expert Guidance
+          </span>
+          <h3 class="text-2xl font-black text-slate-900 tracking-tight mt-1">
+            Frequently Asked Questions About Paver Takeoffs
+          </h3>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {faqs.map((faq) => (
+            <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-2xs space-y-2">
+              <h4 class="text-sm font-bold text-slate-900">{faq.question}</h4>
+              <p class="text-xs text-slate-600 leading-relaxed">{faq.answer}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Related Calculators -->
+      <RelatedCalculators currentPath="/paver-calculator/" />
+    </section>
+  </div>
+</BaseLayout>

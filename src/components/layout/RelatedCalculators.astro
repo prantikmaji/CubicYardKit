@@ -91,6 +91,12 @@ const ALL_TOOLS: Record<string, ToolItem> = {
     badge: 'Tonnage & Loads',
     desc: 'Calculate hot mix asphalt and recycled millings tonnage, truckloads, and driveway paving budgets.',
   },
+  paver: {
+    href: '/paver-calculator/',
+    title: 'Paver & Patio Calculator',
+    badge: 'Pieces & Base',
+    desc: 'Calculate pavers, laying patterns, crushed stone base tons, bedding sand, and polymeric joints.',
+  },
 };
 
 // Map each path to 3 related tools
@@ -101,11 +107,12 @@ const RELATED_MAP: Record<string, string[]> = {
   '/concrete-calculator/': ['concreteSlabCost', 'concreteDriveway', 'home'],
   '/concrete-block-calculator/': ['brick', 'concrete', 'home'],
   '/brick-calculator/': ['concreteBlock', 'sand', 'planner'],
-  '/sand-calculator/': ['gravel', 'planner', 'concrete'],
+  '/sand-calculator/': ['paver', 'gravel', 'planner'],
   '/asphalt-calculator/': ['concreteDriveway', 'gravel', 'quoteComparison'],
+  '/paver-calculator/': ['sand', 'gravel', 'planner'],
   '/concrete-slab-cost-calculator/': ['concreteDriveway', 'concrete', 'planner'],
   '/concrete-driveway-cost-calculator/': ['asphalt', 'concreteSlabCost', 'gravel'],
-  '/planner/': ['gravel', 'sand', 'concrete'],
+  '/planner/': ['paver', 'gravel', 'sand'],
   '/quote-comparison/': ['planner', 'gravel', 'concrete'],
 };
 

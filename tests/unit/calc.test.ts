@@ -1288,3 +1288,203 @@ describe('Pre-Live Audit Edge Case & Regression Tests', () => {
   });
 });
 
+import { calculatePavers, PAVER_PRESETS, LAYING_PATTERNS } from '../../src/lib/calc/paver';
+
+describe('Paver Calculator', () => {
+  const basePaverInput = {
+    projectType: 'patio' as const,
+    inputMode: 'dimensions' as const,
+    length: 16,
+    lengthUnit: 'feet' as const,
+    width: 12,
+    widthUnit: 'feet' as const,
+    presetId: '4x8-holland' as const,
+    jointWidthInches: 0.125,
+    patternId: 'running-bond' as const,
+    wastePercent: 0,
+    unrestrainedSides: 3 as const,
+    includeBase: true,
+    baseDepthInches: 4,
+    baseCompactionPercent: 15,
+    includeBaseShoulder: true,
+    includeBedding: true,
+    beddingDepthInches: 1.0,
+    beddingWastePercent: 5,
+    includeJointSand: true,
+    jointSandCoverageSqFtPerBag: 75,
+    includeEdgeRestraints: true,
+    edgeSectionLengthFt: 7.5,
+    spikeSpacingInches: 18,
+    includeGeotextile: true,
+  };
+
+  it('1. Standard rectangular patio: 16×12 (192 sq ft) Holland 4×8 piece count at 0% waste', () => {
+    const r = calculatePavers(basePaverInput);
+    expect(r.netPavedAreaSqFt).toBe(192);
+    // Holland 4x8: (7.87 + 0.125) * (3.94 + 0.125) = 7.995 * 4.065 = 32.499675 sq in = 0.22569 sq ft
+    // Pavers per sq ft = 1 / 0.22569 = ~4.4308
+    // Theoretical = 192 * 4.4308 = ~850.7 -> round to 851
+    expect(r.theoreticalPaverCount).toBeCloseTo(850.7, 0);
+    expect(r.orderPaverCount).toBe(851);
+  });
+
+  it('2. Waste percentage correctly increases order paver count', () => {
+    const r = calculatePavers({
+      ...basePaverInput,
+      wastePercent: 10,
+    });
+    // 850.7 * 1.10 = 935.8 -> Math.ceil = 936
+    expect(r.orderPaverCount).toBe(936);
+    expect(r.wastePercent).toBe(10);
+  });
+
+  it('3. Pallet and bundle packaging rounding calculates accurately', () => {
+    const r = calculatePavers({
+      ...basePaverInput,
+      wastePercent: 10,
+      piecesPerPallet: 432,
+      piecesPerPack: 108,
+    });
+    // 936 pavers / 432 = 2.16 -> ceil = 3 pallets
+    expect(r.palletsNeeded).toBe(3);
+    // 936 pavers / 108 = 8.66 -> ceil = 9 packs
+    expect(r.packsNeeded).toBe(9);
+  });
+
+  it('4. Compacted base aggregate layer includes 15% compaction and 6" shoulder', () => {
+    const r = calculatePavers(basePaverInput);
+    expect(r.baseIncluded).toBe(true);
+    // 3 exposed sides for 16x12: length 16 against house -> exposed = 12 + 12 + 16 = 40 linear feet
+    // Shoulder footprint = 192 + (40 * 0.5) = 212 sq ft
+    expect(r.baseFootprintSqFt).toBe(212);
+    // Compacted Cu Ft = 212 * (4/12) = 70.6667 cu ft = 2.617 cu yds
+    expect(r.baseCompactedVolumeCuYds).toBeCloseTo(2.617, 2);
+    // Loose bulk with 15% compaction = 2.617 * 1.15 = 3.01 cu yds
+    expect(r.baseLooseOrderVolumeCuYds).toBeCloseTo(3.01, 2);
+    // Weight at 1.35 tons/yd = 3.01 * 1.35 = ~4.06 tons
+    expect(r.baseWeightTons).toBeCloseTo(4.06, 1);
+  });
+
+  it('5. Bedding sand layer computes accurate tons and 50-lb bag equivalents', () => {
+    const r = calculatePavers(basePaverInput);
+    expect(r.beddingIncluded).toBe(true);
+    // 192 sq ft * (1/12) ft = 16 cu ft. With 5% waste = 16.8 cu ft = 0.622 cu yds
+    expect(r.beddingVolumeCuYds).toBeCloseTo(0.622, 2);
+    // Weight = 0.622 * 1.35 tons/yd = 0.84 tons (1,680 lbs)
+    expect(r.beddingWeightTons).toBeCloseTo(0.84, 1);
+    // Bags: 16.8 cu ft / 0.50 cu ft per 50lb bag = ceil(33.6) = 34 bags
+    expect(r.beddingBags50lb).toBe(34);
+  });
+
+  it('6. Polymeric joint sand bags calculate based on bag coverage', () => {
+    const r = calculatePavers({
+      ...basePaverInput,
+      jointSandCoverageSqFtPerBag: 75,
+    });
+    // 192 sq ft / 75 sq ft per bag = 2.56 -> ceil = 3 bags
+    expect(r.jointSandBags50lb).toBe(3);
+  });
+
+  it('7. Edge restraints and anchoring spikes calculate exposed perimeter', () => {
+    const r = calculatePavers(basePaverInput);
+    // 3 unrestrained sides: 12 + 12 + 16 = 40 linear feet
+    expect(r.edgeRestraintLinearFt).toBe(40);
+    // 40 ft / 7.5 ft sticks = 5.33 -> ceil = 6 sticks
+    expect(r.edgeRestraintSectionsNeeded).toBe(6);
+    // 40 ft / 1.5 ft (18") = 26.66 -> ceil = 27 spikes
+    expect(r.edgeSpikesNeeded).toBe(27);
+  });
+
+  it('8. Multi-section take-off aggregates independent sections and openings', () => {
+    const r = calculatePavers({
+      ...basePaverInput,
+      inputMode: 'dimensions',
+      sections: [
+        { id: 'sec-1', name: 'Main Patio', shape: 'rectangle', length: 15, lengthUnit: 'feet', width: 10, widthUnit: 'feet', sharedEdgeFeet: 15 },
+        { id: 'sec-2', name: 'Grill Bump-out', shape: 'rectangle', length: 6, lengthUnit: 'feet', width: 5, widthUnit: 'feet', sharedEdgeFeet: 6 },
+      ],
+      openings: [
+        { id: 'op-1', name: 'Fire Pit', length: 3, lengthUnit: 'feet', width: 3, widthUnit: 'feet', count: 1 },
+      ],
+    });
+    // Gross: (15*10) + (6*5) = 150 + 30 = 180 sq ft
+    expect(r.totalGrossAreaSqFt).toBe(180);
+    // Opening: 3*3 = 9 sq ft
+    expect(r.totalOpeningsAreaSqFt).toBe(9);
+    // Net: 180 - 9 = 171 sq ft
+    expect(r.netPavedAreaSqFt).toBe(171);
+    expect(r.sections).toHaveLength(2);
+  });
+
+  it('9. Known surface area input mode computes take-off directly', () => {
+    const r = calculatePavers({
+      ...basePaverInput,
+      inputMode: 'area',
+      knownArea: 300,
+      knownAreaUnit: 'sqFt',
+    });
+    expect(r.netPavedAreaSqFt).toBe(300);
+    expect(r.theoreticalPaverCount).toBeCloseTo(300 * r.paversPerSqFt, 0);
+  });
+
+  it('10. Itemized project cost estimating reconciles materials, labor, and grand total', () => {
+    const r = calculatePavers({
+      ...basePaverInput,
+      pricePerPaverPiece: 1.00,
+      pricePerBaseTon: 35.00,
+      pricePerSandTon: 45.00,
+      pricePerJointSandBag: 25.00,
+      pricePerEdgingPiece: 12.00,
+      deliveryFee: 100,
+      laborCostPerSqFt: 10.00,
+      salesTaxPercent: 6,
+    });
+    expect(r.hasCostData).toBe(true);
+    // Paver cost: 851 * 1.00 = $851
+    // Base cost: ~4.06 tons * 35 = ~$142.10
+    // Bedding: ~0.84 tons * 45 = ~$37.80
+    // Joint sand: 3 * 25 = $75
+    // Edging: 6 * 12 = $72
+    // Labor: 192 * 10 = $1,920
+    // Delivery: $100
+    expect(r.materialSubtotal).toBeGreaterThan(1100);
+    expect(r.laborSubtotal).toBe(1920);
+    expect(r.deliverySubtotal).toBe(100);
+    expect(r.grandTotal).toBeCloseTo(r.subtotalBeforeTax * 1.06, 1);
+    expect(r.costPerSqFt).toBeCloseTo(r.grandTotal / 192, 2);
+  });
+
+  it('11. Edge cases: zero length/width returns safe 0 quantities without NaN', () => {
+    const r = calculatePavers({
+      ...basePaverInput,
+      length: 0,
+      width: 0,
+    });
+    expect(r.netPavedAreaSqFt).toBe(0);
+    expect(r.orderPaverCount).toBe(0);
+    expect(r.palletsNeeded).toBe(0);
+    expect(r.baseWeightTons).toBe(0);
+    expect(r.beddingWeightTons).toBe(0);
+    expect(r.jointSandBags50lb).toBe(0);
+    expect(r.edgeRestraintSectionsNeeded).toBe(0);
+  });
+
+  it('12. Custom paver dimensions are accurately supported', () => {
+    const r = calculatePavers({
+      ...basePaverInput,
+      presetId: 'custom',
+      customDimensions: {
+        lengthInches: 12.0,
+        widthInches: 12.0,
+        thicknessInches: 2.0,
+      },
+      jointWidthInches: 0.25, // 1/4" joint
+    });
+    // Module: 12.25 * 12.25 = 150.0625 sq in = 1.0421 sq ft
+    expect(r.moduleAreaSqFt).toBeCloseTo(150.0625 / 144, 4);
+    // 192 / 1.0421 = ~184.2 -> round to 184
+    expect(r.theoreticalPaverCount).toBeCloseTo(184.2, 0);
+  });
+});
+
+
